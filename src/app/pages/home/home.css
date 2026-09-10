@@ -1,0 +1,108 @@
+.logo_container{
+    /* Section 1 */
+
+    box-sizing: border-box;
+
+    position: relative;
+    width: 77px;
+    height: 56px;
+
+    
+    border: 1px solid rgb(151, 17, 7 , 0,1);
+    border-radius: 2px;
+
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nav{
+        /* Diseño automático */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 40px;
+
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    left: 0px;
+    top: 0px;
+
+    background-color: #971107;
+}
+
+.nav-textos{
+    /* nav-links-container */
+
+    /* Diseño automático */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 36px;
+
+    width: 492px;
+    height: 38px;
+
+
+    /* Dentro del diseño automático */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.nav-categorias{
+    /* Section 5 */
+
+    box-sizing: border-box;
+
+    position: relative;
+    width: 15%;
+    height: 200vb;
+    
+    background: #971107;
+    border: 1px solid (#971107 ,0.1);
+    border-radius: 2px;
+
+}
+
+.nav-textos-categorias{
+    /* categorias: tal */
+
+    position: absolute;
+    width: 200px;
+    height: 715px;
+    left: 26px;
+    top: 16px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+
+    color: #FFFFFF;
+
+
+}
+
+.content-pelis{
+    /* Section 4 */
+
+box-sizing: border-box;
+
+position: relative;
+width: 100%;
+height: 100%;
+
+background: #444444;
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 2px;
+
+}

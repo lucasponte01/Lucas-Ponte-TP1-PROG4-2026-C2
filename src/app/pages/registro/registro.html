@@ -1,0 +1,67 @@
+<form class="login" [formGroup]="form_registro" (ngSubmit)="registrarse()">
+  
+  <div>
+    <div class="logo_container">
+        <img [src]="logo_2" alt="Logo" class="logo" />
+    </div>
+  </div>
+  
+<div class="card">
+  <h1 class="textos">Regitrarse</h1>
+  <div >
+    
+    <app-campo-input id="nombre" label="Nombre" [control]="form_registro.controls.nombre" type="text">
+      <app-error-requerido  mensaje="El nombre es requerido" [errors]="form_registro.controls.nombre.errors"></app-error-requerido>
+      <app-error-minlenght [errors]="form_registro.controls.nombre.errors"></app-error-minlenght>
+      <app-error-maxlenght [errors]="form_registro.controls.nombre.errors"></app-error-maxlenght>
+      <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.nombre.errors" ></app-error-pattern>
+    </app-campo-input>
+    
+  </div>
+ 
+  <div>
+    <app-campo-input id="apellido" label="Apellido" [control]="form_registro.controls.apellido" type="text">
+      <app-error-requerido  mensaje="El Apellido es requerido" [errors]="form_registro.controls.apellido.errors"></app-error-requerido>
+      <app-error-minlenght [errors]="form_registro.controls.apellido.errors"></app-error-minlenght>
+      <app-error-maxlenght [errors]="form_registro.controls.apellido.errors"></app-error-maxlenght>
+      <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.apellido.errors" ></app-error-pattern>
+    </app-campo-input>
+  </div>
+
+  <div>
+    <app-campo-input id="email" label="Email" [control]="form_registro.controls.email" type="email">
+      <app-error-requerido  mensaje="El Email es requerido" [errors]="form_registro.controls.email.errors"></app-error-requerido>
+      <app-error-email mensaje="Ingresa un correo electrónico válido." [errors]="form_registro.controls.email.errors"></app-error-email>
+    </app-campo-input>
+  </div>
+  
+  <div>
+    <app-campo-input id="contrasena" label="Contrasena" [control]="form_registro.controls.contrasena" type="password">
+      <app-error-requerido  mensaje="El Contraseña es requerido" [errors]="form_registro.controls.contrasena.errors"></app-error-requerido>
+      <app-error-minlenght [errors]="form_registro.controls.contrasena.errors"></app-error-minlenght>
+    </app-campo-input>
+    
+  </div>
+  
+  <div>
+    <app-campo-input id="fecha_naci" label="Fecha de nacimiento" [control]="form_registro.controls.fecha_naci" type="date">
+      <app-error-requerido  mensaje="El Fecha de nacimiento es requerido" [errors]="form_registro.controls.fecha_naci.errors"></app-error-requerido>
+    </app-campo-input>
+    @if (form_registro.get('fecha_naci')?.invalid && form_registro.get('fecha_naci')?.touched) {
+      <div class="error-msg">
+        @if (form_registro.get('fecha_naci')?.errors?.['fechaNacimientoInvalida']) {
+          <small class="textos" style="color: #ebe705;">Ingresa una fecha de nacimiento válida.</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <app-campo-input id="avatar" label="Crear Avatar" [control]="form_registro.controls.cupon" type="file">
+    </app-campo-input>
+  </div>
+
+  
+  <button class="boton_i" type="submit" [disabled]="form_registro.invalid">Registrarse</button>
+</div>
+</form>

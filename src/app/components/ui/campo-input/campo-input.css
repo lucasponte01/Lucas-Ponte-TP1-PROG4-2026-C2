@@ -1,0 +1,37 @@
+input{
+box-sizing: border-box;
+    color: #ebe705 ;
+    width: clamp(100vw, 50vw, 600px);
+    max-width: 327px;
+    height: clamp(30%, 50vh, 60px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 5%;
+    gap: 10px;
+
+    background: rgba(249, 250, 249, 0.05);
+    border: 1px solid #ebe705;
+    border-radius: 12px;
+
+    margin-bottom: 10px;
+input::placeholder{
+    color: #ebe705 ;
+}
+}
+
+label{
+    width: 100%;
+    max-width: 327px;
+
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 700px;
+    font-size: 18px;
+    line-height: 150%;
+    
+    color: #ffffff ;
+
+    margin-bottom: 16px;
+}

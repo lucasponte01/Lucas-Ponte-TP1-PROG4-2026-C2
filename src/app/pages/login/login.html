@@ -1,0 +1,20 @@
+<div class="login">
+    <div class="logo_container">
+        <img [src]="logo" alt="Logo" class="logo" />
+    </div>
+    <h1 class="textos">iniciar sesion</h1>
+    <form [formGroup]="form_login" (ngSubmit)="iniciar_sesion()">
+        <div>
+        <label class="textos">email</label>
+        <input class="input" formControlName="email" placeholder="example@email.com">
+        </div>
+        <div>
+        <label class="textos">contraseña</label>
+        <input class="input" formControlName="contrasena" placeholder="contraseña" type="password"> 
+        </div>
+        
+    </form>
+    <button class="boton_i" (click)="iniciar_sesion()">iniciar sesion</button>
+    <button class="boton_i" (click)="acceso_invitado()">entrar como invitado</button>
+    <label class="textos" >¿no tienes cuenta?<a class="registrate" routerLink="/registro">registrarse</a></label>
+</div>
