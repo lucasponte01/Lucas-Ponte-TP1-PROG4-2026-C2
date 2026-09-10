@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CampoInput } from '../../components/ui/campo-input/campo-input';
 import { ErrorRequerido } from '../../components/ui/error-requerido/error-requerido';
@@ -6,6 +6,8 @@ import { ErrorMinlenght } from '../../components/ui/error-minlenght/error-minlen
 import { ErrorMaxlenght } from '../../components/ui/error-maxlenght/error-maxlenght';
 import { ErrorPattern } from '../../components/ui/error-pattern/error-pattern';
 import { ErrorEmail } from '../../components/ui/error-email/error-email';
+import { Auth } from '../../services/auth';
+import Usuario from '../../../../interfaces/usuario';
 
 @Component({
   imports: [ReactiveFormsModule, CampoInput , ErrorRequerido , ErrorMinlenght , ErrorMaxlenght , ErrorPattern , ErrorEmail],
@@ -15,7 +17,7 @@ import { ErrorEmail } from '../../components/ui/error-email/error-email';
 })
 export class Registro {
 //mejorar diseño 
-//conectarse con la base de datos 
+  auth = inject(Auth)
 
 
   logo_2='assets/imagenes/Gemini2.png'
@@ -24,13 +26,15 @@ export class Registro {
     nombre: new FormControl('', [Validators.required, Validators.minLength(2) , Validators.maxLength(15) , Validators.pattern(/^[a-zA-Z\- ]+$/)]),
     apellido: new FormControl('', [Validators.required, Validators.minLength(2) , Validators.maxLength(15) , Validators.pattern(/^[a-zA-Z\- ]+$/)]),
     email: new FormControl('', [Validators.email , Validators.required]),
-    contrasena: new FormControl('',[Validators.required , Validators.minLength(2)]),
-    fecha_naci: new FormControl('',[Validators.required , fechaNacimientoValidator() ,]),
-    cupon: new FormControl<boolean>(false)
+    contrasena: new FormControl('',[Validators.required , Validators.minLength(6)]),
+    edad: new FormControl<number | null>(null, [Validators.required, Validators.min(15), Validators.max(120), Validators.pattern(/^[0-9]+$/)]),
+    foto: new FormControl<File | null>(null,)
   });
 
   registrarse(){
-    return 
+    if(this.form_registro.valid){
+      this.auth.registrar(this.form_registro.value as unknown as Usuario)
+    }
   }
 
 }

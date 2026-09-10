@@ -44,20 +44,18 @@
   </div>
   
   <div>
-    <app-campo-input id="fecha_naci" label="Fecha de nacimiento" [control]="form_registro.controls.fecha_naci" type="date">
-      <app-error-requerido  mensaje="El Fecha de nacimiento es requerido" [errors]="form_registro.controls.fecha_naci.errors"></app-error-requerido>
+    <app-campo-input id="fecha_naci" label="Fecha de nacimiento" [control]="form_registro.controls.edad" type="int">
+      <app-error-requerido  mensaje="El Fecha de nacimiento es requerido" [errors]="form_registro.controls.edad.errors"></app-error-requerido>
+      <app-error-minlenght [errors]="form_registro.controls.edad.errors"></app-error-minlenght>
+      <app-error-maxlenght [errors]="form_registro.controls.edad.errors"></app-error-maxlenght>
+      <app-error-pattern mensaje="solo se permiten numeros" [errors]="form_registro.controls.edad.errors" ></app-error-pattern>
+    
     </app-campo-input>
-    @if (form_registro.get('fecha_naci')?.invalid && form_registro.get('fecha_naci')?.touched) {
-      <div class="error-msg">
-        @if (form_registro.get('fecha_naci')?.errors?.['fechaNacimientoInvalida']) {
-          <small class="textos" style="color: #ebe705;">Ingresa una fecha de nacimiento válida.</small>
-        }
-      </div>
-    }
+    
   </div>
 
   <div>
-    <app-campo-input id="avatar" label="Crear Avatar" [control]="form_registro.controls.cupon" type="file">
+    <app-campo-input id="avatar" label="Crear Avatar" [control]="form_registro.controls.foto" type="file">
     </app-campo-input>
   </div>
 
