@@ -1,13 +1,27 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
+import { Auth } from '../../services/auth';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink , ReactiveFormsModule],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
 export class Home {
   logo_menus = "/assets/imagenes/Gemini2.png"
+  auth = inject(Auth)
+  route = inject(Router)
 
+
+
+  async cerrar_sesion() {
+  try {
+    await this.auth.cerrarSesion();
+    await this.route.navigate(['/login']); // '' es tu ruta de login, no '/login'
+  } catch (error) {
+    console.error(error);
+  }
+}
 }

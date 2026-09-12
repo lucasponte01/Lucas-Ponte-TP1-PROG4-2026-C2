@@ -1,7 +1,11 @@
+
 <form class="login" [formGroup]="form_registro" (ngSubmit)="registrarse()">
-  
   <div>
-    <div class="logo_container">
+    <button class="boton_i" type="submit" (click)="volver()">volver</button>
+  </div>
+
+  <div class="logo_container">
+    <div class="logo">
         <img [src]="logo_2" alt="Logo" class="logo" />
     </div>
   </div>
@@ -9,7 +13,7 @@
 <div class="card">
   <h1 class="textos">Regitrarse</h1>
   <div >
-    
+
     <app-campo-input id="nombre" label="Nombre" [control]="form_registro.controls.nombre" type="text">
       <app-error-requerido  mensaje="El nombre es requerido" [errors]="form_registro.controls.nombre.errors"></app-error-requerido>
       <app-error-minlenght [errors]="form_registro.controls.nombre.errors"></app-error-minlenght>
@@ -40,12 +44,11 @@
       <app-error-requerido  mensaje="El Contraseña es requerido" [errors]="form_registro.controls.contrasena.errors"></app-error-requerido>
       <app-error-minlenght [errors]="form_registro.controls.contrasena.errors"></app-error-minlenght>
     </app-campo-input>
-    
   </div>
   
   <div>
-    <app-campo-input id="fecha_naci" label="Fecha de nacimiento" [control]="form_registro.controls.edad" type="int">
-      <app-error-requerido  mensaje="El Fecha de nacimiento es requerido" [errors]="form_registro.controls.edad.errors"></app-error-requerido>
+    <app-campo-input id="fecha_naci" label="Edad" [control]="form_registro.controls.edad" type="int">
+      <app-error-requerido  mensaje="La edad es requerido" [errors]="form_registro.controls.edad.errors"></app-error-requerido>
       <app-error-minlenght [errors]="form_registro.controls.edad.errors"></app-error-minlenght>
       <app-error-maxlenght [errors]="form_registro.controls.edad.errors"></app-error-maxlenght>
       <app-error-pattern mensaje="solo se permiten numeros" [errors]="form_registro.controls.edad.errors" ></app-error-pattern>
@@ -55,7 +58,7 @@
   </div>
 
   <div>
-    <app-campo-input id="avatar" label="Crear Avatar" [control]="form_registro.controls.foto" type="file">
+    <app-campo-input id="avatar" label="Seleccionar Avatar" [control]="form_registro.controls.foto" type="file">
     </app-campo-input>
   </div>
 

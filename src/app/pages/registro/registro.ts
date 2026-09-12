@@ -8,6 +8,7 @@ import { ErrorPattern } from '../../components/ui/error-pattern/error-pattern';
 import { ErrorEmail } from '../../components/ui/error-email/error-email';
 import { Auth } from '../../services/auth';
 import Usuario from '../../../../interfaces/usuario';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [ReactiveFormsModule, CampoInput , ErrorRequerido , ErrorMinlenght , ErrorMaxlenght , ErrorPattern , ErrorEmail],
@@ -16,8 +17,8 @@ import Usuario from '../../../../interfaces/usuario';
   templateUrl: './registro.html',
 })
 export class Registro {
-//mejorar diseño 
   auth = inject(Auth)
+  rout = inject(Router)
 
 
   logo_2='assets/imagenes/Gemini2.png'
@@ -36,32 +37,12 @@ export class Registro {
       this.auth.registrar(this.form_registro.value as unknown as Usuario)
     }
   }
-
-}
-
-
-export function fechaNacimientoValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (!control.value) return null;
-
-    const fechaNac = new Date(control.value);
-    const hoy = new Date();
-    
-    const anioMinimo = hoy.getFullYear() - 120;
-
-    if (fechaNac > hoy) {
-      return { fechaFutura: true }; 
-    }
-    if (fechaNac.getFullYear() < anioMinimo) {
-      return { fechaMuyAntigua: true }; 
-    }
-    return null;
-  };
+  volver():void{
+    this.rout.navigate(['/login'])
+  }
 
   
+
 }
 
-const fechaValidators = [
-  Validators.required,
-  fechaNacimientoValidator()
-];
+

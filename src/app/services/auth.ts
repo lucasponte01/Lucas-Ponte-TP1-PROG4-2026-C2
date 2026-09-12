@@ -8,16 +8,16 @@ import Usuario from '../../../interfaces/usuario';
 export class Auth {
     private _supabaseService = inject(SupabaseService);
     private router = inject(Router);
+    usuarioActual: any = null;
 
-    public usuarioActual: WritableSignal<User | null> = signal<User | null>(null);
 
     constructor(){
         this._supabaseService.Auth.onAuthStateChange((event , session) =>{
             if(session?.user){
-                this.usuarioActual.set(session.user);
+                this.usuarioActual = session.user;
                 this.router.navigateByUrl('/home')
             }else{
-                this.usuarioActual.set(null);
+                this.usuarioActual = null;
                 this.router.navigateByUrl('/login');
             }   
         });
@@ -44,10 +44,39 @@ export class Auth {
         
     }
 
+  async logear(res: any) {
+    const { data, error } = await this._supabaseService.Auth.signInWithPassword({
+      email: res.email,
+      password: res.password,
+    });
+    if (error) {
+        throw new Error(
+          `Login failed: ${error.message}`
+        );
+      }
+
+    if (!data.user) {
+      throw new Error(
+        'Login failed: no user returned'
+      );
+    }
+
+    this.usuarioActual = data.user;
+    
+    return data.user;
+  }
+
 
     async cerrarSesion() {
-    await this._supabaseService.Auth.signOut();
-    this.router.navigateByUrl('/login');
+     const{error} = await this._supabaseService.Auth.signOut();
+    
+      this.usuarioActual = null;
+      this.router.navigate(['/login'])
+      if(error){
+        throw new Error(
+          `Logout failed: ${error.message}`
+        );
+      }
   }
 }
     

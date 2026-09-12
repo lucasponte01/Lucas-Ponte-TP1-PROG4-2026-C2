@@ -12,5 +12,6 @@ export class CampoInput {
   label = input('');
   control = input<FormControl>();
   type = input('');
+  
  
 }

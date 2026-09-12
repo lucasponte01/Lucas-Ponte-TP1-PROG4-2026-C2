@@ -2,19 +2,25 @@
     <div class="logo_container">
         <img [src]="logo" alt="Logo" class="logo" />
     </div>
+    <div class="card">
     <h1 class="textos">iniciar sesion</h1>
-    <form [formGroup]="form_login" (ngSubmit)="iniciar_sesion()">
+    <form [formGroup]="form_login" (ngSubmit)="iniciarSesion()">
         <div>
-        <label class="textos">email</label>
-        <input class="input" formControlName="email" placeholder="example@email.com">
+            <app-campo-input id="email" label="Email" [control]="form_login.controls.email" type="email">
+            <app-error-requerido [errors]="form_login.controls.email.errors"></app-error-requerido>
+            <app-error-email [errors]="form_login.controls.email.errors"></app-error-email>
+            </app-campo-input>
         </div>
         <div>
-        <label class="textos">contraseña</label>
-        <input class="input" formControlName="contrasena" placeholder="contraseña" type="password"> 
+            <app-campo-input id="contrasena" label="Contrasena" [control]="form_login.controls.contrasena" type="password">
+            <app-error-requerido  [errors]="form_login.controls.contrasena.errors"></app-error-requerido>
+            <app-error-minlenght [errors]="form_login.controls.contrasena.errors"></app-error-minlenght>
+            </app-campo-input>
         </div>
         
     </form>
-    <button class="boton_i" (click)="iniciar_sesion()">iniciar sesion</button>
+    <button class="boton_i" type="submit" (click)="iniciarSesion()">Registrarse</button>
     <button class="boton_i" (click)="acceso_invitado()">entrar como invitado</button>
     <label class="textos" >¿no tienes cuenta?<a class="registrate" routerLink="/registro">registrarse</a></label>
+</div>
 </div>
