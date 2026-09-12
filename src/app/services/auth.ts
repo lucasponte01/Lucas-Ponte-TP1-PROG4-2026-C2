@@ -71,7 +71,7 @@ export class Auth {
      const{error} = await this._supabaseService.Auth.signOut();
     
       this.usuarioActual = null;
-      this.router.navigate(['/login'])
+      this.router.navigate(['/'])
       if(error){
         throw new Error(
           `Logout failed: ${error.message}`

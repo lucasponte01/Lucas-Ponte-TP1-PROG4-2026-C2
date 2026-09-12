@@ -19,7 +19,7 @@ export class Home {
   async cerrar_sesion() {
   try {
     await this.auth.cerrarSesion();
-    await this.route.navigate(['/login']); // '' es tu ruta de login, no '/login'
+    await this.route.navigate(['/']); 
   } catch (error) {
     console.error(error);
   }
