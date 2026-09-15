@@ -1,7 +1,7 @@
 
 <form class="login" [formGroup]="form_registro" (ngSubmit)="registrarse()">
   <div>
-    <button class="boton_i" type="submit" (click)="volver()">volver</button>
+    <button class="boton_i" type="submit" routerLink="/">volver</button>
   </div>
 
   <div class="logo_container">
@@ -52,15 +52,29 @@
       <app-error-minlenght [errors]="form_registro.controls.edad.errors"></app-error-minlenght>
       <app-error-maxlenght [errors]="form_registro.controls.edad.errors"></app-error-maxlenght>
       <app-error-pattern mensaje="solo se permiten numeros" [errors]="form_registro.controls.edad.errors" ></app-error-pattern>
-    
     </app-campo-input>
-    
   </div>
 
-  <div>
-    <app-campo-input id="avatar" label="Seleccionar Avatar" [control]="form_registro.controls.foto" type="file">
-    </app-campo-input>
-  </div>
+  <button class="boton_i" type="submit" (click)="abrirSelectorAvatar()">Seleccionar avatar</button>
+
+  @if (mostrarSelectorAvatar()) {
+    <div class="modal-avatares">
+      @if (isLoadingAvatares()) {
+        <p>Cargando avatares...</p>
+      } @else {
+        <div class="grid-avatares">
+          @for (avatar of avatares(); track avatar) {
+            <img solid #f8aa19; class="avatars" [src]="avatar" [class.seleccionado]="avatar === avatarSeleccionado()" (click)="elegirAvatar(avatar)"/>
+          }
+        </div>
+      }
+      <button class="boton_i" type="submit" (click)="confirmarAvatar()">Elegir</button>
+    </div>
+  }
+
+  @if (form_registro.controls.foto.value) {
+    <img [src]="form_registro.controls.foto.value" class="avatars" />
+  }
 
   
   <button class="boton_i" type="submit" [disabled]="form_registro.invalid">Registrarse</button>

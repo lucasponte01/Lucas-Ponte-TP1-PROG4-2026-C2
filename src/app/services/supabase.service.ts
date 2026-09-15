@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-    Storage: any;
+  
 
   constructor() {
     this.supabase = createClient(
@@ -28,17 +28,4 @@ export class SupabaseService {
     return this.supabase.storage;
   }
 
-  async uploadAvatar(filePath: string, file: File) {
-    const { data, error } = await this.supabase.storage.from('avatars').upload(filePath, file, {contentType: file.type,});
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  }
-
-  getAvatarUrl(filePath: string) {
-    return this.supabase.storage.from('avatars').getPublicUrl(filePath);
-  }
 }

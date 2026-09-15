@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import {  FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CampoInput } from '../../components/ui/campo-input/campo-input';
 import { ErrorRequerido } from '../../components/ui/error-requerido/error-requerido';
 import { ErrorMinlenght } from '../../components/ui/error-minlenght/error-minlenght';
@@ -8,10 +8,11 @@ import { ErrorPattern } from '../../components/ui/error-pattern/error-pattern';
 import { ErrorEmail } from '../../components/ui/error-email/error-email';
 import { Auth } from '../../services/auth';
 import Usuario from '../../../../interfaces/usuario';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { StorageService } from '../../services/storage-service';
 
 @Component({
-  imports: [ReactiveFormsModule, CampoInput , ErrorRequerido , ErrorMinlenght , ErrorMaxlenght , ErrorPattern , ErrorEmail],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink],
   selector: 'app-registro',
   styleUrl: './registro.css',
   templateUrl: './registro.html',
@@ -19,9 +20,12 @@ import { Router } from '@angular/router';
 export class Registro {
   auth = inject(Auth)
   rout = inject(Router)
-
+  stg = inject(StorageService)
 
   logo_2='assets/imagenes/Gemini2.png'
+  
+  //cargar peliculas y mostrarlas 
+  
 
   form_registro = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.minLength(2) , Validators.maxLength(15) , Validators.pattern(/^[a-zA-Z\- ]+$/)]),
@@ -29,18 +33,45 @@ export class Registro {
     email: new FormControl('', [Validators.email , Validators.required]),
     contrasena: new FormControl('',[Validators.required , Validators.minLength(6)]),
     edad: new FormControl<number | null>(null, [Validators.required, Validators.min(15), Validators.max(120), Validators.pattern(/^[0-9]+$/)]),
-    foto: new FormControl<File | null>(null,)
+    foto: new FormControl<string | null>(null,)
   });
+
+ 
 
   registrarse(){
     if(this.form_registro.valid){
       this.auth.registrar(this.form_registro.value as unknown as Usuario)
     }
   }
-  volver():void{
-    this.rout.navigate(['/login'])
+
+
+  avatares = signal<string[]>([]);
+  avatarSeleccionado = signal<string | null>(null);
+  mostrarSelectorAvatar = signal(false);
+  isLoadingAvatares = signal(false);
+
+async abrirSelectorAvatar(): Promise<void> {
+  this.mostrarSelectorAvatar.set(true);
+  this.isLoadingAvatares.set(true);
+
+  try {
+      const avatares = await this.stg.listarAvatares();
+      this.avatares.set(avatares);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoadingAvatares.set(false);
+    } 
+  } 
+
+  elegirAvatar(url: string): void {
+    this.avatarSeleccionado.set(url);
   }
 
+  confirmarAvatar(): void {
+    this.form_registro.controls.foto.setValue(this.avatarSeleccionado());
+    this.mostrarSelectorAvatar.set(false);
+  }
   
 
 }
