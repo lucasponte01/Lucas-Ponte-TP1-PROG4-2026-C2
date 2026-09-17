@@ -24,7 +24,7 @@ export class Registro {
 
   logo_2='assets/imagenes/Gemini2.png'
   
-  //cargar peliculas y mostrarlas 
+
   
 
   form_registro = new FormGroup({

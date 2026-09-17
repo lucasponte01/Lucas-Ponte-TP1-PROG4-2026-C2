@@ -1,19 +1,93 @@
-<div  class="content-pelis">
-    <nav class="nav">
-        <div class="logo_container">
-            <img [src]="logo_menus" alt="logo" class="logo" >
-        </div>
-            <button (click)="cerrar_sesion()">adios</button>
-        <div>
-            <label class="nav-textos" for="">home</label>
-        </div>
-    </nav><br>
-    <nav class="nav-categorias">
-        <label class="nav-textos-categorias" for="">categorias</label>
+<body>
+    
 
-    </nav>
+<header class="navbar">
+  <a routerLink="/home"><img class="logo" [src]="logo_menus" alt="logo"></a>
+  <button class="btn_logout" (click)="cerrar_sesion()">cerrar sesion</button>
+</header>
 
-    <div>
-        
-    </div>
+<div class="sub-header">
+  <button class="btn_nav">peliculas</button>
+  <button class="btn_nav">candy</button>
+  <button class="btn_nav">proximo</button>
+  <button class="btn_nav">proximo</button>
+  <button class="btn_nav">proximo</button>
 </div>
+
+<main class="container">
+  
+  <div class="filter-bar">
+    <button class="btn_nav">Genero ▾</button>
+    <button class="btn_nav">Idioma ▾</button>
+    <p class="texto">Buscador</p>
+    <input type="text" class="input">
+  
+  </div>
+
+  <div >
+    <h2>peliculas mas vendidas</h2>
+  </div>
+
+ 
+  <div class="movies-grid">
+    <div class="card_mas_vendidas">
+
+       
+    <div class="movie-card">
+      <!--
+       <img src="poster1.jpg" alt="Spider-Man">
+      <span class="duration">2h 30m</span>
+      <span class="duration">genero</span>
+      <span class="duration">formato</span>
+      <span class="duration">idioma</span>
+      <span class="badge-icon">sinopsis</span>
+      <span class="duration">puntuacion</span>
+      -->
+    </div>
+
+    
+    <div class="movie-card">
+      <!--
+      <img src="poster2.jpg" alt="Coyote vs Acme">
+      <span class="duration">1h 50m</span>
+      <span class="duration">genero</span>
+      <span class="duration">formato</span>
+      <span class="duration">idioma</span>
+      <span class="badge-icon">sinopsis</span>
+      <span class="duration">puntuacion</span>
+      -->
+    </div>
+
+  
+    <div class="movie-card">
+      <!--
+      <img src="poster3.jpg" alt="La Noche del Demonio">
+      
+      <span class="duration">1h 46m</span>
+      <span class="duration">genero</span>
+      <span class="duration">formato</span>
+      <span class="duration">idioma</span>
+      <span class="badge-icon">sinopsis</span>
+      <span class="duration">puntuacion</span>
+      -->
+    </div>
+    </div>
+    
+
+ 
+    <div class="movie-card">
+      <!--
+      <img src="poster4.jpg" alt="La Odisea">
+     
+      <span class="duration">2h 55m</span>
+      <span class="duration">genero</span>
+      <span class="duration">formato</span>
+      <span class="duration">idioma</span>
+      <span class="badge-icon">sinopsis</span>
+      <span class="duration">puntuacion</span>
+      -->
+    </div>
+
+  </div>
+</main>
+</body>
