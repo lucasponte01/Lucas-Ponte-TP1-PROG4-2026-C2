@@ -8,11 +8,12 @@ import { ErrorPattern } from '../../components/ui/error-pattern/error-pattern';
 import { ErrorEmail } from '../../components/ui/error-email/error-email';
 import { Auth } from '../../services/auth';
 import Usuario from '../../../../interfaces/usuario';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { StorageService } from '../../services/storage-service';
 
+
 @Component({
-  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink, RouterOutlet],
   selector: 'app-registro',
   styleUrl: './registro.css',
   templateUrl: './registro.html',
@@ -33,6 +34,9 @@ export class Registro {
     email: new FormControl('', [Validators.email , Validators.required]),
     contrasena: new FormControl('',[Validators.required , Validators.minLength(6)]),
     edad: new FormControl<number | null>(null, [Validators.required, Validators.min(15), Validators.max(120), Validators.pattern(/^[0-9]+$/)]),
+    tipo_sangre: new FormControl('', [Validators.required]),
+    color_ojos: new FormControl('', [Validators.required]),
+    dias_vacaciones: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     foto: new FormControl<string | null>(null,)
   });
 
@@ -40,7 +44,7 @@ export class Registro {
 
   registrarse(){
     if(this.form_registro.valid){
-      this.auth.registrar(this.form_registro.value as unknown as Usuario)
+      this.auth.registrar(this.form_registro.value as Usuario)
     }
   }
 

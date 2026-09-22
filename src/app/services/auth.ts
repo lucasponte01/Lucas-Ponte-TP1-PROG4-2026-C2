@@ -1,24 +1,24 @@
-import { inject, Service, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { User } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
 import Usuario from '../../../interfaces/usuario';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class Auth {
     private _supabaseService = inject(SupabaseService);
     private router = inject(Router);
-    usuarioActual: any = null;
+    usuarioActual = signal<User | null>(null);
 
 
     constructor(){
         this._supabaseService.Auth.onAuthStateChange((event , session) =>{
             if(session?.user){
-                this.usuarioActual = session.user;
-                this.router.navigateByUrl('/home')
+                this.usuarioActual.set(session?.user ?? null);
+                
             }else{
-                this.usuarioActual = null;
-                this.router.navigateByUrl('/login');
+                this.usuarioActual.set(null) ;
+                
             }   
         });
     }
@@ -32,14 +32,20 @@ export class Auth {
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,
                 edad: usuario.edad,
+                tipo_sangre: usuario.tipo_sangre,
+                color_ojos: usuario.color_ojos,
+                dias_vacaciones: usuario.dias_vacaciones,
                 avatar_url: usuario.foto
                 }
             }
+          
         });
+        
             if(error) {
                 throw error
             };
 
+        this.router.navigate(['/']);
         return data
         
     }
@@ -61,16 +67,26 @@ export class Auth {
       );
     }
 
-    this.usuarioActual = data.user;
-    
+    this.usuarioActual.set(data.user);
+    this.router.navigate(['/home']);
     return data.user;
+  }
+
+  nombre_invi = signal<string>("")
+  email_invi = signal<string>("")
+
+  logear_anonimo(nombre:string , email:string):void{
+    this.nombre_invi.set(nombre);
+    this.email_invi.set(email)
+
+    this.router.navigate(['/home'])
   }
 
 
     async cerrarSesion() {
      const{error} = await this._supabaseService.Auth.signOut();
     
-      this.usuarioActual = null;
+      this.usuarioActual.set(null);
       this.router.navigate(['/'])
       if(error){
         throw new Error(

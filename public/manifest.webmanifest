@@ -1,6 +1,6 @@
 {
-  "name": "progra_4_tp_cine",
-  "short_name": "progra_4_tp_cine",
+  "name": "Fotograma",
+  "short_name": "Fotograma",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

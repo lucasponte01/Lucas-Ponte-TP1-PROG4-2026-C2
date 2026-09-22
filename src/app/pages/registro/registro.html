@@ -40,7 +40,7 @@
   </div>
   
   <div>
-    <app-campo-input id="contrasena" label="Contrasena" [control]="form_registro.controls.contrasena" type="password">
+    <app-campo-input id="contrasena" label="Contraseña" [control]="form_registro.controls.contrasena" type="password">
       <app-error-requerido  mensaje="El Contraseña es requerido" [errors]="form_registro.controls.contrasena.errors"></app-error-requerido>
       <app-error-minlenght [errors]="form_registro.controls.contrasena.errors"></app-error-minlenght>
     </app-campo-input>
@@ -54,6 +54,25 @@
       <app-error-pattern mensaje="solo se permiten numeros" [errors]="form_registro.controls.edad.errors" ></app-error-pattern>
     </app-campo-input>
   </div>
+
+  <div>
+    <app-campo-input id="fecha_naci" label="Tipo de sangre" [control]="form_registro.controls.tipo_sangre" type="text">
+      <app-error-requerido  mensaje="El tipo de sangre es requerido" [errors]="form_registro.controls.tipo_sangre.errors"></app-error-requerido>
+    </app-campo-input>
+  </div>
+
+  <div>
+    <app-campo-input id="fecha_naci" label="Color de ojos" [control]="form_registro.controls.color_ojos" type="text">
+      <app-error-requerido  mensaje="El Color de ojos es requerido" [errors]="form_registro.controls.color_ojos.errors"></app-error-requerido>
+    </app-campo-input>
+  </div>
+
+  <div>
+    <app-campo-input id="fecha_naci" label="Dias de vacasiones" [control]="form_registro.controls.dias_vacaciones" type="int">
+      <app-error-requerido  mensaje="los dias de vacasiones son requerido" [errors]="form_registro.controls.dias_vacaciones.errors"></app-error-requerido>
+    </app-campo-input>
+  </div>
+
 
   <button class="boton_i" type="submit" (click)="abrirSelectorAvatar()">Seleccionar avatar</button>
 

@@ -4,7 +4,7 @@
         <img [src]="logo" alt="Logo" class="logo" />
     </div>
     <div class="card">
-    <h1 class="textos">iniciar sesion</h1>
+    <h1 class="textos">Iniciar sesion</h1>
     <form [formGroup]="form_login" (ngSubmit)="iniciarSesion()">
         <div>
             <app-campo-input id="email" label="Email" [control]="form_login.controls.email" type="email">
@@ -13,7 +13,7 @@
             </app-campo-input>
         </div>
         <div>
-            <app-campo-input id="contrasena" label="Contrasena" [control]="form_login.controls.contrasena" type="password">
+            <app-campo-input id="contrasena" label="Contraseña" [control]="form_login.controls.contrasena" type="password">
             <app-error-requerido  [errors]="form_login.controls.contrasena.errors"></app-error-requerido>
             <app-error-minlenght [errors]="form_login.controls.contrasena.errors"></app-error-minlenght>
             </app-campo-input>
@@ -21,7 +21,7 @@
         
     </form>
     <button class="boton_i" type="submit" (click)="iniciarSesion()">Iniciar sesion</button>
-    <button class="boton_i" (click)="acceso_invitado()">Entrar como invitado</button>
+    <button class="boton_i" routerLink="/anonimo">Entrar como invitado</button>
     <label class="textos" >¿no tienes cuenta?<a class="registrate" routerLink="/registro">Registrarse</a></label>
 </div>
 </div>

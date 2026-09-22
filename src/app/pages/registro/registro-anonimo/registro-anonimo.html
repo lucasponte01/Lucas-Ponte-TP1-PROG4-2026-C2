@@ -1,0 +1,39 @@
+
+<form class="login" [formGroup]="form_registro_anonimo" (ngSubmit)="registrarse_anonimo()">
+  <div>
+    <button class="boton_i" type="submit" (click)="volver()">volver</button>
+  </div>
+
+  <div class="logo_container">
+    <div class="logo">
+        <img [src]="logo_2" alt="Logo" class="logo" />
+    </div>
+  </div>
+  
+<div class="card">
+  <h1 class="textos">Regitrarse</h1>
+  <div >
+
+    <app-campo-input id="nombre" label="Nombre" [control]="form_registro_anonimo.controls.nombre" type="text">
+      <app-error-requerido  mensaje="El nombre es requerido" [errors]="form_registro_anonimo.controls.nombre.errors"></app-error-requerido>
+      <app-error-minlenght [errors]="form_registro_anonimo.controls.nombre.errors"></app-error-minlenght>
+      <app-error-maxlenght [errors]="form_registro_anonimo.controls.nombre.errors"></app-error-maxlenght>
+      <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro_anonimo.controls.nombre.errors" ></app-error-pattern>
+    </app-campo-input>
+    
+  </div>
+ 
+
+  <div>
+    <app-campo-input id="email" label="Email" [control]="form_registro_anonimo.controls.email" type="email">
+      <app-error-requerido  mensaje="El Email es requerido" [errors]="form_registro_anonimo.controls.email.errors"></app-error-requerido>
+      <app-error-email mensaje="Ingresa un correo electrónico válido." [errors]="form_registro_anonimo.controls.email.errors"></app-error-email>
+    </app-campo-input>
+  </div>
+  
+  <button class="boton_i" type="submit" [disabled]="form_registro_anonimo.invalid" (click)="registrarse_anonimo()">Registrarse</button>
+
+
+
+</div>
+</form>
