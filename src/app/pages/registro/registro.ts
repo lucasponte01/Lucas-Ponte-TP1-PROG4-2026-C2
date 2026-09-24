@@ -7,9 +7,9 @@ import { ErrorMaxlenght } from '../../components/ui/error-maxlenght/error-maxlen
 import { ErrorPattern } from '../../components/ui/error-pattern/error-pattern';
 import { ErrorEmail } from '../../components/ui/error-email/error-email';
 import { Auth } from '../../services/auth';
-import Usuario from '../../../../interfaces/usuario';
+import Usuario from '../../interfaces/usuario';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { StorageService } from '../../services/storage-service';
+import { StorageService } from '../../services/storage/storage-service';
 
 
 @Component({
@@ -25,6 +25,10 @@ export class Registro {
 
   logo_2='assets/imagenes/Gemini2.png'
   
+  avatares = signal<string[]>([]);
+  avatarSeleccionado = signal<string | null>(null);
+  mostrarSelectorAvatar = signal(false);
+  isLoadingAvatares = signal(false);
 
   
 
@@ -49,10 +53,6 @@ export class Registro {
   }
 
 
-  avatares = signal<string[]>([]);
-  avatarSeleccionado = signal<string | null>(null);
-  mostrarSelectorAvatar = signal(false);
-  isLoadingAvatares = signal(false);
 
 async abrirSelectorAvatar(): Promise<void> {
   this.mostrarSelectorAvatar.set(true);

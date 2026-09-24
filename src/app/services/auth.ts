@@ -2,7 +2,7 @@ import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { User } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
-import Usuario from '../../../interfaces/usuario';
+import Usuario from '../interfaces/usuario';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {

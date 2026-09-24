@@ -1,8 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { Auth } from '../../services/auth';
-import { ReactiveFormsModule } from '@angular/forms';
-
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Peliculas } from '../../services/peliculas/peliculas';
+import { Pelicula } from '../../interfaces/peliculas';
+import { Funcion } from '../../interfaces/funcion';
+import { Funciones } from '../../services/funciones.ts/funciones';
+import { StorageService } from '../../services/storage/storage-service';
 @Component({
   imports: [RouterLink , ReactiveFormsModule],
   selector: 'app-home',
@@ -21,17 +25,79 @@ RF-04: Sección "Próximamente" con películas de estreno futuro; el usuario pue
 RF-05: Preventa configurable por película: se abre 7 días antes del estreno con un % de descuento configurable sobre el precio normal; al llegar la fecha de estreno, el precio vuelve al valor normal automáticamente.
 RF-06: Cada película puede tener restricción de edad (18+, 13+, sin restricción). Usuarios por debajo de la edad no pueden comprar esa entrada; toda entrada de una película con restricción debe indicar que debe asistir un adulto.
 */
+//arreglar lo de mostrar peliculas
 export class Home {
   logo_menus = "/assets/imagenes/Gemini2.png"
-  auth = inject(Auth)
-  route = inject(Router)
+  auth = inject(Auth);
+  route = inject(Router);
+  pelis = inject(Peliculas);
+  funcion = inject(Funciones);
+  stg = inject(StorageService);
+
+  peliculas = signal<Pelicula[]>([]);
+  funciones = signal<Funcion[]>([]);
+  loading = signal<boolean | null>(null)
+
+  foto_pelicula = signal<string[]>([]);
+  mostrarpeliculas = signal(false);
+  isLoadingpeliculas = signal(false);
+
+
+  form_pelicula = new FormGroup({
+    id: new FormControl<number | null>(null),
+    nombre: new FormControl(''),
+    sinopsis: new FormControl(''),
+    imagen_url: new FormControl<number | null>(null),
+    duracion_min: new FormControl<number | null>(null),
+    generos: new FormControl<[] | null>(null),
+    
+  });
+  form_funcion = new FormGroup({
+    formato: new FormControl<[] | null>(null),
+    idioma:new FormControl('')
+  })
+
+  ngOnInit() {
+    this.loading.set(true);
+    this.traerTodas_peliculas();
+    this.traerTodas_funciones();
+    this.abrirSelectorpelis()
+  }
+
+  ngDestroy(){
+    this.loading.set(false);
+  }
+
+  async traerTodas_peliculas() {
+    this.peliculas.set(await this.pelis.mostrarpeliculas());
+    
+  }
+
+  async traerTodas_funciones() {
+    this.funciones.set(await this.funcion.mostrarfuncin());
+  }
+
+
+  async abrirSelectorpelis(): Promise<void> {
+  this.mostrarpeliculas.set(true);
+  this.isLoadingpeliculas.set(true);
+
+  try {
+      const pelicula = await this.stg.listar_peliculas()
+      this.foto_pelicula.set(pelicula);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoadingpeliculas.set(false);
+    } 
+  } 
 
   async cerrar_sesion() {
-  try {
-    await this.auth.cerrarSesion();
-    
-  } catch (error) {
-    console.error(error);
+    try {
+      await this.auth.cerrarSesion();
+      
+    } catch (error) {
+      console.error(error);
+    }
   }
-}
 }

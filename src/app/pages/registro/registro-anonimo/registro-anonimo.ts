@@ -6,7 +6,7 @@ import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-max
 import { ErrorPattern } from '../../../components/ui/error-pattern/error-pattern';
 import { Auth } from '../../../services/auth';
 import { Router } from '@angular/router';
-import { StorageService } from '../../../services/storage-service';
+import { StorageService } from '../../../services/storage/storage-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorEmail } from '../../../components/ui/error-email/error-email';
 
