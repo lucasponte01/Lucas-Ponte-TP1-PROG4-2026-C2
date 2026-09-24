@@ -7,8 +7,9 @@ import { Pelicula } from '../../interfaces/peliculas';
 import { Funcion } from '../../interfaces/funcion';
 import { Funciones } from '../../services/funciones.ts/funciones';
 import { StorageService } from '../../services/storage/storage-service';
+import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
 @Component({
-  imports: [RouterLink , ReactiveFormsModule],
+  imports: [RouterLink , ReactiveFormsModule ,TexoLargoPipe],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
@@ -25,7 +26,7 @@ RF-04: Sección "Próximamente" con películas de estreno futuro; el usuario pue
 RF-05: Preventa configurable por película: se abre 7 días antes del estreno con un % de descuento configurable sobre el precio normal; al llegar la fecha de estreno, el precio vuelve al valor normal automáticamente.
 RF-06: Cada película puede tener restricción de edad (18+, 13+, sin restricción). Usuarios por debajo de la edad no pueden comprar esa entrada; toda entrada de una película con restricción debe indicar que debe asistir un adulto.
 */
-//arreglar lo de mostrar peliculas
+
 export class Home {
   logo_menus = "/assets/imagenes/Gemini2.png"
   auth = inject(Auth);
@@ -43,30 +44,17 @@ export class Home {
   isLoadingpeliculas = signal(false);
 
 
-  form_pelicula = new FormGroup({
-    id: new FormControl<number | null>(null),
-    nombre: new FormControl(''),
-    sinopsis: new FormControl(''),
-    imagen_url: new FormControl<number | null>(null),
-    duracion_min: new FormControl<number | null>(null),
-    generos: new FormControl<[] | null>(null),
-    
-  });
-  form_funcion = new FormGroup({
-    formato: new FormControl<[] | null>(null),
-    idioma:new FormControl('')
-  })
-
   ngOnInit() {
     this.loading.set(true);
+    try{
     this.traerTodas_peliculas();
     this.traerTodas_funciones();
     this.abrirSelectorpelis()
+    }finally{
+      this.loading.set(false);
+    }
   }
 
-  ngDestroy(){
-    this.loading.set(false);
-  }
 
   async traerTodas_peliculas() {
     this.peliculas.set(await this.pelis.mostrarpeliculas());

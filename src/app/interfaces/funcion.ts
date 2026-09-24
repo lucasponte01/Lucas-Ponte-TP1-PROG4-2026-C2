@@ -2,6 +2,7 @@
 import { Timestamp } from 'rxjs';
 
 export interface Funcion {
+  pelicula_id:string
   id: string;
   inicio: string;
   fin: string;

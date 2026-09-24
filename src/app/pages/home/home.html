@@ -16,36 +16,48 @@
   
   <div class="filter-bar">
     <button class="btn_nav">Idioma ▾</button>
-    <p class="texto">Buscador</p>
-    <!-- Usando tu clase input personalizada -->
-    
+    <div class="input-container">
+      <input type="text" class="input" placeholder="Buscar películas...">
+    </div>
   </div>
 
-  <div class="subtitle-row">
-    <h2>Películas más vendidas</h2>
-  </div>
 
-  @if (loading() == false) {
-    <p>Cargando películas...</p>
+  @if (loading()) {
+    <p>Cargando peliculas...</p>
+  } @else if (peliculas().length === 0) {
+    <p>No hay películas cargadas.</p>
   } @else {
-    
     <div class="movies-grid">
-  @for (pelicula of peliculas(); track pelicula.id) {
-    <div class="movie-card">
-      <!-- Aquí llamas únicamente a la URL de esa película específica -->
-      <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
-      
-      <span class="duration">{{ pelicula.duracion_min }} min</span>
-      
-      @if (pelicula.restriccion_edad) {
-        <span class="badge-icon">+{{ pelicula.restriccion_edad }}</span>
+      @for (pelicula of peliculas(); track pelicula.id) {
+        <div class="movie-card">
+          
+          <div class="movie-image-container">
+            <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
+            <span class="duration">{{ pelicula.duracion_min }} min</span>
+            @if (pelicula.restriccion_edad) {
+              <span class="badge-icon">+{{ pelicula.restriccion_edad }}</span>
+            }
+          </div>
+
+         
+          <div class="movie-info">
+            <h3 class="movie-title">{{ pelicula.nombre }}</h3>
+            <p class="sinopsis">{{ pelicula.sinopsis | textoLargo:30}}</p>
+            <div class="generos-tags">
+              @for (g of pelicula.generos; track g) {
+                <span class="tag-genre">{{ g }}</span>
+              }
+              @for (funcion of funciones(); track funcion.id) {
+                @if (funcion.pelicula_id === pelicula.id) {
+                  <span class="tag-genre">{{ funcion.formato }}</span>
+                  <span class="tag-genre">{{ funcion.idioma }}</span>
+                }
+              }
+            </div>
+          </div>
+        </div>
       }
     </div>
-    }
-  </div>
   }
-  <div class="subtitle-row" style="margin-top: 40px;">
-    <h2>Catálogo de películas</h2>
-  </div>
 </main>
 </body>
