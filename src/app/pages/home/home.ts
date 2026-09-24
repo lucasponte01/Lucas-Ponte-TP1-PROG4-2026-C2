@@ -8,8 +8,9 @@ import { Funcion } from '../../interfaces/funcion';
 import { Funciones } from '../../services/funciones.ts/funciones';
 import { StorageService } from '../../services/storage/storage-service';
 import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
+import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
 @Component({
-  imports: [RouterLink , ReactiveFormsModule ,TexoLargoPipe],
+  imports: [RouterLink , ReactiveFormsModule ,TexoLargoPipe , MinAHsPipe],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',

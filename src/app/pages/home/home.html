@@ -36,7 +36,7 @@
           
           <div class="movie-image-container">
             <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
-            <span class="duration">{{ pelicula.duracion_min }} min</span>
+            <span class="duration">{{ pelicula.duracion_min | minutosToHoras}} </span>
             @if (pelicula.restriccion_edad) {
               <span class="badge-icon">+{{ pelicula.restriccion_edad }}</span>
             }

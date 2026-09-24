@@ -8,6 +8,10 @@
 body {
   background-color: #971107;
   color: #ffffff;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .navbar {
@@ -49,8 +53,10 @@ body {
 }
 
 .container {
+  background-color: #971107;
   padding: 25px;
-  max-width: 1400px;
+  padding-bottom: 50px;
+  min-height: 100vh;
   margin: 0 auto;
 }
 
