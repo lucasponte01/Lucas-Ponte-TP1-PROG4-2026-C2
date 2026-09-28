@@ -5,62 +5,65 @@
 </header>
 
 <div class="sub-header">
-  <button class="btn_nav">peliculas</button>
-  <button class="btn_nav">candy</button>
-  <button class="btn_nav">proximo</button>
+  <button class="btn_nav">Peliculas</button>
+  <button class="btn_nav">Funciones</button>
+  <button class="btn_nav">Salas</button>
   <button class="btn_nav">proximo</button>
   <button class="btn_nav">proximo</button>
 </div>
 
 <main class="container">
-  
-  <div class="filter-bar">
-    <button class="btn_nav">Idioma ▾</button>
-    <div class="input-container">
-      <input type="text" class="input" placeholder="Buscar películas...">
-    </div>
-  </div>
+    <input
+      class="input"
+      type="search"
+      placeholder="Buscar Peliculas"
+      (input)="onBuscar($any($event.target).value)"
+    />
 
   <div class="subtitle-row">
     <h2>Catalogo de Peliculas</h2>
   </div>
-
-  @if (loading()) {
-    <p>Cargando peliculas...</p>
-  } @else if (peliculas().length === 0) {
-    <p>No hay películas cargadas.</p>
-  } @else {
-    <div class="movies-grid">
-      @for (pelicula of peliculas(); track pelicula.id) {
-        <div class="movie-card">
-          
-          <div class="movie-image-container">
-            <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
-            <span class="duration">{{ pelicula.duracion_min | minutosToHoras}} </span>
-            @if (pelicula.restriccion_edad) {
-              <span class="badge-icon">+{{ pelicula.restriccion_edad }}</span>
-            }
-          </div>
-
-         
-          <div class="movie-info">
-            <h3 class="movie-title">{{ pelicula.nombre }}</h3>
-            <p class="sinopsis">{{ pelicula.sinopsis | textoLargo:30}}</p>
-            <div class="generos-tags">
-              @for (g of pelicula.generos; track g) {
-                <span class="tag-genre">{{ g }}</span>
-              }
-              @for (funcion of funciones(); track funcion.id) {
-                @if (funcion.pelicula_id === pelicula.id) {
-                  <span class="tag-genre">{{ funcion.formato }}</span>
-                  <span class="tag-genre">{{ funcion.idioma }}</span>
-                }
+  @if (PeliculasFiltrados().length === 0) {
+  <span class="">Película no encontrada</span>
+  }@else {
+    @if (loading()) {
+      <p>Cargando peliculas...</p>
+    } @else if (peliculas().length === 0) {
+      <p>No hay películas cargadas.</p>
+    } @else {
+      <div class="movies-grid">
+        @for (pelicula of PeliculasFiltrados(); track pelicula.id) {
+          <div class="movie-card">
+            
+            <div class="movie-image-container">
+              <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
+              <span class="duration">{{ pelicula.duracion_min | minutosToHoras}} </span>
+              @if (pelicula.restriccion_edad) {
+                <span class="badge-icon">+{{ pelicula.restriccion_edad }}</span>
               }
             </div>
+
+          
+            <div class="movie-info">
+              <h3 class="movie-title">{{ pelicula.nombre }}</h3>
+              <p class="sinopsis">{{ pelicula.sinopsis | textoLargo:30}}</p>
+              <div class="generos-tags">
+                @for (g of pelicula.generos; track g) {
+                  <span class="tag-genre">{{ g }}</span>
+                }
+                @for (funcion of funciones(); track funcion.id) {
+                  @if (funcion.pelicula_id === pelicula.id) {
+                    <span class="tag-genre">{{ funcion.formato }}</span>
+                    <span class="tag-genre">{{ funcion.idioma }}</span>
+                  }
+                }
+              </div>
+            </div>
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
   }
+    
 </main>
 </body>

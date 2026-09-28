@@ -1,0 +1,26 @@
+
+<div class="login">
+    <div class="logo_container">
+        <img [src]="logo" alt="Logo" class="logo" />
+    </div>
+    <div class="card">
+    <h1 class="textos">Iniciar sesion  como Administrador</h1>
+    <form [formGroup]="form_login_admin" (ngSubmit)="iniciarSesion_admin()">
+        <div>
+            <app-campo-input id="email" label="Email" [control]="form_login_admin.controls.email" type="email">
+            <app-error-requerido [errors]="form_login_admin.controls.email.errors"></app-error-requerido>
+            <app-error-email [errors]="form_login_admin.controls.email.errors"></app-error-email>
+            </app-campo-input>
+        </div>
+        <div>
+            <app-campo-input id="contrasena" label="Contraseña" [control]="form_login_admin.controls.contrasena" type="password">
+            <app-error-requerido  [errors]="form_login_admin.controls.contrasena.errors"></app-error-requerido>
+            <app-error-minlenght [errors]="form_login_admin.controls.contrasena.errors"></app-error-minlenght>
+            </app-campo-input>
+        </div>
+        
+    </form>
+    <button class="boton_i" type="submit" (click)="iniciarSesion_admin()">Iniciar sesion</button>
+    
+</div>
+</div>

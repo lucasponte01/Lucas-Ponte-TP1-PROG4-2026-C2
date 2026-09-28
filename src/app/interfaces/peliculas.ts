@@ -1,6 +1,6 @@
 import { Timestamp } from 'rxjs';
 
-export interface Pelicula {
+export default interface Pelicula {
   id: string;
   nombre: string;
   sinopsis: string;
@@ -10,6 +10,17 @@ export interface Pelicula {
   fecha_estreno: string;
   preventa_pct_descuento : number;
   created_at: Timestamp<any>;
-  generos: [];
+  generos: string[];
+  
+}
+
+export interface PeliculaPorCrear {
+  nombre: string;
+  sinopsis: string;
+  duracion_min: number;
+  restriccion_edad: number | null;
+  fecha_estreno: string;
+  preventa_pct_descuento : number;
+  generos: string[];
   
 }

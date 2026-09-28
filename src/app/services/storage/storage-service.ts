@@ -36,17 +36,6 @@ export class StorageService {
         );
   }
 
+ 
 
-//push noti import swpush de service worked
-/*
-  sw = inject(SwPush)
-  
-  registrar(){
-    if(!this.sw.isEnabled){
-      return
-    }
-
-    this.sw.requestSubscription({serverPublicKey:environment.vapid})
-  }
-  */
 }

@@ -13,9 +13,18 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/login/login').then(m => m.Login)
     },
     {
+        path:'login/admin',
+        loadComponent:() => import('./pages/login/login-admin/login-admin').then(m => m.LoginAdmin)
+    },
+    {
         path: 'home',
         
         loadComponent: () => import('./pages/home/home').then(m => m.Home)
+    },
+    {
+        path: 'home/admin',
+        
+        loadComponent: () => import('./pages/home/home/admin/admin').then(m => m.Admin)
     },
     {
         path: 'registro',
@@ -25,5 +34,10 @@ export const routes: Routes = [
     {
         path: 'anonimo',
         loadComponent: () => import('./pages/registro/registro-anonimo/registro-anonimo').then(m => m.RegistroAnonimo)
+    },
+    {
+        path: 'admin',
+        loadChildren:() => import('./pages/admin/admin.routes').then(m => m.instalarroute)
     }
+    
 ];

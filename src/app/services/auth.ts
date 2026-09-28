@@ -35,7 +35,8 @@ export class Auth {
                 tipo_sangre: usuario.tipo_sangre,
                 color_ojos: usuario.color_ojos,
                 dias_vacaciones: usuario.dias_vacaciones,
-                avatar_url: usuario.foto
+                avatar_url: usuario.foto,
+                
                 }
             }
           
@@ -50,6 +51,35 @@ export class Auth {
         
     }
 
+    public async registrar_admin(usuario : Usuario){
+      const {data,error} = await this._supabaseService.Auth.signUp({
+        email: usuario.email,
+          password: usuario.contrasena,
+          options: {
+          data: {
+              nombre: usuario.nombre,
+              apellido: usuario.apellido,
+              edad: usuario.edad,
+              tipo_sangre: usuario.tipo_sangre,
+              color_ojos: usuario.color_ojos,
+              dias_vacaciones: usuario.dias_vacaciones,
+              avatar_url: usuario.foto,
+              tipo: 'admin'
+            }
+          }
+            
+        });
+          
+        if(error) {
+            throw error
+        };
+
+      this.router.navigate(['/']);
+      return data
+          
+  }
+    
+  
   async logear(res: any) {
     const { data, error } = await this._supabaseService.Auth.signInWithPassword({
       email: res.email,
@@ -66,9 +96,48 @@ export class Auth {
         'Login failed: no user returned'
       );
     }
+    const { data: usuarioData, error: dbError } = await this._supabaseService.client.from('usuarios').select('tipo').eq('id', data.user.id).single();
+    const tipoEnBaseDeDatos = usuarioData?.tipo?.trim();
+    if (dbError || usuarioData?.tipo || tipoEnBaseDeDatos !== 'cliente') {
+      await this._supabaseService.Auth.signOut();
+      throw new Error('Acceso denegado: el usuario no es cliente');
+    }else{
+      this.usuarioActual.set(data.user);
+      this.router.navigate(['/home']);
+      return data.user;
+    }
+  }
+
+  async logear_admin(res: any) {
+    const { data, error } = await this._supabaseService.Auth.signInWithPassword({
+      email: res.email,
+      password: res.password,
+    });
+
+    if (error) {
+      throw new Error(`Login failed: ${error.message}`);
+    }
+
+    if (!data.user) {
+      throw new Error('Login failed: no user returned');
+    }
+
+    // Consultamos el tipo en la tabla usuarios
+    const { data: usuarioData, error: dbError } = await this._supabaseService.client
+      .from('usuarios')
+      .select('tipo')
+      .eq('id', data.user.id)
+      .maybeSingle();
+
+    console.log("Rol obtenido de la BD:", usuarioData);
+
+    // Validamos que sea admin (usando trim por seguridad)
+    if (dbError || !usuarioData || usuarioData.tipo?.trim() !== 'admin') {
+      await this._supabaseService.Auth.signOut();
+      throw new Error('Acceso denegado: el usuario no es administrador');
+    }
 
     this.usuarioActual.set(data.user);
-    this.router.navigate(['/home']);
     return data.user;
   }
 

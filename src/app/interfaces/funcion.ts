@@ -14,5 +14,4 @@ export interface Funcion {
   es_preventa: boolean;
   created_at: Timestamp<any>;
   
-  
 }

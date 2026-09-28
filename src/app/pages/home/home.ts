@@ -1,16 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { Auth } from '../../services/auth';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Peliculas } from '../../services/peliculas/peliculas';
-import { Pelicula } from '../../interfaces/peliculas';
+import {  ReactiveFormsModule } from '@angular/forms';
+import Pelicula from '../../interfaces/peliculas';
 import { Funcion } from '../../interfaces/funcion';
-import { Funciones } from '../../services/funciones.ts/funciones';
+import { Funciones } from '../../services/funciones/funciones';
 import { StorageService } from '../../services/storage/storage-service';
 import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
 import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
+import { PeliculasServices } from '../../services/peliculas/peliculas';
+
 @Component({
-  imports: [RouterLink , ReactiveFormsModule ,TexoLargoPipe , MinAHsPipe],
+  imports: [RouterLink, ReactiveFormsModule, TexoLargoPipe, MinAHsPipe],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
@@ -18,10 +19,11 @@ import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
 
 //visual del home poner que los botones se opaquen cuando pasas x arriba
 //mirar requerimientos :
+
+//agregar validaciones a las cosas analisar bien 
 /*
 3.1 Catálogo de películas
-RF-01: Cada película tiene nombre, imagen, sinopsis, duración, uno o más géneros, formato (2D/3D/4D/5D) e idioma (castellano/subtitulada).
-RF-02: Listado de películas con buscador, filtrable por género (múltiple).
+
 RF-03: La home muestra primero las 3 películas más vendidas.
 RF-04: Sección "Próximamente" con películas de estreno futuro; el usuario puede activar una alerta para ser notificado cuando se habilite la venta.
 RF-05: Preventa configurable por película: se abre 7 días antes del estreno con un % de descuento configurable sobre el precio normal; al llegar la fecha de estreno, el precio vuelve al valor normal automáticamente.
@@ -32,17 +34,33 @@ export class Home {
   logo_menus = "/assets/imagenes/Gemini2.png"
   auth = inject(Auth);
   route = inject(Router);
-  pelis = inject(Peliculas);
+  db = inject(PeliculasServices)
   funcion = inject(Funciones);
   stg = inject(StorageService);
-
+ 
   peliculas = signal<Pelicula[]>([]);
   funciones = signal<Funcion[]>([]);
   loading = signal<boolean | null>(null)
+  textoBusqueda = signal('');
 
   foto_pelicula = signal<string[]>([]);
   mostrarpeliculas = signal(false);
   isLoadingpeliculas = signal(false);
+
+
+  PeliculasFiltrados = computed(() => {
+  const texto = this.textoBusqueda().trim().toLowerCase();
+    
+  return this.peliculas().filter(
+    pelicula => !texto || pelicula.generos.some(genero =>
+        (genero).toLowerCase().includes(texto)
+      )
+    );
+  });
+
+  onBuscar(texto: string): void {
+    this.textoBusqueda.set(texto);
+  }
 
 
   ngOnInit() {
@@ -58,7 +76,7 @@ export class Home {
 
 
   async traerTodas_peliculas() {
-    this.peliculas.set(await this.pelis.mostrarpeliculas());
+    this.peliculas.set(await this.db.mostrarpeliculas());
     
   }
 

@@ -1,0 +1,169 @@
+<body>
+  <header class="navbar">
+    
+    <button class="btn_logout" (click)="cerrar_sesion()">cerrar sesion</button>
+  </header>
+
+  <div class="navbar">
+    <button class="btn_nav" (click)="cambiarVista('crear')">crear</button>
+    <button class="btn_nav" (click)="cambiarVista('modificar')">modificar</button>
+    <button class="btn_nav" (click)="cambiarVista('eliminar')">eliminar</button>
+  </div>
+
+  <div class="main-content">
+    @switch (vistaActiva()) {
+      
+      @case ('crear') {
+        <div class="card">
+          <h2 class="textos" style="color: aliceblue;">Crear Película</h2>
+          <form [formGroup]="form_crear" (ngSubmit)="crear()" class="form-grid">
+            <input formControlName="nombre" placeholder="Nombre" class="input full-width-input" />
+            <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input full-width-input"></textarea>
+            
+            <input formControlName="duracion_min" type="number" placeholder="Duración (min)" class="input" />
+            <input formControlName="restriccion_edad" type="number" placeholder="Restricción de edad (13, 18 o vacío)" class="input" />
+            
+            <input formControlName="fecha_estreno" type="date" class="input" />
+            <input formControlName="preventa_pct_descuento" type="number" placeholder="% preventa (opcional)" class="input" />
+            
+            <input formControlName="generos" placeholder="Géneros separados por coma" class="input full-width-input" />
+
+            <div class="file-container">
+              <label class="file-label">Imagen de película:</label>
+              
+              
+              <label class="file-custom-box">
+                <span class="file-text">Seleccionar archivo</span>
+                
+                <input type="file" class="file-input-hidden">
+              </label>
+          </div>
+
+            @if (error()) {
+              <p class="error full-width-input">{{ error() }}</p>
+            }
+
+            <button type="submit" class="boton_i" [disabled]="form_crear.invalid || isGuardando()">
+              {{ isGuardando() ? 'Guardando...' : 'Crear película' }}
+            </button>
+          </form>
+        </div>
+      }
+
+      
+      @case ('modificar') {
+        <div class="card">
+
+          <div class="lista-seccion">
+            <h3 class="titulo-seccion">Listado de Películas</h3>
+            <div class="peliculas-lista">
+              @for (item of peliculas(); track $index) {
+                <div class="pelicula-item">
+                  <span class="pelicula-nombre">{{ item.nombre }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="eliminar-seccion">
+            <label class="label-input">Nombre de la película que deseas modificar:</label>
+            <form [formGroup]="form_modificar" (ngSubmit)="pelicula_a_modificar()" class="input-grupo">
+              <input formControlName="nombre" placeholder="Nombre de la película" class="input-custom full-width-input" />
+              <button type="submit" class="btn-eliminar">Buscar</button>
+            </form>
+          </div>
+
+  
+          @if (error()) {
+            <p class="error-msg">{{ error() }}</p>
+          }
+
+          @if (peliculas_seleccionada(); as pelicula) {
+            <form [formGroup]="form_edicion" (ngSubmit)="guardar_modificacion()" class="form-grid">
+              <h4 class="subtitulo-seccion">Editar Datos</h4>
+              
+              <div class="input-grupo-col">
+                <label class="label-input">Nombre:</label>
+                <input formControlName="nombre" placeholder="Nombre" class="input-custom" />
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">Sinopsis:</label>
+                <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input-custom textarea-custom"></textarea>
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">Duración (min):</label>
+                <input formControlName="duracion_min" type="number" placeholder="Duración" class="input-custom" />
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">Restricción de edad:</label>
+                <input formControlName="restriccion_edad" type="number" placeholder="Ej. 13, 18" class="input-custom" />
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">Fecha de estreno:</label>
+                <input formControlName="fecha_estreno" type="date" class="input-custom" />
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">% Preventa (opcional):</label>
+                <input formControlName="preventa_pct_descuento" type="number" placeholder="% preventa" class="input-custom" />
+              </div>
+
+              <div class="input-grupo-col">
+                <label class="label-input">Géneros:</label>
+                <input formControlName="generos" placeholder="Separados por coma" class="input-custom" />
+              </div>
+
+             
+              <div class="imagen-preview-container">
+                <label class="label-input">Poster actual:</label>
+                <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" class="poster-actual" />
+              </div>
+
+         
+              <div class="file-container">
+                <label class="label-input">Cambiar imagen (opcional):</label>
+                <label class="file-custom-box">
+                  <span class="file-text">Seleccionar nueva imagen</span>
+                  <input type="file" accept="image/*" (change)="onNuevaFoto($event)" class="file-input-hidden" />
+                </label>
+              </div>
+
+              <button type="submit" class="btn-guardar" [disabled]="form_edicion.invalid || isGuardando()">
+                {{ isGuardando() ? 'Guardando...' : 'Guardar cambios' }}
+              </button>
+            </form>
+          }
+        </div>
+      }
+
+      @case ('eliminar') {
+          <div class="card">
+      
+        <div class="lista-seccion">
+          <h3 class="textos" style="color: white;">Listado de Películas</h3>
+          <div class="peliculas-lista">
+            @for (item of peliculas(); track $index) {
+              <div class="pelicula-item">
+                <span class="pelicula-nombre">{{ item.nombre }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        
+        <div class="eliminar-seccion">
+          <label for="peliculaEliminar" class="">Nombre de la película que deseas eliminar:</label>
+          <form [formGroup]="form_eliminar" class="input-grupo">
+            <input formControlName="nombre" placeholder="Nombre" class="input full-width-input" />
+            <button class="btn-eliminar" (click)="eliminar_pelicula()">Eliminar</button>
+          </form>
+        </div>
+      </div>
+      }    
+    }
+  </div>
+</body>
