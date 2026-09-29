@@ -1,0 +1,327 @@
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #971107;
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Navbar superior fijo */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 25px;
+  background-color: #1f2229;
+  border-bottom: 1px solid #2a2a2a;
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-top {
+  justify-content: flex-end;
+  border-bottom: none;
+}
+
+.navbar-menu {
+  justify-content: flex-start;
+  border-top: 1px solid #2a2a2a;
+}
+
+/* Botones de navegación */
+.btn_nav {
+  background-color: #f8aa19;
+  color: #121418;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn_nav:hover {
+  opacity: 0.9;
+}
+
+/* Contenedor principal */
+.main-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+/* Tarjeta contenedora unificada */
+.card {
+  background-color: #121212;
+  width: 100%;
+  max-width: 750px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+/* Títulos y Secciones */
+.titulo-seccion, .subtitulo-seccion {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.subtitulo-seccion {
+  margin-top: 1.5rem;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 1rem;
+}
+
+.label-input {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f8aa19;
+  margin-bottom: 0.4rem;
+}
+
+/* Listado de películas interactivo */
+.peliculas-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: #1a1a1a;
+}
+
+.pelicula-item {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #2a2a2a;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pelicula-item:last-child {
+  border-bottom: none;
+}
+
+.pelicula-item:hover {
+  background: #262626;
+}
+
+.pelicula-nombre {
+  color: #e0e0e0;
+  font-size: 0.95rem;
+}
+
+/* Grilla del formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 20px;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Inputs y Selects */
+.input, .input-custom {
+  color: #f8aa19;
+  width: 100%;
+  height: 45px;
+  padding: 0 15px;
+  background: #1a1a1a;
+  border: 1px solid #E76F45;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+}
+
+.input-custom {
+  border-color: #333333;
+}
+
+.input-custom:focus, .input:focus {
+  border-color: #f8aa19;
+  box-shadow: 0 0 0 2px rgba(248, 170, 25, 0.2);
+}
+
+.textarea-custom {
+  height: 90px;
+  padding-top: 10px;
+  resize: vertical;
+}
+
+.input::placeholder, .input-custom::placeholder {
+  color: #f8aa19;
+  opacity: 0.7;
+}
+
+.input option {
+  background-color: #121212;
+  color: #f8aa19;
+}
+
+/* Grupos de búsqueda (Modificar / Eliminar) */
+.eliminar-seccion {
+  border-top: 1px solid #2a2a2a;
+  padding-top: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.input-grupo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-grupo-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Botones */
+.btn-eliminar, .btn-guardar, .boton_i {
+  padding: 0 20px;
+  height: 45px;
+  background-color: #f8aa19;
+  color: #121212;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Manrope', sans-serif;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #bb2d3b;
+}
+
+.btn-guardar, .boton_i {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn-guardar:hover, .boton_i:hover, .btn-eliminar:hover {
+  opacity: 0.9;
+}
+
+.btn-guardar:disabled, .boton_i:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"] {
+  accent-color: #f8aa19;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Imagen Preview y Carga de Archivos */
+.imagen-preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.poster-actual {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #333333;
+}
+
+.file-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.file-custom-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  border: 2px dashed #f8aa19;
+  border-radius: 12px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.file-custom-box:hover {
+  background-color: #262626;
+}
+
+.file-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+/* Mensajes de error */
+.error, .error-msg {
+  color: #ff5555;
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 10px;
+  background: rgba(255, 85, 85, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Utilidades */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+}

@@ -1,1 +1,88 @@
-<p>salas works!</p>
+<body>
+  <header class="navbar">
+    
+    <button class="btn_logout" (click)="cerrar_sesion()">cerrar sesion</button>
+  </header>
+
+  <div class="navbar">
+    <button class="btn_nav" (click)="cambiarVista('crear')">crear</button>
+    <button class="btn_nav" (click)="cambiarVista('modificar')">modificar</button>
+    <button class="btn_nav" (click)="cambiarVista('eliminar')">eliminar</button>
+  </div>
+
+  <div class="main-content">
+    @switch (vistaActiva()) {
+      
+      @case ('crear') {
+        <form [formGroup]="form_crear" (ngSubmit)="crear_sala()" class="form-grid">
+            <input formControlName="nombre" placeholder="Nombre de la sala" class="input" />
+
+            @if (error()) {
+                <p class="error">{{ error() }}</p>
+            }
+
+            <button type="submit" class="btn_nav" [disabled]="form_crear.invalid || isGuardando()">
+                {{ isGuardando() ? 'Creando...' : 'Crear sala' }}
+            </button>
+        </form>
+
+      }
+      @case ('modificar') {
+        <div class="card">
+            <div class="lista-seccion">
+            <h3 class="textos">Listado de Salas</h3>
+            <div class="peliculas-lista">
+                @for (item of salas(); track item.id) {
+                <div class="pelicula-item" (click)="form_modificar.controls.numero.setValue($index + 1)">
+                    <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
+                </div>
+                }
+            </div>
+            </div>
+
+            <form [formGroup]="form_modificar" (ngSubmit)="sala_a_modificar()" class="input-grupo">
+            <input formControlName="numero" type="number" placeholder="N° de sala" class="input" />
+            <button type="submit" class="btn-eliminar">Buscar</button>
+            </form>
+
+            @if (error()) {
+            <p class="error">{{ error() }}</p>
+            }
+
+            @if (sala_seleccionada()) {
+            <form [formGroup]="form_edicion" (ngSubmit)="guardar_modificacion_sala()" class="form-grid">
+                <input formControlName="nombre" placeholder="Nombre" class="input" />
+
+                <button type="submit" class="btn_nav" [disabled]="form_edicion.invalid || isGuardando()">
+                {{ isGuardando() ? 'Guardando...' : 'Guardar cambios' }}
+                </button>
+            </form>
+            }
+        </div>
+        }
+        @case ('eliminar') {
+            <div class="card">
+                <div class="lista-seccion">
+                <h3 class="textos" style="color: aliceblue">Listado de Funciones</h3>
+                <div class="peliculas-lista">
+                    @for (item of salas(); track item.id) {
+                    <div class="pelicula-item" (click)="form_eliminar.controls.numero.setValue($index + 1)">
+                        <span class="pelicula-nombre">{{ $index + 1 }}: {{ item.nombre }}</span>
+                    </div>
+                    }
+                </div>
+                </div>
+
+                <form [formGroup]="form_eliminar" (ngSubmit)="eliminar_salas()" class="input-grupo">
+                <input formControlName="numero" type="number" placeholder="N° de función" class="input" />
+                <button type="submit" class="btn-eliminar">Eliminar</button>
+                </form>
+
+                @if (error()) {
+                <p class="error">{{ error() }}</p>
+                }
+            </div>
+        }
+    }  
+    </div>
+</body>

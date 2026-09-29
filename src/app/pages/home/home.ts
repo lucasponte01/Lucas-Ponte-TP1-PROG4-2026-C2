@@ -4,7 +4,7 @@ import { Auth } from '../../services/auth';
 import {  ReactiveFormsModule } from '@angular/forms';
 import Pelicula from '../../interfaces/peliculas';
 import { Funcion } from '../../interfaces/funcion';
-import { Funciones } from '../../services/funciones/funciones';
+import { FuncionesService } from '../../services/funciones/funciones';
 import { StorageService } from '../../services/storage/storage-service';
 import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
 import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
@@ -35,7 +35,7 @@ export class Home {
   auth = inject(Auth);
   route = inject(Router);
   db = inject(PeliculasServices)
-  funcion = inject(Funciones);
+  funcion = inject(FuncionesService);
   stg = inject(StorageService);
  
   peliculas = signal<Pelicula[]>([]);
@@ -81,7 +81,7 @@ export class Home {
   }
 
   async traerTodas_funciones() {
-    this.funciones.set(await this.funcion.mostrarfuncin());
+    this.funciones.set(await this.funcion.mostrar_funcion());
   }
 
 

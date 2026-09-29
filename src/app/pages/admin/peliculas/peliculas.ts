@@ -92,7 +92,7 @@ export class Peliculas {
 
     //eliminar pelicula
     form_eliminar = new FormGroup({
-      nombre: new FormControl('', [Validators.required])
+      numero: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
     })
 
     async  traer_peliculas(){
@@ -100,17 +100,20 @@ export class Peliculas {
     }
 
     async eliminar_pelicula(){
-      const valores = this.form_eliminar.getRawValue();
-      const nombre = valores.nombre?.trim();
+      const numero = this.form_eliminar.getRawValue().numero;
+      const lista = this.peliculas();
 
-      if (!nombre) {
-        this.error.set('Debe indicar un nombre válido');
+      if (!numero || numero < 1 || numero > lista.length) {
+        this.error.set('Número inválido');
         return;
-      }
+      } 
+
+      const pelicula = lista[numero - 1];
 
       try{
-        await this.bd.eliminar_pelicula(nombre);
+        await this.bd.eliminar_pelicula(pelicula.id);
         this.form_eliminar.reset();
+        await this.traer_peliculas();
       } catch (e) {
         console.error(e);
         this.error.set('Error al eliminar la película');
@@ -122,7 +125,7 @@ export class Peliculas {
     nuevaFoto = signal<File | null>(null);
 
      form_modificar = new FormGroup({
-      nombre: new FormControl('', [Validators.required])
+      numero: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
     })
 
     form_edicion = new FormGroup({
@@ -138,14 +141,16 @@ export class Peliculas {
 
     pelicula_a_modificar(): void {
       this.error.set('');
-      const nombre = this.form_modificar.getRawValue().nombre?.trim().toLowerCase();
-      const pelicula = this.peliculas().find(p => p.nombre.toLowerCase() === nombre);
+      const numero = this.form_modificar.getRawValue().numero;
+      const lista = this.peliculas();
 
-      if (!pelicula) {
-        this.peliculas_seleccionada.set(null);
-        this.error.set('No se encontró una película con ese nombre');
-        return;
-      }
+    if (!numero || numero < 1 || numero > lista.length) {
+      this.peliculas_seleccionada.set(null);
+      this.error.set('Número inválido');
+      return;
+    }
+
+    const pelicula = lista[numero - 1]
 
       this.peliculas_seleccionada.set(pelicula);
       this.nuevaFoto.set(null);

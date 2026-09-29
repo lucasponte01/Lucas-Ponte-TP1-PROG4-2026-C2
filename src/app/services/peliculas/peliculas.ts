@@ -49,13 +49,13 @@ export class PeliculasServices {
 
     
 
-    async eliminar_pelicula(nombre:string):Promise<void>{
-        const {data,error} = await this.peliculas.delete().eq('nombre' , nombre);
+    async eliminar_pelicula(id: string):Promise<void>{
+        const {data,error} = await this.peliculas.delete().eq('id', id);
     
         if(error){
             throw error;
         };
-    
+        
     }
 
     rutaDesdeUrl(url: string | null | undefined): string | null {
