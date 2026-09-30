@@ -4,7 +4,7 @@ import Pelicula, { type PeliculaPorCrear } from '../../../app/interfaces/pelicul
 import { SupabaseService } from '../supabase.service';
 
 @Injectable({ providedIn: 'root' })
-export class PeliculasServices {
+export class PeliculaService {
     stg = inject(StorageService);
     sup = inject(SupabaseService)
     

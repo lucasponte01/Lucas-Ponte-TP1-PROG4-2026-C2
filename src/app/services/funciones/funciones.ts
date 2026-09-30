@@ -4,7 +4,7 @@ import {Funcion, FuncionPorCrear} from '../../../app/interfaces/funcion'
 import { SupabaseService } from '../supabase.service';
 
 @Injectable({ providedIn: 'root' })
-export class FuncionesService {
+export class FuncionService {
     stg = inject(StorageService);
     sup = inject(SupabaseService)
     

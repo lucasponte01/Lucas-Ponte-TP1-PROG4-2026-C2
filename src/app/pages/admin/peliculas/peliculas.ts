@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PeliculasServices } from '../../../services/peliculas/peliculas';
+import { PeliculaService } from '../../../services/peliculas/peliculas';
 import { SupabaseService } from '../../../services/supabase.service';
 import Pelicula from '../../../interfaces/peliculas';
 import { Auth } from '../../../services/auth';
@@ -12,9 +12,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './peliculas.css',
   templateUrl: './peliculas.html',
 })
-export class Peliculas {
+export class PeliculasAdmin {
   logo_menus = "/assets/imagenes/Gemini2.png"
-  bd = inject(PeliculasServices);
+  bd = inject(PeliculaService);
   storage = inject(SupabaseService);
   auth = inject(Auth);
   error = signal('');

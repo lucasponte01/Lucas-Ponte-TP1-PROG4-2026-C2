@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { FuncionesService } from '../../../services/funciones/funciones';
-import { PeliculasServices } from '../../../services/peliculas/peliculas';
-import { salasServices } from '../../../services/salas/salas';
+import { FuncionService } from '../../../services/funciones/funciones';
+import { PeliculaService } from '../../../services/peliculas/peliculas';
+import { SalaService } from '../../../services/salas/salas';
 import { Auth } from '../../../services/auth';
 import Sala from '../../../interfaces/salas';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,15 +12,15 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './salas.css',
   templateUrl: './salas.html',
 })
-export class Salas {
+export class SalasAdmin {
 
-//RF-25: Gestión total de salas, funciones, distribución de butacas y productos.
+//RF-25: distribución de butacas y productos.
 //RF-26: Reporte de facturación diaria y cantidad de entradas vendidas, exportable a PDF y Excel.
 //RF-27: Gráficos de películas más vistas por semana/mes y producto de candy bar más vendido.
 //RF-28: Log de actividad: quién creó una función, quién modificó un precio, quién validó un QR — todo con fecha y hora.
- bd = inject(FuncionesService);
-  peliculasBd = inject(PeliculasServices);
-  salasBd = inject(salasServices);
+ bd = inject(FuncionService);
+  peliculasBd = inject(PeliculaService);
+  salasBd = inject(SalaService);
   auth = inject(Auth);
 
   error = signal('');

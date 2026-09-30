@@ -4,11 +4,11 @@ import { Auth } from '../../services/auth';
 import {  ReactiveFormsModule } from '@angular/forms';
 import Pelicula from '../../interfaces/peliculas';
 import { Funcion } from '../../interfaces/funcion';
-import { FuncionesService } from '../../services/funciones/funciones';
+import { FuncionService } from '../../services/funciones/funciones';
 import { StorageService } from '../../services/storage/storage-service';
 import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
 import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
-import { PeliculasServices } from '../../services/peliculas/peliculas';
+import { PeliculaService } from '../../services/peliculas/peliculas';
 import { CampoInput } from '../../components/ui/campo-input/campo-input';
 
 @Component({
@@ -22,8 +22,8 @@ export class Home {
   logo_menus = "/assets/imagenes/Gemini2.png"
   auth = inject(Auth);
   route = inject(Router);
-  db = inject(PeliculasServices)
-  funcion = inject(FuncionesService);
+  db = inject(PeliculaService)
+  funcion = inject(FuncionService);
   stg = inject(StorageService);
  
   peliculas = signal<Pelicula[]>([]);

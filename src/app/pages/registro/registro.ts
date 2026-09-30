@@ -13,7 +13,7 @@ import { StorageService } from '../../services/storage/storage-service';
 
 
 @Component({
-  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink, RouterOutlet],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink],
   selector: 'app-registro',
   styleUrl: './registro.css',
   templateUrl: './registro.html',

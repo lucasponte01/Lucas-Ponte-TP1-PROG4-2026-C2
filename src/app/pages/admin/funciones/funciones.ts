@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { Auth } from '../../../services/auth';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FuncionesService } from '../../../services/funciones/funciones';
+import { FuncionService } from '../../../services/funciones/funciones';
 import { Funcion } from '../../../interfaces/funcion';
-import { PeliculasServices } from '../../../services/peliculas/peliculas';
-import { salasServices } from '../../../services/salas/salas';
+import { PeliculaService } from '../../../services/peliculas/peliculas';
+import { SalaService } from '../../../services/salas/salas';
 import Pelicula from '../../../interfaces/peliculas';
 import Salas from '../../../interfaces/salas';
 
@@ -14,10 +14,10 @@ import Salas from '../../../interfaces/salas';
   styleUrl: './funciones.css',
   templateUrl: './funciones.html',
 })
-export class Funciones {
-  bd = inject(FuncionesService);
-  peliculasBd = inject(PeliculasServices);
-  salasBd = inject(salasServices);
+export class FuncionesAdmin {
+  bd = inject(FuncionService);
+  peliculasBd = inject(PeliculaService);
+  salasBd = inject(SalaService);
   auth = inject(Auth);
 
   error = signal('');

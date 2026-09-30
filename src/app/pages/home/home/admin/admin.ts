@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Auth } from '../../../../services/auth';
 import { Router, RouterLink } from '@angular/router';
-import { PeliculasServices } from '../../../../services/peliculas/peliculas';
-import { FuncionesService } from '../../../../services/funciones/funciones';
+import { PeliculaService } from '../../../../services/peliculas/peliculas';
+import { FuncionService } from '../../../../services/funciones/funciones';
 import { StorageService } from '../../../../services/storage/storage-service';
 import Pelicula from '../../../../interfaces/peliculas';
 import { Funcion } from '../../../../interfaces/funcion';
@@ -19,8 +19,8 @@ export class Admin {
  logo_menus = "/assets/imagenes/Gemini2.png"
   auth = inject(Auth);
   route = inject(Router);
-  db = inject(PeliculasServices)
-  funcion = inject(FuncionesService);
+  db = inject(PeliculaService)
+  funcion = inject(FuncionService);
   stg = inject(StorageService);
  
   peliculas = signal<Pelicula[]>([]);
