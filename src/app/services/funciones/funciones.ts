@@ -42,7 +42,7 @@ export class FuncionesService {
 
     async modificar_funcion(id: string, funcion : FuncionPorCrear){
         const {error} = await this.funciones.update({
-            funcion : funcion
+            ...funcion
         }).eq('id', id);
 
         if (error) {

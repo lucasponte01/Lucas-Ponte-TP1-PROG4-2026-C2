@@ -8,37 +8,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Navbar fijo arriba con botones juntos */
-.navbar {
-  display: flex;
-  justify-content: flex-start; /* Junta los botones a la izquierda */
-  align-items: center;
-  gap: 15px; /* Espacio uniforme entre los botones */
-  padding: 15px 25px;
-  background-color: #1f2229;
-  border-bottom: 1px solid #f9f5f5;
-  width: 100%;
-  box-sizing: border-box;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.btn_nav {
-  background-color: #f8aa19;
-  color: #121418;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 20px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.btn_nav:hover {
-  opacity: 0.9;
-}
 
 /* Contenedor que ocupa toda la pantalla abajo */
 .main-content {

@@ -4,19 +4,21 @@ import { PeliculasServices } from '../../../services/peliculas/peliculas';
 import { SupabaseService } from '../../../services/supabase.service';
 import Pelicula from '../../../interfaces/peliculas';
 import { Auth } from '../../../services/auth';
-
+import { NavbarComponent } from '../../../components/ui/navbar/navbar';
+import { RouterLink } from '@angular/router';
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NavbarComponent, RouterLink],
   selector: 'app-peliculas',
   styleUrl: './peliculas.css',
   templateUrl: './peliculas.html',
 })
 export class Peliculas {
+  logo_menus = "/assets/imagenes/Gemini2.png"
   bd = inject(PeliculasServices);
   storage = inject(SupabaseService);
   auth = inject(Auth);
   error = signal('');
-  isGuardando = signal(false);
+  Guardando = signal(false);
   vistaActiva = signal<string>('crear');
 
   peliculas = signal<Pelicula[]>([]);
@@ -58,7 +60,7 @@ export class Peliculas {
     this.error.set('');
     if (this.form_crear.invalid) return;
 
-      this.isGuardando.set(true);
+      this.Guardando.set(true);
       try {
         const valores = this.form_crear.getRawValue();
 
@@ -86,7 +88,7 @@ export class Peliculas {
         console.error(e);
         this.error.set('Error al crear la película');
       } finally {
-        this.isGuardando.set(false);
+        this.Guardando.set(false);
       }
     }
 
@@ -175,7 +177,7 @@ export class Peliculas {
       if (!original || this.form_edicion.invalid) return;
 
       this.error.set('');
-      this.isGuardando.set(true);
+      this.Guardando.set(true);
       try {
         const v = this.form_edicion.getRawValue();
 
@@ -206,7 +208,7 @@ export class Peliculas {
         console.error(e);
         this.error.set('Error al modificar la película');
       } finally {
-        this.isGuardando.set(false);
+        this.Guardando.set(false);
       }
     }
 }

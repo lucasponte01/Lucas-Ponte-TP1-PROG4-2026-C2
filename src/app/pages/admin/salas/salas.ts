@@ -24,7 +24,7 @@ export class Salas {
   auth = inject(Auth);
 
   error = signal('');
-  isGuardando = signal(false);
+  Guardando = signal(false);
   vistaActiva = signal<string>('crear');
 
   
@@ -56,7 +56,7 @@ export class Salas {
     this.error.set('');
     if (this.form_crear.invalid) return;
 
-    this.isGuardando.set(true);
+    this.Guardando.set(true);
     try {
       const nombre = this.form_crear.getRawValue().nombre!;
       await this.salasBd.crear_sala({ nombre });
@@ -67,7 +67,7 @@ export class Salas {
       console.error(e);
       this.error.set('Error al crear la sala');
     } finally {
-      this.isGuardando.set(false);
+      this.Guardando.set(false);
     }
   }
   //modificar sala
@@ -102,7 +102,7 @@ export class Salas {
     if (!original || this.form_edicion.invalid) return;
 
     this.error.set('');
-    this.isGuardando.set(true);
+    this.Guardando.set(true);
     try {
       const nombre = this.form_edicion.getRawValue().nombre!;
       await this.salasBd.modificar_sala(original.id, { nombre });
@@ -114,7 +114,7 @@ export class Salas {
       console.error(e);
       this.error.set('Error al modificar la sala');
     } finally {
-      this.isGuardando.set(false);
+      this.Guardando.set(false);
     }
   }
   //eliminar salas

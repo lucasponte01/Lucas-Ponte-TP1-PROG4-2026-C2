@@ -21,8 +21,8 @@
                 <p class="error">{{ error() }}</p>
             }
 
-            <button type="submit" class="btn_nav" [disabled]="form_crear.invalid || isGuardando()">
-                {{ isGuardando() ? 'Creando...' : 'Crear sala' }}
+            <button type="submit" class="btn_nav" [disabled]="form_crear.invalid || Guardando()">
+                {{ Guardando() ? 'Creando...' : 'Crear sala' }}
             </button>
         </form>
 
@@ -53,8 +53,8 @@
             <form [formGroup]="form_edicion" (ngSubmit)="guardar_modificacion_sala()" class="form-grid">
                 <input formControlName="nombre" placeholder="Nombre" class="input" />
 
-                <button type="submit" class="btn_nav" [disabled]="form_edicion.invalid || isGuardando()">
-                {{ isGuardando() ? 'Guardando...' : 'Guardar cambios' }}
+                <button type="submit" class="btn_nav" [disabled]="form_edicion.invalid || Guardando()">
+                {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
                 </button>
             </form>
             }

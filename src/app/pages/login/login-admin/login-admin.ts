@@ -23,7 +23,7 @@ export class LoginAdmin {
   ) {}
 
   form_login_admin = new FormGroup({
-    email: new FormControl('' , Validators.email),
+    email: new FormControl('' , [Validators.email , Validators.required]),
     contrasena: new FormControl('', [Validators.required , Validators.minLength(6)]),
   });
   

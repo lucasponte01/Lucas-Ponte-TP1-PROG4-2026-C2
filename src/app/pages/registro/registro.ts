@@ -28,7 +28,7 @@ export class Registro {
   avatares = signal<string[]>([]);
   avatarSeleccionado = signal<string | null>(null);
   mostrarSelectorAvatar = signal(false);
-  isLoadingAvatares = signal(false);
+  cargando_Avatares = signal(false);
 
   
 
@@ -56,7 +56,7 @@ export class Registro {
 
 async abrirSelectorAvatar(): Promise<void> {
   this.mostrarSelectorAvatar.set(true);
-  this.isLoadingAvatares.set(true);
+  this.cargando_Avatares.set(true);
 
   try {
       const avatares = await this.stg.listarAvatares();
@@ -64,7 +64,7 @@ async abrirSelectorAvatar(): Promise<void> {
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoadingAvatares.set(false);
+      this.cargando_Avatares.set(false);
     } 
   } 
 

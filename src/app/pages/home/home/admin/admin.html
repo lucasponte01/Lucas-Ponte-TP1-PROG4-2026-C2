@@ -12,5 +12,65 @@
   <button class="btn_nav">proximo</button>
 </div>
 
+  <main class="container">
+      <app-campo-input  label="Buscar Peliculas por Generos" (input)="onBuscar($any($event.target).value)" type="search"></app-campo-input>
+    
+      <div class="subtitle-row">
+      <h2>Catalogo de Peliculas</h2>
+    </div>
+    @if (PeliculasFiltrados().length === 0) {
+    <span class="">Película no encontrada</span>
+    }@else {
+      @if (cargando()) {
+        <p>Cargando peliculas...</p>
+      } @else if (peliculas().length === 0) {
+        <p>No hay películas cargadas.</p>
+      } @else {
+        <div class="movies-grid">
+          @for (pelicula of PeliculasFiltrados(); track pelicula.id) {
+            <div class="movie-card">
+              
+              
+              <div class="movie-image-container">
+                <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" />
+              </div>
 
+              <div class="movie-info">
+                
+                <div class="movie-main-info">
+                  <h3 class="movie-title">{{ pelicula.nombre }}</h3>
+                  <span class="section-label">Informacion:</span>
+                  <div class="generos-tags">
+                    @for (g of pelicula.generos; track g) {
+                      <span class="tag-genre">{{ g }}</span>
+                    }
+                    @if (pelicula.restriccion_edad) {
+                      <span class="tag-badge">+{{ pelicula.restriccion_edad }}</span>
+                    }
+                    <span class="tag-duration">{{ pelicula.duracion_min | minutosToHoras }}</span>
+                  </div>
+                </div>
+
+                <div class="movie-functions-info">
+                  <span class="section-label">Funciones:</span>
+                  <div class="generos-tags">
+                    @for (funcion of funciones(); track funcion.id) {
+                      @if (funcion.pelicula_id === pelicula.id) {
+                        <span class="tag-function">{{ funcion.formato }} - {{ funcion.idioma }}</span>
+                      }
+                    }
+                  </div>
+                </div>
+
+            
+                <p class="sinopsis">{{ pelicula.sinopsis }}</p>
+                    
+              </div>
+              
+            </div>
+          }
+        </div>
+      }
+    }
+</main>
 </body>

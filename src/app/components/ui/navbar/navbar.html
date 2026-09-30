@@ -1,0 +1,13 @@
+
+<header class="navbar-top">
+  <div class="logo_container">
+    @if (logoSrc) {
+      <a routerLink="/home"><img class="logo" [src]="logoSrc" alt="logo"></a>
+    }
+  </div>
+  <button class="btn_logout" (click)="cerrar_sesion()">cerrar sesion</button>
+</header>
+
+<nav class="navbar">
+  <ng-content></ng-content>
+</nav>

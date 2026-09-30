@@ -24,7 +24,7 @@ export class StorageService {
   }
 
   public async listar_peliculas(): Promise<string[]> {
-      // Cambia 'peliculas' por 'Películas'
+      
       const { data, error } = await this.client.storage.from('Peliculas').list('', { limit: 100 });
 
       if (error) throw error;

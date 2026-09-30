@@ -60,8 +60,8 @@
               <p class="error full-width">{{ error() }}</p>
             }
             
-            <button type="submit" class="boton_i full-width" [disabled]="form_crear.invalid || isGuardando()">
-              {{ isGuardando() ? 'Guardando...' : 'Crear función' }}
+            <button type="submit" class="boton_i full-width" [disabled]="form_crear.invalid || Guardando()">
+              {{ Guardando() ? 'Guardando...' : 'Crear función' }}
             </button>
           </form>
         }
@@ -128,8 +128,8 @@
                             <span>Es preventa</span>
                         </label>
 
-                        <button type="submit" class="btn_nav" [disabled]="form_edicion.invalid || isGuardando()">
-                        {{ isGuardando() ? 'Guardando...' : 'Guardar cambios' }}
+                        <button type="submit" class="btn_nav" [disabled]="form_edicion.invalid || Guardando()">
+                        {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
                         </button>
                     </form>
                    }

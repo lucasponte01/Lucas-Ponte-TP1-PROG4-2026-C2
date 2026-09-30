@@ -13,13 +13,7 @@ import { ErrorMinlenght } from '../../components/ui/error-minlenght/error-minlen
   styleUrl: './login.css',
   templateUrl: './login.html',
 })
-//tema tps ahora lo visto traer vistos los tp para preguntas puntuales
 
-//trabajar en orden del tp no es parte de la consigna la onda es hacer analisando todos los correos ordenar requerimiento basandome en resu final
-//ui pag que se paresca a otra no va 
-//revisar como se piden los asientos 
-//no descartar nada de lo que esta en la consigna 
-//cambiar el logo y lo que aparece en la pantalla del tema lo de arriba de todo de google
 export class Login {
   logo = '/assets/imagenes/Gemini1r.png';
 
@@ -29,7 +23,7 @@ export class Login {
   ) {}
 
   form_login = new FormGroup({
-    email: new FormControl('' , Validators.email),
+    email: new FormControl('' , [Validators.email , Validators.required]),
     contrasena: new FormControl('', [Validators.required , Validators.minLength(6)]),
   });
   

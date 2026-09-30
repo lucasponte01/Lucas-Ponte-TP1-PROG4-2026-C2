@@ -1,3 +1,4 @@
+
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -9,6 +10,8 @@ export class TexoLargoPipe implements PipeTransform {
     if(value.length > largoMaximo) {
       return value.slice(0,largoMaximo) + "...";
     }
+
+
 
     return value
   }

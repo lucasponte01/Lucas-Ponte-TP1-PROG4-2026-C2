@@ -1,15 +1,11 @@
 <body>
-  <header class="navbar">
-    
-    <button class="btn_logout" (click)="cerrar_sesion()">cerrar sesion</button>
-  </header>
-
-  <div class="navbar">
-    <button class="btn_nav" (click)="cambiarVista('crear')">crear</button>
-    <button class="btn_nav" (click)="cambiarVista('modificar')">modificar</button>
-    <button class="btn_nav" (click)="cambiarVista('eliminar')">eliminar</button>
-  </div>
-
+  <app-navbar [logoSrc]="logo_menus">
+    <button class="btn_nav" (click)="cambiarVista('crear')">peliculas</button>
+    <button class="btn_nav" (click)="cambiarVista('modificar')">funciones</button>
+    <button class="btn_nav" (click)="cambiarVista('eliminar')">salas</button>
+    <button class="btn-nav" routerLink="/home">volver</button>
+  </app-navbar>
+<!--arreglar esto -->
   <div class="main-content">
     @switch (vistaActiva()) {
       
@@ -34,8 +30,7 @@
               
               <label class="file-custom-box">
                 <span class="file-text">Seleccionar archivo</span>
-                
-                <input type="file" class="file-input-hidden">
+                <input type="file" class="file-input-hidden" (change)="onArchivoSeleccionado($event)">
               </label>
           </div>
 
@@ -43,8 +38,8 @@
               <p class="error full-width-input">{{ error() }}</p>
             }
 
-            <button type="submit" class="boton_i" [disabled]="form_crear.invalid || isGuardando()">
-              {{ isGuardando() ? 'Guardando...' : 'Crear película' }}
+            <button type="submit" class="boton_i" [disabled]="form_crear.invalid || Guardando()">
+              {{ Guardando() ? 'Guardando...' : 'Crear película' }}
             </button>
           </form>
         </div>
@@ -127,15 +122,15 @@
                 </label>
               </div>
 
-              <button type="submit" class="btn-guardar full-width" [disabled]="form_edicion.invalid || isGuardando()">
-                {{ isGuardando() ? 'Guardando...' : 'Guardar cambios' }}
+              <button type="submit" class="btn-guardar full-width" [disabled]="form_edicion.invalid || Guardando()">
+                {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
               </button>
             </form>
           }
         </div>
       }
 
-      <!-- VISTA ELIMINAR -->
+      
       @case ('eliminar') {
         <div class="card">
           <div class="lista-seccion">

@@ -21,7 +21,7 @@ export class Funciones {
   auth = inject(Auth);
 
   error = signal('');
-  isGuardando = signal(false);
+  Guardando = signal(false);
   vistaActiva = signal<string>('crear');
 
   funciones = signal<Funcion[]>([]);
@@ -90,7 +90,7 @@ export class Funciones {
     const inicio = new Date(v.inicio!);
     const fin = new Date(inicio.getTime() + pelicula.duracion_min * 60000);
 
-    this.isGuardando.set(true);
+    this.Guardando.set(true);
     try {
       await this.bd.crear_funcion({
         pelicula_id: v.pelicula_id!,
@@ -114,7 +114,7 @@ export class Funciones {
         this.error.set('Error al crear la función');
       }
     } finally {
-      this.isGuardando.set(false);
+      this.Guardando.set(false);
     }
   }
   //arreglar errores 
@@ -183,7 +183,7 @@ export class Funciones {
       const fin = new Date(inicio.getTime() + pelicula.duracion_min * 60000);
 
       this.error.set('');
-      this.isGuardando.set(true);
+      this.Guardando.set(true);
       try {
         await this.bd.modificar_funcion(original.id, {
           pelicula_id: v.pelicula_id!,
@@ -208,7 +208,7 @@ export class Funciones {
           this.error.set('Error al modificar la función');
         }
       } finally {
-        this.isGuardando.set(false);
+        this.Guardando.set(false);
       }
     }
 
