@@ -8,30 +8,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Navbar superior fijo */
-.navbar {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 12px 25px;
-  background-color: #1f2229;
-  border-bottom: 1px solid #2a2a2a;
-  width: 100%;
-  box-sizing: border-box;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
 
-.navbar-top {
-  justify-content: flex-end;
-  border-bottom: none;
-}
-
-.navbar-menu {
-  justify-content: flex-start;
-  border-top: 1px solid #2a2a2a;
-}
 
 /* Botones de navegación */
 .btn_nav {

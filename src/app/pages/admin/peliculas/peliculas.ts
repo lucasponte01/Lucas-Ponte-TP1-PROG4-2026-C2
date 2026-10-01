@@ -5,14 +5,17 @@ import { SupabaseService } from '../../../services/supabase.service';
 import Pelicula, { PeliculaPorCrear, PeliculaPorModificar } from '../../../interfaces/peliculas';
 import { Auth } from '../../../services/auth';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
-import { RouterLink } from '@angular/router';
+
 @Component({
-  imports: [ReactiveFormsModule, NavbarComponent, RouterLink],
+  imports: [ReactiveFormsModule, NavbarComponent ],
   selector: 'app-peliculas',
   styleUrl: './peliculas.css',
   templateUrl: './peliculas.html',
 })
 export class PeliculasAdmin {
+volver(arg0: string) {
+throw new Error('Method not implemented.');
+}
   logo_menus = "/assets/imagenes/Gemini2.png"
   bd = inject(PeliculaService);
   storage = inject(SupabaseService);

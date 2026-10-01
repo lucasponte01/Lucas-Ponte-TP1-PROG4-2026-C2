@@ -1,14 +1,14 @@
 <body>
-   <header class="navbar navbar-top">
-    <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
-  </header>
 
-  <nav class="navbar navbar-menu">
-    <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
-    <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
-    <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
-  </nav>
-  
+<header class="navbar navbar-top">
+  <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
+</header>
+
+<nav class="navbar navbar-menu">
+  <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
+  <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
+  <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
+</nav>
 
   <div class="main-content">
     @switch (vistaActiva()) {

@@ -11,12 +11,13 @@ import { Auth } from '../../../services/auth';
   styles: []
 })
 export class NavbarComponent {
-
   auth = inject(Auth)
-
-  constructor(private router: Router) {}
+  router = inject(Router);
+  
 
   @Input() logoSrc?: string;         
+  @Output() onCambiarVista = new EventEmitter<string>();
+  @Output() onVolver = new EventEmitter<string>();
 
   async cerrar_sesion() {
     try {
@@ -27,7 +28,12 @@ export class NavbarComponent {
     }
   }
 
+  cambiarVista(vista: string) {
+    this.onCambiarVista.emit(vista);
+  }
+
   async volver(ruta:string){
-    this.router.navigate([ruta])
+    this.onVolver.emit(ruta);
+    this.router.navigate([ruta]);
   }
 }

@@ -10,9 +10,10 @@ import { TexoLargoPipe } from '../../components/ui/pipe/pipe-texto-largo-pipe';
 import { MinAHsPipe } from '../../components/ui/pipe/min-a-hs-pipe';
 import { PeliculaService } from '../../services/peliculas/peliculas';
 import { CampoInput } from '../../components/ui/campo-input/campo-input';
+import { NavbarComponent } from '../../components/ui/navbar/navbar';
 
 @Component({
-  imports: [RouterLink, ReactiveFormsModule, TexoLargoPipe, MinAHsPipe, CampoInput],
+  imports: [RouterLink, ReactiveFormsModule, TexoLargoPipe, MinAHsPipe, CampoInput, NavbarComponent],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
