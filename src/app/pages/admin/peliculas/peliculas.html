@@ -1,18 +1,23 @@
 <body>
-  <app-navbar [logoSrc]="logo_menus">
-    <button class="btn_nav" (click)="cambiarVista('crear')">peliculas</button>
-    <button class="btn_nav" (click)="cambiarVista('modificar')">funciones</button>
-    <button class="btn_nav" (click)="cambiarVista('eliminar')">salas</button>
-    <button class="btn-nav" routerLink="/home">volver</button>
-  </app-navbar>
-<!--arreglar esto -->
+   <header class="navbar navbar-top">
+    <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
+  </header>
+
+  <nav class="navbar navbar-menu">
+    <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
+    <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
+    <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
+  </nav>
+  
+
   <div class="main-content">
     @switch (vistaActiva()) {
+      
       
       @case ('crear') {
         <div class="card">
           <h2 class="textos" style="color: aliceblue;">Crear Película</h2>
-          <form [formGroup]="form_crear" (ngSubmit)="crear()" class="form-grid">
+          <form [formGroup]="form_crear" (ngSubmit)="crear_pelicula()" class="form-grid">
             <input formControlName="nombre" placeholder="Nombre" class="input full-width-input" />
             <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input full-width-input"></textarea>
             
@@ -24,15 +29,11 @@
             
             <input formControlName="generos" placeholder="Géneros separados por coma" class="input full-width-input" />
 
+            
             <div class="file-container">
               <label class="file-label">Imagen de película:</label>
-              
-              
-              <label class="file-custom-box">
-                <span class="file-text">Seleccionar archivo</span>
-                <input type="file" class="file-input-hidden" (change)="onArchivoSeleccionado($event)">
-              </label>
-          </div>
+              <input type="file" accept="image/*" (change)="cargarImagenCrear($event)" class="input" />
+            </div>
 
             @if (error()) {
               <p class="error full-width-input">{{ error() }}</p>
@@ -45,33 +46,26 @@
         </div>
       }
 
+     
       @case ('modificar') {
         <div class="card">
           <div class="lista-seccion">
             <h3 class="titulo-seccion">Listado de Películas</h3>
             <div class="peliculas-lista">
               @for (item of peliculas(); track item.id) {
-                <div class="pelicula-item" (click)="form_modificar.controls.numero.setValue($index + 1)">
+                <div class="pelicula-item" (click)="seleccionar_pelicula_para_editar(item)" style="cursor: pointer; margin-bottom: 5px;">
                   <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
                 </div>
               }
             </div>
           </div>
 
-          <div class="eliminar-seccion">
-            <label class="label-input">N° de película que deseas modificar:</label>
-            <form [formGroup]="form_modificar" (ngSubmit)="pelicula_a_modificar()" class="input-grupo">
-              <input formControlName="numero" type="number" placeholder="N° de película" class="input-custom" />
-              <button type="submit" class="btn-eliminar">Buscar</button>
-            </form>
-          </div>
-
           @if (error()) {
             <p class="error-msg">{{ error() }}</p>
           }
 
-          @if (peliculas_seleccionada(); as pelicula) {
-            <form [formGroup]="form_edicion" (ngSubmit)="guardar_modificacion()" class="form-grid">
+          @if (pelicula_seleccionada()) {
+            <form [formGroup]="form_edicion" (ngSubmit)="modificar_pelicula()" class="form-grid">
               <h4 class="subtitulo-seccion full-width">Editar Datos</h4>
               
               <div class="input-grupo-col">
@@ -109,17 +103,10 @@
                 <input formControlName="generos" placeholder="Separados por coma" class="input-custom" />
               </div>
 
-              <div class="imagen-preview-container full-width">
-                <label class="label-input">Poster actual:</label>
-                <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre" class="poster-actual" />
-              </div>
-
-              <div class="file-container full-width">
+              
+              <div class="input-grupo-col full-width">
                 <label class="label-input">Cambiar imagen (opcional):</label>
-                <label class="file-custom-box">
-                  <span class="file-text">Seleccionar nueva imagen</span>
-                  <input type="file" accept="image/*" (change)="onNuevaFoto($event)" class="file-input-hidden" />
-                </label>
+                <input type="file" accept="image/*" (change)="cargarImagenEditar($event)" class="input-custom" />
               </div>
 
               <button type="submit" class="btn-guardar full-width" [disabled]="form_edicion.invalid || Guardando()">
@@ -130,27 +117,32 @@
         </div>
       }
 
-      
+     
       @case ('eliminar') {
         <div class="card">
           <div class="lista-seccion">
             <h3 class="titulo-seccion">Listado de Películas</h3>
             <div class="peliculas-lista">
               @for (item of peliculas(); track item.id) {
-                <div class="pelicula-item" (click)="form_eliminar.controls.numero.setValue($index + 1)">
+                
+                <div class="pelicula-item" (click)="form_eliminar.controls.nombre.setValue(item.nombre)" style="cursor: pointer; margin-bottom: 5px;">
                   <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
                 </div>
               }
             </div>
           </div>
           
-          <div class="eliminar-seccion">
-            <label class="label-input">N° de película que deseas eliminar:</label>
+          <div class="eliminar-seccion" style="margin-top: 20px;">
+            <label class="label-input">Nombre de la película que deseas eliminar:</label>
             <form [formGroup]="form_eliminar" (ngSubmit)="eliminar_pelicula()" class="input-grupo">
-              <input formControlName="numero" type="number" placeholder="N° de película" class="input-custom" />
+              <input formControlName="nombre" type="text" placeholder="Nombre de la película" class="input-custom" />
               <button type="submit" class="btn-eliminar">Eliminar</button>
             </form>
           </div>
+
+          @if (error()) {
+            <p class="error-msg">{{ error() }}</p>
+          }
         </div>
       }
 

@@ -20,32 +20,29 @@ export class SalaService {
     }
 
     async crear_sala(sala: SalasPorCrear): Promise<void> {
-        const { error } = await this.salas.insert({
-            ...sala
-        });
+        const {data, error } = await this.salas.insert(sala);
 
         if (error) {
             throw error;
         }
+        console.log(data,error);
     }
 
-    async modificar_sala(id: string, sala : SalasPorCrear){
-            const {error} = await this.salas.update({
-                 ...sala
-            }).eq('id', id);
+    async modificar_sala(sala:Salas){
+            const {data,error} = await this.salas.update(sala).eq('id', sala.id);
     
             if (error) {
                 throw error
             }
-            
+            console.log(data,error);
         }
 
-    async eliminar_sala(id:string):Promise<void>{
-        const {error} = await this.salas.delete().eq('id' , id);
+    async eliminar_sala(nombre:string):Promise<void>{
+        const {data ,error} = await this.salas.delete().eq('nombre' , nombre);
     
         if(error){
             throw error;
         };
-    
+        console.log(data,error);
     }
 }

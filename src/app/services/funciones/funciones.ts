@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage-service';
-import {Funcion, FuncionPorCrear} from '../../../app/interfaces/funcion'
+import {Funcion, FuncionPorCrear, FuncionPorModificar} from '../../../app/interfaces/funcion'
 import { SupabaseService } from '../supabase.service';
 
 @Injectable({ providedIn: 'root' })
@@ -21,34 +21,31 @@ export class FuncionService {
     }
     
     async crear_funcion(funcion: FuncionPorCrear):Promise<void>{
-        const { error } = await this.funciones.insert({
-            ...funcion
-        })
+        const {data, error } = await this.funciones.insert(funcion)
         
         if (error) {
             throw error
         }
+        console.log(data,error);
     }
 
 
     async eliminar_funcion(id:string):Promise<void>{
-        const {error} = await this.funciones.delete().eq('id' , id);
+        const {data, error} = await this.funciones.delete().eq('id' , id);
     
         if(error){
             throw error;
         };
-    
+        console.log(data,error);
     }
 
-    async modificar_funcion(id: string, funcion : FuncionPorCrear){
-        const {error} = await this.funciones.update({
-            ...funcion
-        }).eq('id', id);
+    async modificar_funcion(funcion: FuncionPorModificar){
+        const {data, error} = await this.funciones.update(funcion).eq('id', funcion.id);
 
         if (error) {
             throw error
         }
-        
+        console.log(data,error);
     }
 
 }

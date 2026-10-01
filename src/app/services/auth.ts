@@ -115,14 +115,14 @@ export class Auth {
     });
 
     if (error) {
-      throw new Error(`Login failed: ${error.message}`);
+      throw new Error(`error al loguearse: ${error.message}`);
     }
 
     if (!data.user) {
-      throw new Error('Login failed: no user returned');
+      throw new Error('error al loguearse: ningun usuario retornado');
     }
 
-    // Consultamos el tipo en la tabla usuarios
+   
     const { data: usuarioData, error: dbError } = await this._supabaseService.client
       .from('usuarios')
       .select('tipo')
@@ -131,7 +131,6 @@ export class Auth {
 
     console.log("Rol obtenido de la BD:", usuarioData);
 
-    // Validamos que sea admin (usando trim por seguridad)
     if (dbError || !usuarioData || usuarioData.tipo?.trim() !== 'admin') {
       await this._supabaseService.Auth.signOut();
       throw new Error('Acceso denegado: el usuario no es administrador');

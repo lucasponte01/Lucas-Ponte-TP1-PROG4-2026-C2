@@ -3,7 +3,7 @@ import { FuncionService } from '../../../services/funciones/funciones';
 import { PeliculaService } from '../../../services/peliculas/peliculas';
 import { SalaService } from '../../../services/salas/salas';
 import { Auth } from '../../../services/auth';
-import Sala from '../../../interfaces/salas';
+import Sala, { SalasPorCrear } from '../../../interfaces/salas';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -53,99 +53,81 @@ export class SalasAdmin {
         nombre: new FormControl('', [Validators.required]),
     })
     async crear_sala(): Promise<void> {
-    this.error.set('');
+    
     if (this.form_crear.invalid) return;
 
     this.Guardando.set(true);
     try {
-      const nombre = this.form_crear.getRawValue().nombre!;
-      await this.salasBd.crear_sala({ nombre });
+      this.salasBd.crear_sala(this.form_crear.value as SalasPorCrear);
 
       this.form_crear.reset();
       await this.traer_salas();
-    } catch (e) {
-      console.error(e);
-      this.error.set('Error al crear la sala');
-    } finally {
+    } catch{
+       this.error.set('error al crear sala');
+    }finally{
       this.Guardando.set(false);
     }
+    
+
   }
   //modificar sala
-  sala_seleccionada = signal<Sala | null>(null);
-
-  form_modificar = new FormGroup({
-    numero: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
-  });
-
+  sala_seleccionada = signal<boolean>(false);
   form_edicion = new FormGroup({
+    id:new FormControl('', [Validators.required]),
     nombre: new FormControl('', [Validators.required]),
   });
 
-  sala_a_modificar(): void {
+    seleccionar_sala_para_editar(sala: any) {
+    this.sala_seleccionada.set(true);
     this.error.set('');
-    const numero = this.form_modificar.getRawValue().numero;
-    const lista = this.salas();
 
-    if (!numero || numero < 1 || numero > lista.length) {
-      this.sala_seleccionada.set(null);
-      this.error.set('Número inválido');
-      return;
-    }
-
-    const sala = lista[numero - 1];
-    this.sala_seleccionada.set(sala);
-    this.form_edicion.patchValue({ nombre: sala.nombre });
+    this.form_edicion.setValue({
+      id: sala.id,
+      nombre: sala.nombre
+    });
   }
 
-  async guardar_modificacion_sala(): Promise<void> {
-    const original = this.sala_seleccionada();
-    if (!original || this.form_edicion.invalid) return;
+  async modificacion_sala(): Promise<void> {
+    
+    if (this.form_edicion.invalid) return;
 
     this.error.set('');
     this.Guardando.set(true);
     try {
-      const nombre = this.form_edicion.getRawValue().nombre!;
-      await this.salasBd.modificar_sala(original.id, { nombre });
+    
+      await this.salasBd.modificar_sala(this.form_edicion.value as Sala);
 
       await this.traer_salas();
-      this.sala_seleccionada.set(null);
-      this.form_modificar.reset();
-    } catch (e) {
-      console.error(e);
+      
+    } catch {
       this.error.set('Error al modificar la sala');
     } finally {
       this.Guardando.set(false);
     }
   }
   //eliminar salas
-
+  
   form_eliminar = new FormGroup({
-    numero: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
+    nombre: new FormControl<string | null>(null, [Validators.required])
   });
 
   async eliminar_salas(): Promise<void> {
     this.error.set('');
-    const numero = this.form_eliminar.getRawValue().numero;
-    const lista = this.salas();
-
-    if (!numero || numero < 1 || numero > lista.length) {
-      this.error.set('Número inválido');
+    if (this.form_eliminar.invalid) {
       return;
     }
 
-    const funcion = lista[numero - 1];
-
+    this.Guardando.set(true);
     try {
-      await this.salasBd.eliminar_sala(funcion.id);
+      if (this.form_eliminar.value.nombre) {
+        await this.salasBd.eliminar_sala(this.form_eliminar.value.nombre);
+      }
       this.form_eliminar.reset();
       await this.traer_salas();
-    } catch (e: any) {
-      console.error(e);
-      if (e?.code === '23503') {
-        this.error.set('No se puede eliminar: la función tiene entradas vendidas');
-      } else {
-        this.error.set('Error al eliminar la función');
-      }
+    } catch {
+      this.error.set('Error al eliminar la sala');
+    } finally {
+      this.Guardando.set(false);
     }
   }
 }

@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { StorageService } from '../storage/storage-service';
-import Pelicula, { type PeliculaPorCrear } from '../../../app/interfaces/peliculas';
+import Pelicula, { PeliculaPorCrear, PeliculaPorModificar } from '../../../app/interfaces/peliculas';
 import { SupabaseService } from '../supabase.service';
 
 @Injectable({ providedIn: 'root' })
@@ -21,10 +21,8 @@ export class PeliculaService {
     
     }
 
-    async subirPelicula(file: File): Promise<string | null> {
-        const extension = file.type.split('/')[1];
-        const ruta = `${crypto.randomUUID()}.${extension}`;
-
+    async subirArchivo(file: File): Promise<string | null> {
+        const ruta = `${Date.now()}.${file.type.split('/')[1]}`;
         const { error } = await this.sup.Stg.from('Peliculas').upload(ruta, file);
 
         if (error) {
@@ -32,66 +30,34 @@ export class PeliculaService {
             return null;
         }
 
-        return this.sup.Stg.from('Peliculas').getPublicUrl(ruta).data.publicUrl;
+        const { data: urlData } = this.sup.Stg.from('Peliculas').getPublicUrl(ruta);
+        return urlData.publicUrl;
     }
 
-    async crear_pelicula(pelicula: PeliculaPorCrear, imagen: File): Promise<void> {
-        const imagen_url = await this.subirPelicula(imagen);
-        if (!imagen_url) throw new Error('Error al subir la imagen');
+    async crear_pelicula(pelicula: PeliculaPorCrear): Promise<void> {
 
-        const { error } = await this.sup.client.from('peliculas').insert({
-            ...pelicula,
-            imagen_url
-        });
+        const {data, error } = await this.sup.client.from('peliculas').insert(pelicula);
 
         if (error) throw error;
+        console.log(data,error);
     }
 
-    
-
-    async eliminar_pelicula(id: string):Promise<void>{
-        const {data,error} = await this.peliculas.delete().eq('id', id);
+    async eliminar_pelicula(nombre: string):Promise<void>{
+        const {data,error} = await this.peliculas.delete().eq('nombre', nombre);
     
         if(error){
             throw error;
         };
-        
+        console.log(data,error);
     }
+    
+    async modificar_pelicula(pelicula: PeliculaPorModificar): Promise<void> {
 
-    rutaDesdeUrl(url: string | null | undefined): string | null {
-        if (!url) return null;
-
-        const marca = '/Peliculas/';
-        const indice = url.indexOf(marca);
-        if (indice === -1) return null;
-
-        return decodeURIComponent(url.substring(indice + marca.length));
-    }
-
-    async modificar_pelicula(original: Pelicula, cambios: PeliculaPorCrear, nuevaImagen: File | null): Promise<void> {
-        let imagen_url = original.imagen_url;
-
-        if (nuevaImagen) {
-            const urlNueva = await this.subirPelicula(nuevaImagen);
-            if (!urlNueva) throw new Error('Error al subir la imagen');
-            imagen_url = urlNueva;
-        }
-
-        const { data, error } = await this.peliculas
-            .update({ ...cambios, imagen_url })
-            .eq('id', original.id)
-            .select('id');
+        const { data, error } = await this.peliculas.update(pelicula).eq('id', pelicula.id);
 
         if (error) throw error;
-        if (!data || data.length === 0) throw new Error('No se modificó ninguna película');
 
-        if (nuevaImagen) {
-            const rutaVieja = this.rutaDesdeUrl(original.imagen_url);
-            if (rutaVieja) {
-            const { error: errorStorage } = await this.sup.Stg.from('Peliculas').remove([rutaVieja]);
-            if (errorStorage) console.error(errorStorage);
-            }
-        }
+        console.log(data,error);
     }
 
 }    
