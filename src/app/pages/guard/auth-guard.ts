@@ -1,22 +1,41 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { SupabaseService } from '../../services/supabase.service';
 
-export const authGuard: CanActivateFn =
-  async () => {
+export const authGuard: CanActivateFn = async (route, state) => {
+  const auth = inject(Auth);
+  const router = inject(Router);
+  const supa = inject(SupabaseService)
 
-    const auth = inject(Auth);
-    const router = inject(Router);
+  
+  const esAnonimo = auth.nombre_invi && auth.nombre_invi().trim() !== '';
+  if (esAnonimo) {
+    return true; 
+  }
 
-    const usuario = await auth.usuarioActual();
+ 
+  const usuarioSupabase = auth.usuarioActual ? auth.usuarioActual() : null;
+  
+  if (!usuarioSupabase) {
+    
+    return router.createUrlTree(['/login']);
+  }
 
-    if (!usuario) {
+  const rolesPermitidos = route.data?.['roles'] as string[];
+  if (rolesPermitidos && rolesPermitidos.length > 0) {
+    
+    const { data: usuarioData, error } = await supa.client
+      .from('usuarios')
+      .select('tipo')
+      .eq('id', usuarioSupabase.id)
+      .maybeSingle();
 
-      return router.createUrlTree([
-        '/login'
-      ]);
-
+    if (error || !usuarioData || !rolesPermitidos.includes(usuarioData.tipo?.trim())) {
+   
+      return router.createUrlTree(['/home']);
     }
+  }
 
-    return true;
-  };
+  return true;
+};

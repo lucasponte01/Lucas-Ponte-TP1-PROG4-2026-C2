@@ -1,8 +1,5 @@
 <body>
-
-<header class="navbar navbar-top">
-  <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
-</header>
+<app-navbar [logo_menus]="logo_menus"></app-navbar>
 
 <nav class="navbar navbar-menu">
   <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
@@ -13,47 +10,85 @@
   <div class="main-content">
     @switch (vistaActiva()) {
       
-      
       @case ('crear') {
         <div class="card">
-          <h2 class="textos" style="color: aliceblue;">Crear Película</h2>
+          <h2 class="textos">Crear Película</h2>
           <form [formGroup]="form_crear" (ngSubmit)="crear_pelicula()" class="form-grid">
-            <input formControlName="nombre" placeholder="Nombre" class="input full-width-input" />
-            <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input full-width-input"></textarea>
-            
-            <input formControlName="duracion_min" type="number" placeholder="Duración (min)" class="input" />
-            <input formControlName="restriccion_edad" type="number" placeholder="Restricción de edad (13, 18 o vacío)" class="input" />
-            
-            <input formControlName="fecha_estreno" type="date" class="input" />
-            <input formControlName="preventa_pct_descuento" type="number" placeholder="% preventa (opcional)" class="input" />
-            
-            <input formControlName="generos" placeholder="Géneros separados por coma" class="input full-width-input" />
+            <app-campo-input id="nombre_sala" label="Nombre de la película" [control]="$any(form_crear.controls.nombre)" type="text">
+              <app-error-requerido mensaje="El nombre de la película es requerido" [errors]="form_crear.controls.nombre.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="El nombre de la película debe tener al menos 1 caracter" [errors]="form_crear.controls.nombre.errors"></app-error-minlenght>  
+              <app-error-maxlenght mensaje="El nombre de la película no puede tener más de 100 caracteres" [errors]="form_crear.controls.nombre.errors"></app-error-maxlenght>
+              <app-error-pattern mensaje="El nombre de la película solo puede contener letras, números y espacios" [errors]="form_crear.controls.nombre.errors"></app-error-pattern>
+            </app-campo-input>
 
+            <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input-custom textarea-custom full-width-input">
+              <app-error-requerido mensaje="La sinopsis es requerida" [errors]="form_crear.controls.sinopsis.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="La sinopsis debe tener al menos 1 caracter" [errors]="form_crear.controls.sinopsis.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="La sinopsis no puede tener más de 100 caracteres" [errors]="form_crear.controls.sinopsis.errors"></app-error-maxlenght> 
+              <app-error-pattern mensaje="La sinopsis solo puede contener letras, números y espacios" [errors]="form_crear.controls.sinopsis.errors"></app-error-pattern>
+            </textarea>
             
+            <app-campo-input id="duracion_min" label="Duración (min)" [control]="$any(form_crear.controls.duracion_min)" type="text">
+              <app-error-requerido mensaje="La duración es requerida" [errors]="form_crear.controls.duracion_min.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="La duración debe ser al menos 1 minuto" [errors]="form_crear.controls.duracion_min.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="La duración no puede ser mayor a 500 minutos" [errors]="form_crear.controls.duracion_min.errors"></app-error-maxlenght> 
+              <app-error-pattern mensaje="La duración solo puede contener números" [errors]="form_crear.controls.duracion_min.errors"></app-error-pattern>
+            </app-campo-input>
+            
+            <label  for="restriccion_edad">Restricción de edad:</label>
+            <select id="restriccion_edad" formControlName="restriccion_edad" class="input">
+              <option value="13">13</option>
+              <option value="16">16</option>
+              <option value="18">18</option>
+            </select>
+
+            <input  pInputText formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input" />
+              @if (form_crear.get('fecha_estreno')?.invalid && form_crear.get('fecha_estreno')?.touched) {
+                @if (form_crear.get('fecha_estreno')?.hasError('required')) {
+                  <p class="field__error">Ingresá la fecha de estreno.</p>
+                }
+                @if (form_crear.get('fecha_estreno')?.hasError('invalidDate')) {
+                  <p class="field__error">Ingresá una fecha válida.</p>
+                }
+              }
+            
+
+            <app-campo-input id="preventa_pct_descuento" label="% preventa (opcional)" [control]="$any(form_crear.controls.preventa_pct_descuento)" type="text">
+              <app-error-requerido mensaje="El descuento es requerido" [errors]="form_crear.controls.preventa_pct_descuento.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="El descuento debe ser al menos 0" [errors]="form_crear.controls.preventa_pct_descuento.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="El descuento no puede ser mayor a 100" [errors]="form_crear.controls.preventa_pct_descuento.errors"></app-error-maxlenght>
+              <app-error-pattern mensaje="El descuento solo puede contener números" [errors]="form_crear.controls.preventa_pct_descuento.errors"></app-error-pattern>
+            </app-campo-input>
+            
+            <app-campo-input id="generos" label="Géneros" [control]="$any(form_crear.controls.generos)" type="text">
+              <app-error-requerido mensaje="Los géneros son requeridos" [errors]="form_crear.controls.generos.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="Los géneros deben tener al menos 1 caracter" [errors]="form_crear.controls.generos.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="Los géneros no pueden tener más de 100 caracteres" [errors]="form_crear.controls.generos.errors"></app-error-maxlenght>
+              <app-error-pattern mensaje="Los géneros solo pueden contener letras, números y espacios" [errors]="form_crear.controls.generos.errors"></app-error-pattern>
+            </app-campo-input>
+
             <div class="file-container">
-              <label class="file-label">Imagen de película:</label>
-              <input type="file" accept="image/*" (change)="cargarImagenCrear($event)" class="input" />
+              <app-campo-input id="foto" label="Imagen de película" [control]="$any(form_crear.controls.foto)" type="file"></app-campo-input>
             </div>
 
             @if (error()) {
               <p class="error full-width-input">{{ error() }}</p>
             }
 
-            <button type="submit" class="boton_i" [disabled]="form_crear.invalid || Guardando()">
+            <button type="submit" class="boton_i full-width-input" [disabled]="form_crear.invalid || Guardando()">
               {{ Guardando() ? 'Guardando...' : 'Crear película' }}
             </button>
           </form>
         </div>
       }
 
-     
       @case ('modificar') {
         <div class="card">
           <div class="lista-seccion">
             <h3 class="titulo-seccion">Listado de Películas</h3>
             <div class="peliculas-lista">
               @for (item of peliculas(); track item.id) {
-                <div class="pelicula-item" (click)="seleccionar_pelicula_para_editar(item)" style="cursor: pointer; margin-bottom: 5px;">
+                <div class="pelicula-item" (click)="seleccionar_pelicula_para_editar(item)">
                   <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
                 </div>
               }
@@ -69,47 +104,72 @@
               <h4 class="subtitulo-seccion full-width">Editar Datos</h4>
               
               <div class="input-grupo-col">
-                <label class="label-input">Nombre:</label>
-                <input formControlName="nombre" placeholder="Nombre" class="input-custom" />
+                <app-campo-input id="nombre_edit" label="Nombre" [control]="$any(form_edicion.controls.nombre)" type="text">
+                  <app-error-requerido mensaje="El nombre de la película es requerido" [errors]="form_edicion.controls.nombre.errors"></app-error-requerido>
+                  <app-error-minlenght mensaje="El nombre de la película debe tener al menos 1 caracter" [errors]="form_edicion.controls.nombre.errors"></app-error-minlenght>
+                  <app-error-maxlenght mensaje="El nombre de la película no puede tener más de 100 caracteres" [errors]="form_edicion.controls.nombre.errors"></app-error-maxlenght>    
+                  <app-error-pattern mensaje="El nombre de la película solo puede contener letras, números y espacios" [errors]="form_edicion.controls.nombre.errors"></app-error-pattern>  
+                </app-campo-input>
               </div>
 
               <div class="input-grupo-col">
-                <label class="label-input">Duración (min):</label>
-                <input formControlName="duracion_min" type="number" placeholder="Duración" class="input-custom" />
+                <app-campo-input id="duracion_min_edit" label="Duración (min)" [control]="$any(form_edicion.controls.duracion_min)" type="text">
+                  <app-error-requerido mensaje="La duración es requerida" [errors]="form_edicion.controls.duracion_min.errors"></app-error-requerido>
+                  <app-error-minlenght mensaje="La duración debe ser al menos 1 minuto" [errors]="form_edicion.controls.duracion_min.errors"></app-error-minlenght>
+                  <app-error-maxlenght mensaje="La duración no puede ser mayor a 500 minutos" [errors]="form_edicion.controls.duracion_min.errors"></app-error-maxlenght> 
+                  <app-error-pattern mensaje="La duración solo puede contener números" [errors]="form_edicion.controls.duracion_min.errors"></app-error-pattern>
+                </app-campo-input>
               </div>
 
               <div class="input-grupo-col full-width">
                 <label class="label-input">Sinopsis:</label>
-                <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input-custom textarea-custom"></textarea>
+                <textarea formControlName="sinopsis" placeholder="Sinopsis" class="input-custom textarea-custom">
+                  <app-error-requerido mensaje="La sinopsis es requerida" [errors]="form_edicion.controls.sinopsis.errors"></app-error-requerido>
+                  <app-error-minlenght mensaje="La sinopsis debe tener al menos 1 caracter" [errors]="form_edicion.controls.sinopsis.errors"></app-error-minlenght>
+                  <app-error-maxlenght mensaje="La sinopsis no puede tener más de 100 caracteres" [errors]="form_edicion.controls.sinopsis.errors"></app-error-maxlenght> 
+                  <app-error-pattern mensaje="La sinopsis solo puede contener letras, números y espacios" [errors]="form_edicion.controls.sinopsis.errors"></app-error-pattern>
+                </textarea>
+              </div>
+
+              <label  for="restriccion_edad">Restricción de edad:</label>
+                <select id="restriccion_edad" formControlName="restriccion_edad" class="input">
+                  <option value="13">13</option>
+                  <option value="16">16</option>
+                  <option value="18">18</option>
+                </select>
+
+              <input  pInputText formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input" />
+              @if (form_edicion.get('fecha_estreno')?.invalid && form_edicion.get('fecha_estreno')?.touched) {
+                @if (form_edicion.get('fecha_estreno')?.hasError('required')) {
+                  <p class="field__error">Ingresá la fecha de estreno.</p>
+                }
+                @if (form_edicion.get('fecha_estreno')?.hasError('invalidDate')) {
+                  <p class="field__error">Ingresá una fecha válida.</p>
+                }
+              }
+
+              <div class="input-grupo-col">
+                <app-campo-input id="preventa_pct_descuento_edit" label="% Preventa (opcional)" [control]="$any(form_edicion.controls.preventa_pct_descuento)" type="text">
+                  <app-error-minlenght mensaje="El descuento debe ser al menos 0" [errors]="form_edicion.controls.preventa_pct_descuento.errors"></app-error-minlenght>
+                  <app-error-maxlenght mensaje="El descuento no puede ser mayor a 100" [errors]="form_edicion.controls.preventa_pct_descuento.errors"></app-error-maxlenght>
+                  <app-error-pattern mensaje="El descuento solo puede contener números" [errors]="form_edicion.controls.preventa_pct_descuento.errors"></app-error-pattern>
+                </app-campo-input>
               </div>
 
               <div class="input-grupo-col">
-                <label class="label-input">Restricción de edad:</label>
-                <input formControlName="restriccion_edad" type="number" placeholder="Ej. 13, 18" class="input-custom" />
+                <app-campo-input id="generos_edit" label="Géneros" [control]="$any(form_edicion.controls.generos)" type="text">
+                  <app-error-requerido mensaje="Los géneros son requeridos" [errors]="form_edicion.controls.generos.errors"></app-error-requerido>
+                  <app-error-minlenght mensaje="Los géneros deben tener al menos 1 caracter" [errors]="form_edicion.controls.generos.errors"></app-error-minlenght>
+                  <app-error-maxlenght mensaje="Los géneros no pueden tener más de 100 caracteres" [errors]="form_edicion.controls.generos.errors"></app-error-maxlenght>
+                  <app-error-pattern mensaje="Los géneros solo pueden contener letras, números y espacios" [errors]="form_edicion.controls.generos.errors"></app-error-pattern>
+                </app-campo-input>
               </div>
-
-              <div class="input-grupo-col">
-                <label class="label-input">Fecha de estreno:</label>
-                <input formControlName="fecha_estreno" type="date" class="input-custom" />
-              </div>
-
-              <div class="input-grupo-col">
-                <label class="label-input">% Preventa (opcional):</label>
-                <input formControlName="preventa_pct_descuento" type="number" placeholder="% preventa" class="input-custom" />
-              </div>
-
-              <div class="input-grupo-col">
-                <label class="label-input">Géneros:</label>
-                <input formControlName="generos" placeholder="Separados por coma" class="input-custom" />
-              </div>
-
               
               <div class="input-grupo-col full-width">
-                <label class="label-input">Cambiar imagen (opcional):</label>
-                <input type="file" accept="image/*" (change)="cargarImagenEditar($event)" class="input-custom" />
+                <app-campo-input id="imagen_edit" accept="image/*" label="Cambiar imagen (opcional)" (change)="cargarImagenEditar($event)" type="file"></app-campo-input>
               </div>
 
-              <button type="submit" class="btn-guardar full-width" [disabled]="form_edicion.invalid || Guardando()">
+              <button type="submit" class="boton_i full-width" [disabled]="form_edicion.invalid || Guardando()">
                 {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
               </button>
             </form>
@@ -117,25 +177,22 @@
         </div>
       }
 
-     
       @case ('eliminar') {
         <div class="card">
           <div class="lista-seccion">
             <h3 class="titulo-seccion">Listado de Películas</h3>
             <div class="peliculas-lista">
               @for (item of peliculas(); track item.id) {
-                
-                <div class="pelicula-item" (click)="form_eliminar.controls.nombre.setValue(item.nombre)" style="cursor: pointer; margin-bottom: 5px;">
+                <div class="pelicula-item" (click)="form_eliminar.controls.nombre.setValue(item.nombre)">
                   <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
                 </div>
               }
             </div>
           </div>
           
-          <div class="eliminar-seccion" style="margin-top: 20px;">
-            <label class="label-input">Nombre de la película que deseas eliminar:</label>
+          <div class="eliminar-seccion">
             <form [formGroup]="form_eliminar" (ngSubmit)="eliminar_pelicula()" class="input-grupo">
-              <input formControlName="nombre" type="text" placeholder="Nombre de la película" class="input-custom" />
+              <app-campo-input id="nombre_delete" label="Nombre de la película" [control]="$any(form_eliminar.controls.nombre)" type="text"></app-campo-input>
               <button type="submit" class="btn-eliminar">Eliminar</button>
             </form>
           </div>

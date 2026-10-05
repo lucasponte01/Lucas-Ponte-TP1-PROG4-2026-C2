@@ -1,11 +1,44 @@
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45; /* Fondo petróleo profundo */
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+}
+
+.input, .input-custom {
+  color: #ffffff;
+  width: 100%;
+  height: 45px;
+  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+}
+
+.input-custom {
+  border-color: #427C8E;
+}
+
+.input-custom:focus, .input:focus {
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 2px rgba(65, 191, 173, 0.2);
+}
+
 /* Navbar superior fijo */
 .navbar {
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 12px 25px;
-  background-color: #1f2229;
-  border-bottom: 1px solid #2a2a2a;
+  background-color: #162d33;
+  border-bottom: 1px solid #427C8E;
   width: 100%;
   box-sizing: border-box;
   position: sticky;
@@ -14,18 +47,26 @@
 }
 
 .navbar-top {
-  justify-content: flex-end;
-  border-bottom: none;
+  justify-content: space-between; /* Distribuye elementos: izquierda, centro y derecha */
 }
 
-.navbar-menu {
-  justify-content: flex-start;
-  border-top: 1px solid #2a2a2a;
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  transform: scale(2); 
+  transform-origin: center;
 }
 
 .btn_nav {
-  background-color: #f8aa19;
-  color: #121418;
+  background-color: #41BFAD; /* Turquesa vibrante */
+  color: #1a3036;
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
@@ -33,8 +74,225 @@
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: filter 0.2s;
 }
 
 .btn_nav:hover {
-  opacity: 0.9;
+  filter: brightness(1.1);
 }
+
+.btn_secundario {
+  background-color: #D08E78; /* Terracota para acciones de sesión/volver */
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+/* Contenedor que ocupa toda la pantalla abajo */
+.main-content {
+  width: 100%;
+  min-height: calc(100vh - 65px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  box-sizing: border-box;
+}
+
+/* Tarjeta contenedora principal estilo cinematográfico */
+.card {
+  background-color: #366E79; /* Azul petróleo de la tarjeta */
+  width: 100%;
+  max-width: 850px;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  border: 1px solid #427C8E;
+  color: #ffffff;
+}
+
+/* Títulos y secciones */
+.textos, .titulo-seccion, .subtitulo-seccion {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.subtitulo-seccion {
+  margin-top: 1.5rem;
+  border-top: 1px solid #427C8E;
+  padding-top: 1rem;
+}
+
+.label-input {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #41BFAD;
+  margin-bottom: 0.4rem;
+}
+
+/* Grilla de formularios */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.input-grupo-col {
+  margin-bottom: 5px;
+}
+
+.full-width, .full-width-input {
+  grid-column: span 2;
+}
+
+/* Inputs personalizados */
+.input-custom {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+}
+
+.input-custom:focus {
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 3px rgba(65, 191, 173, 0.15);
+}
+
+.textarea-custom {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.input-custom::placeholder {
+  color: #9cbcc4;
+}
+
+/* Listado de películas */
+.peliculas-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.pelicula-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #427C8E;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pelicula-item:last-child {
+  border-bottom: none;
+}
+
+.pelicula-item:hover {
+  background: rgba(65, 191, 173, 0.15);
+}
+
+.pelicula-nombre {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Sección de eliminación */
+.eliminar-seccion {
+  border-top: 1px solid #427C8E;
+  padding-top: 1.2rem;
+  margin-top: 1rem;
+}
+
+.input-grupo {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.input-grupo app-campo-input {
+  flex: 1;
+}
+
+/* Botones principales y de acción */
+.boton_i {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #41BFAD;
+  border: none;
+  border-radius: 8px;
+  color: #1a3036;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: filter 0.2s;
+}
+
+.boton_i:hover {
+  filter: brightness(1.1);
+}
+
+.boton_i:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.btn-eliminar {
+  padding: 0 20px;
+  height: 44px;
+  background-color: #D08E78; /* Terracota para eliminar */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  font-family: 'Manrope', sans-serif;
+}
+
+.btn-eliminar:hover {
+  filter: brightness(1.1);
+}
+
+/* Mensajes de error */
+.error, .error-msg {
+  color: #ff8080;
+  font-size: 0.9rem;
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: rgba(255, 128, 128, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 128, 128, 0.3);
+}
+
+/* Contenedor de archivos */
+.file-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  grid-column: span 2;
+}
+

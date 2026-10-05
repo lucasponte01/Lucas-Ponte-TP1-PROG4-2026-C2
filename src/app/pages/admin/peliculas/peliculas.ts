@@ -4,23 +4,30 @@ import { PeliculaService } from '../../../services/peliculas/peliculas';
 import { SupabaseService } from '../../../services/supabase.service';
 import Pelicula, { PeliculaPorCrear, PeliculaPorModificar } from '../../../interfaces/peliculas';
 import { Auth } from '../../../services/auth';
+import { Router } from '@angular/router';
+import { CampoInput } from '../../../components/ui/campo-input/campo-input';
+import { dateValidator } from '../../../validators/date.validator';
+import { parseDate, parseISODateOnly, toDDMMYYYY, toISODateOnly } from '../../../utils/parse_date';
+import { ErrorRequerido } from '../../../components/ui/error-requerido/error-requerido';
+import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-maxlenght';
+import { ErrorMinlenght } from '../../../components/ui/error-minlenght/error-minlenght';
+import { ErrorPattern } from '../../../components/ui/error-pattern/error-pattern';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 
 @Component({
-  imports: [ReactiveFormsModule, NavbarComponent ],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMaxlenght, ErrorMinlenght, ErrorPattern, NavbarComponent],
   selector: 'app-peliculas',
   styleUrl: './peliculas.css',
   templateUrl: './peliculas.html',
 })
 export class PeliculasAdmin {
-volver(arg0: string) {
-throw new Error('Method not implemented.');
-}
+
   logo_menus = "/assets/imagenes/Gemini2.png"
   bd = inject(PeliculaService);
   storage = inject(SupabaseService);
   auth = inject(Auth);
   error = signal('');
+  router = inject(Router);
   Guardando = signal(false);
   vistaActiva = signal<string>('crear');
   fb = inject(FormBuilder);
@@ -41,18 +48,23 @@ throw new Error('Method not implemented.');
     }
   }
 
+  async volver() {
+    this.router.navigate(['/home']);
+  }
+
+
   async  traer_peliculas(){
     this.peliculas.set(await this.bd.mostrarpeliculas()) ;
     }
 //crear peliculas
     form_crear = this.fb.group({
-    nombre: new FormControl('', [Validators.required]),
-    sinopsis: new FormControl('', [Validators.required]),
-    duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+    nombre: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
+    sinopsis: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(1000) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
+    duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(500) , Validators.pattern(/^[0-9]+$/)]),
     restriccion_edad: new FormControl<number | null>(null),
-    fecha_estreno: new FormControl('', [Validators.required]),
-    preventa_pct_descuento: new FormControl<number | null>(null),
-    generos: new FormControl('', [Validators.required]),
+    fecha_estreno: new FormControl('', [Validators.required, dateValidator]),
+    preventa_pct_descuento: new FormControl<number | null>(null , [Validators.min(0), Validators.max(100) , Validators.pattern(/^[0-9]+$/)]),
+    generos: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s,]+$/)]),
     foto: new FormControl<File | null>(null, [Validators.required])
   });
 
@@ -77,6 +89,12 @@ throw new Error('Method not implemented.');
         return;
       }
 
+      const fecha = parseDate(this.form_crear.value.fecha_estreno ?? '');
+        if (!fecha) {
+          this.error.set('Fecha de estreno inválida');
+          return;
+        }
+
       const datos = this.form_crear.value.generos ?? '';
       const generos: string[] = [];
       for (const g of datos.toString().split(',')) {
@@ -89,7 +107,7 @@ throw new Error('Method not implemented.');
         sinopsis: this.form_crear.value.sinopsis!,
         duracion_min: this.form_crear.value.duracion_min!,
         restriccion_edad: this.form_crear.value.restriccion_edad ?? null,
-        fecha_estreno: this.form_crear.value.fecha_estreno!,
+        fecha_estreno: toISODateOnly(fecha),
         preventa_pct_descuento: this.form_crear.value.preventa_pct_descuento ?? 0,
         generos: generos,
         imagen_url: urlImagen
@@ -135,13 +153,13 @@ throw new Error('Method not implemented.');
 
     form_edicion = new FormGroup({
         id: new FormControl('', [Validators.required]),
-        nombre: new FormControl('', [Validators.required]),
-        sinopsis: new FormControl('', [Validators.required]),
-        duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
-        restriccion_edad: new FormControl<number | null>(null, [Validators.min(0), Validators.max(120)]),
-        fecha_estreno: new FormControl('', [Validators.required]),
-        preventa_pct_descuento: new FormControl<number | null>(null),
-        generos: new FormControl('', [Validators.required]),
+        nombre: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
+        sinopsis: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(1000) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
+        duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(500) , Validators.pattern(/^[0-9]+$/)]),
+        restriccion_edad: new FormControl<number | null>(null),
+        fecha_estreno: new FormControl('', [Validators.required, dateValidator]),
+        preventa_pct_descuento: new FormControl<number | null>(null , [Validators.min(0), Validators.max(100) , Validators.pattern(/^[0-9]+$/)]),
+        generos: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s,]+$/)]),
         imagen_url: new FormControl<File | string | null>(null)
     });
 
@@ -149,17 +167,20 @@ throw new Error('Method not implemented.');
     this.pelicula_seleccionada.set(true);
     this.error.set('');
 
+    const fecha = parseISODateOnly(pelicula.fecha_estreno);
+
     this.form_edicion.setValue({
       id: pelicula.id,
       nombre: pelicula.nombre,
       sinopsis: pelicula.sinopsis,
       duracion_min: pelicula.duracion_min,
       restriccion_edad: pelicula.restriccion_edad,
-      fecha_estreno: pelicula.fecha_estreno,
+      fecha_estreno: fecha ? toDDMMYYYY(fecha) : '',
       preventa_pct_descuento: pelicula.preventa_pct_descuento,
       generos: pelicula.generos?.join(', ') || null,
       imagen_url: pelicula.imagen_url || null
     });
+
     }  
     
     cargarImagenEditar(evento: Event) {
@@ -174,8 +195,7 @@ throw new Error('Method not implemented.');
       this.error.set('');
       if (this.form_edicion.invalid) return;
       
-      console.log("2. Estado del formulario (invalid?):", this.form_edicion.invalid);
-      console.log("3. Valores del formulario:", this.form_edicion.value);
+      
       this.Guardando.set(true);
 
       try {
@@ -183,7 +203,7 @@ throw new Error('Method not implemented.');
         let urlImagen = this.form_edicion.value.imagen_url;
 
         if (urlImagen instanceof File) {
-          console.log("5. Subiendo archivo nuevo al Storage...");
+          
           const subida = await this.bd.subirArchivo(urlImagen);
           if (!subida) {
             this.error.set('Error al subir la imagen');
@@ -193,7 +213,14 @@ throw new Error('Method not implemented.');
           urlImagen = subida; 
         }
 
-        console.log("4. URL de imagen a guardar:", urlImagen);
+        const fecha = parseDate(this.form_edicion.value.fecha_estreno ?? '');
+            if (!fecha) {
+              this.error.set('Fecha de estreno inválida');
+              this.Guardando.set(false);
+              return;
+            }
+          
+          
 
         const v = this.form_edicion.value.generos ?? '';
         const generos: string[] = [];
@@ -208,22 +235,20 @@ throw new Error('Method not implemented.');
           sinopsis: this.form_edicion.value.sinopsis!,
           duracion_min: this.form_edicion.value.duracion_min!,
           restriccion_edad: this.form_edicion.value.restriccion_edad ?? null,
-          fecha_estreno: this.form_edicion.value.fecha_estreno!,
+          fecha_estreno: toISODateOnly(fecha),
           preventa_pct_descuento: this.form_edicion.value.preventa_pct_descuento ?? 0,
           generos: generos,
           imagen_url: urlImagen as string 
         };
 
-        console.log("7. Enviando a Supabase:", peliculaModificada);
+        
         await this.bd.modificar_pelicula(peliculaModificada);
         
         this.form_edicion.reset();
         this.pelicula_seleccionada.set(false);
         await this.traer_peliculas();
-        console.log("8. ¡Modificación en Supabase exitosa!");
         
-      } catch (e) {
-        console.error("Error al modificar:", e);
+      } catch {
         this.error.set('Error al modificar la película');
       } finally {
         this.Guardando.set(false);

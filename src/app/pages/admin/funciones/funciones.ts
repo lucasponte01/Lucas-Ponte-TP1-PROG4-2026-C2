@@ -7,19 +7,29 @@ import { PeliculaService } from '../../../services/peliculas/peliculas';
 import { SalaService } from '../../../services/salas/salas';
 import Pelicula from '../../../interfaces/peliculas';
 import Salas from '../../../interfaces/salas';
+import { CampoInput } from '../../../components/ui/campo-input/campo-input';
+import { Router } from '@angular/router';
+import { dateTimeValidator } from '../../../validators/date-time.validator';
+import { parseDateTime, toDDMMYYYYHHmm } from '../../../utils/parse_date';
+import { ErrorRequerido } from '../../../components/ui/error-requerido/error-requerido';
+import { ErrorMinlenght } from '../../../components/ui/error-minlenght/error-minlenght';
+import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-maxlenght';
+import { NavbarComponent } from '../../../components/ui/navbar/navbar';
+
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, NavbarComponent],
   selector: 'app-funciones',
   styleUrl: './funciones.css',
   templateUrl: './funciones.html',
 })
 export class FuncionesAdmin {
+  logo_menus = "/assets/imagenes/Gemini2.png"
   bd = inject(FuncionService);
   peliculasBd = inject(PeliculaService);
   salasBd = inject(SalaService);
   auth = inject(Auth);
-
+  router = inject(Router);
   error = signal('');
   Guardando = signal(false);
   vistaActiva = signal<string>('crear');
@@ -27,9 +37,6 @@ export class FuncionesAdmin {
   funciones = signal<Funcion[]>([]);
   peliculas = signal<Pelicula[]>([]);
   salas = signal<Salas[]>([]);
-  lista: any;
-  num: any;
-  item: any;
 
   async ngOnInit() {
     this.peliculas.set(await this.peliculasBd.mostrarpeliculas());
@@ -54,6 +61,10 @@ export class FuncionesAdmin {
     }
   }
 
+  async volver() {
+    this.router.navigate(['/home']);
+  }
+
   async traer_peliculas(){
     this.peliculas.set(await this.peliculasBd.mostrarpeliculas()) ;
     }
@@ -71,33 +82,56 @@ export class FuncionesAdmin {
   form_crear = new FormGroup({
     pelicula_id: new FormControl('', [Validators.required]),
     sala_id: new FormControl('', [Validators.required]),
-    inicio: new FormControl('', [Validators.required]), 
-    fin: new FormControl('', [Validators.required]),
+    inicio: new FormControl('', [Validators.required, dateTimeValidator]),
     formato: new FormControl('2D', [Validators.required]),
     idioma: new FormControl('castellano', [Validators.required]),
-    precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
-    precio_vip: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+    precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),
+    precio_vip: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),
     es_preventa: new FormControl(false),
   });
 
   async crear_funcion(): Promise<void> {
-    this.error.set('');
-    if (this.form_crear.invalid) return;
-    this.Guardando.set(true);
+  this.error.set('');
+  if (this.form_crear.invalid) return;
 
-
-    this.Guardando.set(true);
-    try {
-      await this.bd.crear_funcion(this.form_crear.value as FuncionPorCrear);
-
-      this.form_crear.reset({ formato: '2D', idioma: 'castellano', es_preventa: false });
-      await this.traer_funciones();
-    } catch {
-        this.error.set('Error al crear la función');
-    } finally {
-      this.Guardando.set(false);
-    }
+  const v = this.form_crear.value;
+  const pelicula = this.peliculas().find(p => p.id === v.pelicula_id);
+  if (!pelicula) {
+    this.error.set('Seleccioná una película válida');
+    return;
   }
+
+  const inicio = parseDateTime(v.inicio ?? '');
+  if (!inicio) {
+    this.error.set('Fecha y hora inválidas');
+    return;
+  }
+
+  const fin = new Date(inicio.getTime() + pelicula.duracion_min * 60000);
+
+  this.Guardando.set(true);
+  try {
+    const nuevaFuncion: FuncionPorCrear = {
+      pelicula_id: v.pelicula_id!,
+      sala_id: v.sala_id!,
+      inicio: inicio.toISOString(),
+      fin: fin.toISOString(),
+      formato: v.formato!,
+      idioma: v.idioma!,
+      precio_base: v.precio_base!,
+      precio_vip: v.precio_vip!,
+      es_preventa: v.es_preventa!,
+    };
+
+    await this.bd.crear_funcion(nuevaFuncion);
+    this.form_crear.reset({ formato: '2D', idioma: 'castellano', es_preventa: false });
+    await this.traer_funciones();
+  } catch  {
+    this.error.set('Error al crear la función');
+  } finally {
+    this.Guardando.set(false);
+  }
+}
   
   //modificar funcion 
 
@@ -111,36 +145,34 @@ export class FuncionesAdmin {
       id: new FormControl('', [Validators.required]),
       pelicula_id: new FormControl('', [Validators.required]),
       sala_id: new FormControl('', [Validators.required]),
-      inicio: new FormControl('', [Validators.required]),
-      fin: new FormControl('', [Validators.required]),
+      inicio: new FormControl('', [Validators.required, dateTimeValidator]),
       formato: new FormControl('2D', [Validators.required]),
       idioma: new FormControl('castellano', [Validators.required]),
-      precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
-      precio_vip: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+      precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),
+      precio_vip: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),
       es_preventa: new FormControl(false),
     });
 
     seleccionar_funcion_para_editar(index: number) {
-    const lista = this.funciones();
-    const item = lista[index];
-    if (!item) return;
+      const lista = this.funciones();
+      const item = lista[index];
+      if (!item) return;
 
-    this.funcion_seleccionada.set(true);
-    this.form_modificar.controls.numero.setValue(index + 1);
-    
-    this.form_edicion.setValue({
-      id: item.id,
-      pelicula_id: item.pelicula_id,
-      sala_id: item.sala_id,
-      inicio: item.inicio ? item.inicio.slice(0, 16) : '', 
-      fin: item.fin ? item.fin.slice(0, 16) : '',
-      formato: item.formato,
-      idioma: item.idioma,
-      precio_base: item.precio_base,
-      precio_vip: item.precio_vip,
-      es_preventa: item.es_preventa ?? false
-    });
-  }
+      this.funcion_seleccionada.set(true);
+      this.form_modificar.controls.numero.setValue(index + 1);
+
+      this.form_edicion.setValue({
+        id: item.id,
+        pelicula_id: item.pelicula_id,
+        sala_id: item.sala_id,
+        inicio: toDDMMYYYYHHmm(new Date(item.inicio)),
+        formato: item.formato,
+        idioma: item.idioma,
+        precio_base: item.precio_base,
+        precio_vip: item.precio_vip,
+        es_preventa: item.es_preventa ?? false
+      });
+    }
 
   buscar_funcion_por_numero() {
     const num = this.form_modificar.value.numero;
@@ -154,24 +186,50 @@ export class FuncionesAdmin {
   }
 
     async modificacion_funcion(): Promise<void> {
-      this.error.set('');
-      if (this.form_edicion.invalid) return;
-      this.Guardando.set(true);
+        this.error.set('');
+        if (this.form_edicion.invalid) return;
 
-      try {
-       await this.bd.modificar_funcion(this.form_edicion.value as FuncionPorModificar);
+        const v = this.form_edicion.value;
+        const pelicula = this.peliculas().find(p => p.id === v.pelicula_id);
+        if (!pelicula) {
+          this.error.set('Seleccioná una película válida');
+          return;
+        }
 
-        await this.traer_funciones();
-        this.funcion_seleccionada.set(null);
-        this.form_edicion.reset({ formato: '2D', idioma: 'castellano', es_preventa: false });
-        this.form_modificar.reset();
-      } catch  {
-        this.error.set('Error al modificar la función');
-        
-      } finally {
-        this.Guardando.set(false);
+        const inicio = parseDateTime(v.inicio ?? '');
+        if (!inicio) {
+          this.error.set('Fecha y hora inválidas');
+          return;
+        }
+
+        const fin = new Date(inicio.getTime() + pelicula.duracion_min * 60000);
+
+        this.Guardando.set(true);
+        try {
+          const funcionModificada: FuncionPorModificar = {
+            id: v.id!,
+            pelicula_id: v.pelicula_id!,
+            sala_id: v.sala_id!,
+            inicio: inicio.toISOString(),
+            fin: fin.toISOString(),
+            formato: v.formato!,
+            idioma: v.idioma!,
+            precio_base: v.precio_base!,
+            precio_vip: v.precio_vip!,
+            es_preventa: v.es_preventa!,
+          };
+
+          await this.bd.modificar_funcion(funcionModificada);
+          await this.traer_funciones();
+          this.funcion_seleccionada.set(null);
+          this.form_edicion.reset({ formato: '2D', idioma: 'castellano', es_preventa: false });
+          this.form_modificar.reset();
+        } catch  {
+          this.error.set('Error al modificar la función');
+        } finally {
+          this.Guardando.set(false);
+        }
       }
-    }
 
     //eliminar funcion
     form_eliminar = new FormGroup({
@@ -213,5 +271,7 @@ export class FuncionesAdmin {
       this.Guardando.set(false);
     }
   }
+
+  
 }
 

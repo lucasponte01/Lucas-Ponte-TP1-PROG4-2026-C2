@@ -1,101 +1,124 @@
-
 <form class="login" [formGroup]="form_registro" (ngSubmit)="registrarse()">
-  <div>
-    <button class="boton_i" type="submit" routerLink="/">volver</button>
-  </div>
 
   <div class="logo_container">
     <div class="logo">
-        <img [src]="logo_2" alt="Logo" class="logo" />
+      <img [src]="logo_2" alt="Logo" class="logo-img" />
     </div>
   </div>
-  
-<div class="card">
-  <h1 class="textos">Regitrarse</h1>
-  <div >
 
-    <app-campo-input id="nombre" label="Nombre" [control]="form_registro.controls.nombre" type="text">
-      <app-error-requerido  mensaje="El nombre es requerido" [errors]="form_registro.controls.nombre.errors"></app-error-requerido>
-      <app-error-minlenght [errors]="form_registro.controls.nombre.errors"></app-error-minlenght>
-      <app-error-maxlenght [errors]="form_registro.controls.nombre.errors"></app-error-maxlenght>
-      <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.nombre.errors" ></app-error-pattern>
-    </app-campo-input>
+  <div class="volver-container">
+    <button class="boton_i boton_secundario" type="button" (click)="volver()">Volver</button>
+  </div>
+  
+  <div class="card">
+    <h1 class="textos">Registrarse</h1>
     
-  </div>
- 
-  <div>
-    <app-campo-input id="apellido" label="Apellido" [control]="form_registro.controls.apellido" type="text">
-      <app-error-requerido  mensaje="El Apellido es requerido" [errors]="form_registro.controls.apellido.errors"></app-error-requerido>
-      <app-error-minlenght [errors]="form_registro.controls.apellido.errors"></app-error-minlenght>
-      <app-error-maxlenght [errors]="form_registro.controls.apellido.errors"></app-error-maxlenght>
-      <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.apellido.errors" ></app-error-pattern>
-    </app-campo-input>
-  </div>
+    <div class="form-grid">
+      <div>
+        <app-campo-input id="nombre" label="Nombre" [control]="form_registro.controls.nombre" type="text">
+          <app-error-requerido mensaje="El nombre es requerido" [errors]="form_registro.controls.nombre.errors"></app-error-requerido>
+          <app-error-minlenght [errors]="form_registro.controls.nombre.errors"></app-error-minlenght>
+          <app-error-maxlenght [errors]="form_registro.controls.nombre.errors"></app-error-maxlenght>
+          <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.nombre.errors"></app-error-pattern>
+        </app-campo-input>
+      </div>
+      
+      <div>
+        <app-campo-input id="apellido" label="Apellido" [control]="form_registro.controls.apellido" type="text">
+          <app-error-requerido mensaje="El Apellido es requerido" [errors]="form_registro.controls.apellido.errors"></app-error-requerido>
+          <app-error-minlenght [errors]="form_registro.controls.apellido.errors"></app-error-minlenght>
+          <app-error-maxlenght [errors]="form_registro.controls.apellido.errors"></app-error-maxlenght>
+          <app-error-pattern mensaje="Solo se permiten letras, guiones y espacios." [errors]="form_registro.controls.apellido.errors"></app-error-pattern>
+        </app-campo-input>
+      </div>
 
-  <div>
-    <app-campo-input id="email" label="Email" [control]="form_registro.controls.email" type="email">
-      <app-error-requerido  mensaje="El Email es requerido" [errors]="form_registro.controls.email.errors"></app-error-requerido>
-      <app-error-email mensaje="Ingresa un correo electrónico válido." [errors]="form_registro.controls.email.errors"></app-error-email>
-    </app-campo-input>
-  </div>
-  
-  <div>
-    <app-campo-input id="contrasena" label="Contraseña" [control]="form_registro.controls.contrasena" type="password">
-      <app-error-requerido  mensaje="El Contraseña es requerido" [errors]="form_registro.controls.contrasena.errors"></app-error-requerido>
-      <app-error-minlenght [errors]="form_registro.controls.contrasena.errors"></app-error-minlenght>
-    </app-campo-input>
-  </div>
-  
-  <div>
-    <app-campo-input id="fecha_naci" label="Edad" [control]="form_registro.controls.edad" type="int">
-      <app-error-requerido  mensaje="La edad es requerido" [errors]="form_registro.controls.edad.errors"></app-error-requerido>
-      <app-error-minlenght [errors]="form_registro.controls.edad.errors"></app-error-minlenght>
-      <app-error-maxlenght [errors]="form_registro.controls.edad.errors"></app-error-maxlenght>
-      <app-error-pattern mensaje="solo se permiten numeros" [errors]="form_registro.controls.edad.errors" ></app-error-pattern>
-    </app-campo-input>
-  </div>
-
-  <div>
-    <app-campo-input id="fecha_naci" label="Tipo de sangre" [control]="form_registro.controls.tipo_sangre" type="text">
-      <app-error-requerido  mensaje="El tipo de sangre es requerido" [errors]="form_registro.controls.tipo_sangre.errors"></app-error-requerido>
-    </app-campo-input>
-  </div>
-
-  <div>
-    <app-campo-input id="fecha_naci" label="Color de ojos" [control]="form_registro.controls.color_ojos" type="text">
-      <app-error-requerido  mensaje="El Color de ojos es requerido" [errors]="form_registro.controls.color_ojos.errors"></app-error-requerido>
-    </app-campo-input>
-  </div>
-
-  <div>
-    <app-campo-input id="fecha_naci" label="Dias de vacasiones" [control]="form_registro.controls.dias_vacaciones" type="int">
-      <app-error-requerido  mensaje="los dias de vacasiones son requerido" [errors]="form_registro.controls.dias_vacaciones.errors"></app-error-requerido>
-    </app-campo-input>
-  </div>
-
-
-  <button class="boton_i" type="submit" (click)="abrirSelectorAvatar()">Seleccionar avatar</button>
-
-  @if (mostrarSelectorAvatar()) {
-    <div class="modal-avatares">
-      @if (cargando_Avatares()) {
-        <p>Cargando avatares...</p>
-      } @else {
-        <div class="grid-avatares">
-          @for (avatar of avatares(); track avatar) {
-            <img solid #f8aa19; class="avatars" [src]="avatar" [class.seleccionado]="avatar === avatarSeleccionado()" (click)="elegirAvatar(avatar)"/>
+      <div class="full-width">
+        <app-campo-input id="email" label="Email" [control]="form_registro.controls.email" type="email">
+          <app-error-requerido mensaje="El Email es requerido" [errors]="form_registro.controls.email.errors"></app-error-requerido>
+          <app-error-email mensaje="Ingresa un correo electrónico válido." [errors]="form_registro.controls.email.errors"></app-error-email>
+        </app-campo-input>
+      </div>
+      
+      <div class="full-width">
+        <app-campo-input id="contrasena" label="Contraseña" [control]="form_registro.controls.contrasena" type="password">
+          <app-error-requerido mensaje="La Contraseña es requerida" [errors]="form_registro.controls.contrasena.errors"></app-error-requerido>
+          <app-error-minlenght [errors]="form_registro.controls.contrasena.errors"></app-error-minlenght>
+        </app-campo-input>
+      </div>
+      
+      <input pInputText formControlName="fecha_nacimiento" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input" />
+        @if (form_registro.get('fecha_nacimiento')?.invalid && form_registro.get('fecha_nacimiento')?.touched) {
+          @if (form_registro.get('fecha_nacimiento')?.hasError('required')) {
+            <p class="field__error">Ingresá tu fecha de nacimiento.</p>
           }
-        </div>
-      }
-      <button class="boton_i" type="submit" (click)="confirmarAvatar()">Elegir</button>
+          @if (form_registro.get('fecha_nacimiento')?.hasError('invalidDate')) {
+            <p class="field__error">Ingresá una fecha válida.</p>
+          }
+          @if (form_registro.get('fecha_nacimiento')?.hasError('fechaFutura')) {
+            <p class="field__error">La fecha no puede ser futura.</p>
+          }
+          @if (form_registro.get('fecha_nacimiento')?.hasError('menorDeEdad')) {
+            <p class="field__error">Tenés que ser mayor de 15 años.</p>
+          }
+          @if (form_registro.get('fecha_nacimiento')?.hasError('edadInvalida')) {
+            <p class="field__error">Revisá la fecha ingresada.</p>
+          }
+        }
+
+      <div>
+        <label for="tipo_sangre" class="textos">Tipo de sangre</label>
+        <select formControlName="tipo_sangre" id="tipo_sangre" class="input">
+          <option value="O+">O+</option>
+          <option value="A+">A+</option>
+          <option value="B+">B+</option>
+          <option value="O-">O-</option>
+          <option value="A-">A-</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="color_ojos" class="textos">Color de ojos</label>
+        <select formControlName="color_ojos" id="color_ojos" class="input">
+          <option value="Marrón">Marrón </option>
+          <option value="Azul">Azul</option>
+          <option value="Verde">Verde</option>
+          <option value="Gris">Gris</option>
+          <option value="Avellana">Avellana</option>
+        </select>
+      </div>
+
+      <div>
+        <app-campo-input id="dias_vacaciones" label="Días de vacaciones" [control]="form_registro.controls.dias_vacaciones" type="number">
+          <app-error-requerido mensaje="Los dias de vacaciones son requeridos" [errors]="form_registro.controls.dias_vacaciones.errors"></app-error-requerido>
+          <app-error-minlenght mensaje="el minimo de dias de vacaciones es 1 dias" [errors]="form_registro.controls.dias_vacaciones.errors"></app-error-minlenght>
+          <app-error-maxlenght mensaje="el maximo de dias de vacaciones es 365 dias"  [errors]="form_registro.controls.dias_vacaciones.errors"></app-error-maxlenght>
+        </app-campo-input>
+      </div>
     </div>
-  }
 
-  @if (form_registro.controls.foto.value) {
-    <img [src]="form_registro.controls.foto.value" class="avatars" />
-  }
+    <button class="boton_i boton-avatar-trigger" type="button" (click)="abrirSelectorAvatar()">Seleccionar avatar</button>
 
-  
-  <button class="boton_i" type="submit" [disabled]="form_registro.invalid">Registrarse</button>
-</div>
+    @if (mostrarSelectorAvatar()) {
+      <div class="modal-avatares full-width">
+        @if (cargando_Avatares()) {
+          <p class="texto-cargando">Cargando avatares...</p>
+        } @else {
+          <div class="grid-avatares">
+            @for (avatar of avatares(); track avatar) {
+              <img class="avatars" [src]="avatar" [class.seleccionado]="avatar === avatarSeleccionado()" (click)="elegirAvatar(avatar)" alt="Avatar"/>
+            }
+          </div>
+        }
+        <button class="boton_i boton-elegir" type="button" (click)="confirmarAvatar()">Elegir</button>
+      </div>
+    }
+
+    @if (form_registro.controls.foto.value) {
+      <div class="avatar-seleccionado-preview">
+        <img [src]="form_registro.controls.foto.value" class="avatars preview-img" alt="Avatar seleccionado" />
+      </div>
+    }
+    
+    <button class="boton_i full-width" type="submit" [disabled]="form_registro.invalid">Registrarse</button>
+  </div>
 </form>

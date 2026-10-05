@@ -10,10 +10,12 @@ import { Auth } from '../../services/auth';
 import Usuario from '../../interfaces/usuario';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { StorageService } from '../../services/storage/storage-service';
+import { EdadPipe } from '../../components/ui/pipe/pipe-edad';
+import { fechaNacimientoValidator } from '../../validators/fecha-nacimiento.validator';
 
 
 @Component({
-  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink],
+  imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMinlenght, ErrorMaxlenght, ErrorPattern, ErrorEmail, RouterLink, EdadPipe],
   selector: 'app-registro',
   styleUrl: './registro.css',
   templateUrl: './registro.html',
@@ -23,7 +25,7 @@ export class Registro {
   rout = inject(Router)
   stg = inject(StorageService)
 
-  logo_2='assets/imagenes/Gemini2.png'
+  logo_2='assets/imagenes/Gemini1r.png'
   
   avatares = signal<string[]>([]);
   avatarSeleccionado = signal<string | null>(null);
@@ -37,10 +39,10 @@ export class Registro {
     apellido: new FormControl('', [Validators.required, Validators.minLength(2) , Validators.maxLength(15) , Validators.pattern(/^[a-zA-Z\- ]+$/)]),
     email: new FormControl('', [Validators.email , Validators.required]),
     contrasena: new FormControl('',[Validators.required , Validators.minLength(6)]),
-    edad: new FormControl<number | null>(null, [Validators.required, Validators.min(15), Validators.max(120), Validators.pattern(/^[0-9]+$/)]),
+    fecha_nacimiento: new FormControl('', [Validators.required, fechaNacimientoValidator]),
     tipo_sangre: new FormControl('', [Validators.required]),
     color_ojos: new FormControl('', [Validators.required]),
-    dias_vacaciones: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    dias_vacaciones: new FormControl<number | null>(null, [Validators.required, Validators.minLength(0) ,Validators.maxLength(365) ]),
     foto: new FormControl<string | null>(null,)
   });
 
@@ -76,7 +78,9 @@ async abrirSelectorAvatar(): Promise<void> {
     this.form_registro.controls.foto.setValue(this.avatarSeleccionado());
     this.mostrarSelectorAvatar.set(false);
   }
-  
+  volver(){
+    this.rout.navigate(['/'])
+  }
 
 }
 

@@ -3,7 +3,7 @@ export default interface Usuario {
   apellido: string;
   email: string;
   contrasena: string;
-  edad: number;
+  fecha_nacimiento: string;
   tipo_sangre: string;
   color_ojos: string;
   dias_vacaciones: number;

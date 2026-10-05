@@ -1,24 +1,18 @@
-import { Component, Input, Output, EventEmitter, output, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Auth } from '../../../services/auth';
 
 @Component({
+  imports: [ CommonModule, RouterModule],
   selector: 'app-navbar',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: '',
-  styles: []
+  styleUrl: './navbar.css',
+  templateUrl: './navbar.html',
 })
 export class NavbarComponent {
   auth = inject(Auth)
   router = inject(Router);
-  
-
-  @Input() logoSrc?: string;         
-  @Output() onCambiarVista = new EventEmitter<string>();
-  @Output() onVolver = new EventEmitter<string>();
-
+  @Input() logo_menus: string = '';
   async cerrar_sesion() {
     try {
       await this.auth.cerrarSesion();
@@ -28,12 +22,15 @@ export class NavbarComponent {
     }
   }
 
-  cambiarVista(vista: string) {
-    this.onCambiarVista.emit(vista);
+  async volver() {
+    this.router.navigate(['/home']);
   }
 
-  async volver(ruta:string){
-    this.onVolver.emit(ruta);
-    this.router.navigate([ruta]);
+
+  ngOnInit() {
+    console.log('NavbarComponent initialized');
   }
+
+
+ 
 }

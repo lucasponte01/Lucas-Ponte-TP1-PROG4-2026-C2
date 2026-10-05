@@ -3,6 +3,7 @@ import { SupabaseService } from './supabase.service';
 import { User } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
 import Usuario from '../interfaces/usuario';
+import { parseDate, toISODateOnly } from '../utils/parse_date';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
@@ -24,6 +25,10 @@ export class Auth {
     }
 
     public async registrar(usuario : Usuario){
+      const fecha = parseDate(usuario.fecha_nacimiento);
+      if (!fecha) throw new Error('Fecha de nacimiento inválida');
+
+
     const {data,error} = await this._supabaseService.Auth.signUp({
             email: usuario.email,
             password: usuario.contrasena,
@@ -31,7 +36,7 @@ export class Auth {
             data: {
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,
-                edad: usuario.edad,
+                fecha_nacimiento: toISODateOnly(fecha),
                 tipo_sangre: usuario.tipo_sangre,
                 color_ojos: usuario.color_ojos,
                 dias_vacaciones: usuario.dias_vacaciones,
@@ -52,6 +57,8 @@ export class Auth {
     }
 
     public async registrar_admin(usuario : Usuario){
+      const fecha = parseDate(usuario.fecha_nacimiento);
+        if (!fecha) throw new Error('Fecha de nacimiento inválida');
       const {data,error} = await this._supabaseService.Auth.signUp({
         email: usuario.email,
           password: usuario.contrasena,
@@ -59,7 +66,7 @@ export class Auth {
           data: {
               nombre: usuario.nombre,
               apellido: usuario.apellido,
-              edad: usuario.edad,
+              fecha_nacimiento: toISODateOnly(fecha),
               tipo_sangre: usuario.tipo_sangre,
               color_ojos: usuario.color_ojos,
               dias_vacaciones: usuario.dias_vacaciones,
@@ -80,64 +87,38 @@ export class Auth {
   }
     
   
-  async logear(res: any) {
-    const { data, error } = await this._supabaseService.Auth.signInWithPassword({
-      email: res.email,
-      password: res.password,
-    });
-    if (error) {
-        throw new Error(
-          `Login failed: ${error.message}`
-        );
-      }
-
-    if (!data.user) {
-      throw new Error(
-        'Login failed: no user returned'
-      );
-    }
-    const { data: usuarioData, error: dbError } = await this._supabaseService.client.from('usuarios').select('tipo').eq('id', data.user.id).single();
-    const tipoEnBaseDeDatos = usuarioData?.tipo?.trim();
-    if (dbError || usuarioData?.tipo || tipoEnBaseDeDatos !== 'cliente') {
-      await this._supabaseService.Auth.signOut();
-      throw new Error('Acceso denegado: el usuario no es cliente');
-    }else{
-      this.usuarioActual.set(data.user);
-      this.router.navigate(['/home']);
-      return data.user;
-    }
-  }
-
-  async logear_admin(res: any) {
+  async login(res: any) {
     const { data, error } = await this._supabaseService.Auth.signInWithPassword({
       email: res.email,
       password: res.password,
     });
 
     if (error) {
-      throw new Error(`error al loguearse: ${error.message}`);
+      throw new Error(`Error al loguearse: ${error.message}`);
     }
 
     if (!data.user) {
-      throw new Error('error al loguearse: ningun usuario retornado');
+      throw new Error('Error al loguearse: ningún usuario retornado');
     }
 
-   
+    
     const { data: usuarioData, error: dbError } = await this._supabaseService.client
       .from('usuarios')
       .select('tipo')
       .eq('id', data.user.id)
       .maybeSingle();
 
-    console.log("Rol obtenido de la BD:", usuarioData);
-
-    if (dbError || !usuarioData || usuarioData.tipo?.trim() !== 'admin') {
+    if (dbError || !usuarioData) {
       await this._supabaseService.Auth.signOut();
-      throw new Error('Acceso denegado: el usuario no es administrador');
+      throw new Error('Acceso denegado: el usuario no tiene un rol asignado');
     }
 
+    const tipo = usuarioData.tipo?.trim();
+
+    
     this.usuarioActual.set(data.user);
-    return data.user;
+    
+    return { user: data.user, tipo: tipo }; 
   }
 
   nombre_invi = signal<string>("")

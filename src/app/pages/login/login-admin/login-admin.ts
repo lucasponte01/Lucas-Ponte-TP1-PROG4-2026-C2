@@ -33,14 +33,16 @@ export class LoginAdmin {
     const { email, contrasena } = this.form_login_admin.getRawValue();
 
     try {
-      await this.auth.logear_admin({ email: email!, password: contrasena! });
-      this.router.navigate(['/home/admin']);
+      await this.auth.login({ email: email!, password: contrasena! });
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error al iniciar sesión como admin:',error);
     }
   }    
 
 
-
+  volver(){
+    this.router.navigate(['/'])
+  }
 
 }

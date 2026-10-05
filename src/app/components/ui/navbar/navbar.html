@@ -1,16 +1,11 @@
-
 <header class="navbar navbar-top">
-  <div class="logo-container">
-    @if (logoSrc) {
-      <a routerLink="/home"><img  [src]="logoSrc" alt="logo"></a>
-    }
-  </div>
-  <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
-</header>
+ 
+  <button class="btn_nav btn_secundario" (click)="volver()">Volver</button>
 
-<nav class="navbar navbar-menu">
-  <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
-  <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
-  <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
-  <button class="btn_nav" (click)="volver('/home')">Volver</button>
-</nav>
+
+  <div class="logo-container">
+   <a routerLink="/home"><img class="logo" [src]="logo_menus" alt="logo"></a>
+  </div>
+
+  <button class="btn_nav btn_secundario" (click)="cerrar_sesion()">Cerrar sesión</button>
+</header>

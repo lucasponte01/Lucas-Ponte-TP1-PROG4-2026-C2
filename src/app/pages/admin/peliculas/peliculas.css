@@ -1,20 +1,44 @@
 body {
   width: 100%;
   min-height: 100vh;
-  background-color: #971107;
+  background-color: #203e45; /* Fondo petróleo profundo */
   margin: 0;
   padding: 0;
   font-family: 'Manrope', sans-serif;
   box-sizing: border-box;
 }
+
+.input, .input-custom {
+  color: #ffffff;
+  width: 100%;
+  height: 45px;
+  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+}
+
+.input-custom {
+  border-color: #427C8E;
+}
+
+.input-custom:focus, .input:focus {
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 2px rgba(65, 191, 173, 0.2);
+}
+
 /* Navbar superior fijo */
 .navbar {
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 12px 25px;
-  background-color: #1f2229;
-  border-bottom: 1px solid #2a2a2a;
+  background-color: #162d33;
+  border-bottom: 1px solid #427C8E;
   width: 100%;
   box-sizing: border-box;
   position: sticky;
@@ -23,18 +47,26 @@ body {
 }
 
 .navbar-top {
-  justify-content: flex-end;
-  border-bottom: none;
+  justify-content: space-between; /* Distribuye elementos: izquierda, centro y derecha */
 }
 
-.navbar-menu {
-  justify-content: flex-start;
-  border-top: 1px solid #2a2a2a;
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  transform: scale(2); 
+  transform-origin: center;
 }
 
 .btn_nav {
-  background-color: #f8aa19;
-  color: #121418;
+  background-color: #41BFAD; /* Turquesa vibrante */
+  color: #1a3036;
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
@@ -42,35 +74,68 @@ body {
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: filter 0.2s;
 }
 
 .btn_nav:hover {
-  opacity: 0.9;
+  filter: brightness(1.1);
+}
+
+.btn_secundario {
+  background-color: #D08E78; /* Terracota para acciones de sesión/volver */
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 6px 14px;
 }
 
 /* Contenedor que ocupa toda la pantalla abajo */
 .main-content {
   width: 100%;
-  min-height: calc(100vh - 65px); /* Resta la altura del nav */
+  min-height: calc(100vh - 65px);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 25px;
   box-sizing: border-box;
 }
 
-/* Card ampliada ocupando el espacio de forma limpia */
+/* Tarjeta contenedora principal estilo cinematográfico */
 .card {
-  background-color: #000000;
+  background-color: #366E79; /* Azul petróleo de la tarjeta */
   width: 100%;
-  max-width: 900px; /* Se expande muy bien por toda la pantalla */
-  padding: 30px;
+  max-width: 850px;
+  padding: 32px;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
+  border: 1px solid #427C8E;
+  color: #ffffff;
 }
 
-/* Grilla del formulario de 2 columnas responsiva */
+/* Títulos y secciones */
+.textos, .titulo-seccion, .subtitulo-seccion {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.subtitulo-seccion {
+  margin-top: 1.5rem;
+  border-top: 1px solid #427C8E;
+  padding-top: 1rem;
+}
+
+.label-input {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #41BFAD;
+  margin-bottom: 0.4rem;
+}
+
+/* Grilla de formularios */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -79,235 +144,40 @@ body {
   width: 100%;
 }
 
-/* Inputs adaptados para ocupar el 100% de su celda sin superponerse */
-.input {
-  color: #f8aa19;
-  width: 100%;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  background: #f9faf90d;
-  border: 1px solid #E76F45;
-  border-radius: 12px;
-  outline: none;
-  box-sizing: border-box;
-  font-family: 'Manrope', sans-serif;
+.input-grupo-col {
+  margin-bottom: 5px;
 }
 
-textarea.input {
-  height: 90px;
-  padding-top: 10px;
-  resize: vertical;
-}
-
-.input::placeholder {
-  color: #f8aa19;
-}
-
-/* Clases para abarcar ambas columnas de la grilla */
-.full-width-input {
+.full-width, .full-width-input {
   grid-column: span 2;
 }
 
-/* Estilo para el contenedor general */
-.file-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.file-label {
-  color: #f8aa19;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-/* Caja personalizada que reemplaza visualmente al input feo */
-.file-custom-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #1a1a1a; /* Fondo oscuro elegante */
-  border: 2px solid #f8aa19; /* Borde punteado o sólido anaranjado */
-  border-radius: 8px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.file-custom-box:hover {
-  background-color: #262626;
-  border-color: #ffbc3b;
-}
-
-/* Texto interno del botón */
-.file-text {
-  color: #ffffff;
-  font-size: 0.9rem;
-}
-
-/* Ocultamos el input de archivos nativo pero mantenemos su funcionalidad al hacer clic */
-.file-input-hidden {
-  display: none;
-}
-
-/* Botón de envío principal del form */
-.boton_i {
-  box-sizing: border-box;
-  width: 100%;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f8aa19;
-  border: none;
-  border-radius: 12px;
-  color: #1f2229;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  grid-column: span 2;
-  transition: opacity 0.2s;
-}
-
-.boton_i:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #ff5555;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.peliculas-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Títulos y etiquetas */
-.titulo-seccion {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #333333;
-  margin-bottom: 1rem;
-}
-
-.label-input {
-  display: block;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #555555;
-  margin-bottom: 0.5rem;
-}
-
-/* Lista de películas */
-.peliculas-lista {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 2rem 0;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.pelicula-item {
-  padding: 0.75rem 1rem;
-  background: #f9faf90d;
-  border: 1px solid #f8aa19;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  transition: background 0.2s ease;
-}
-
-
-
-.pelicula-nombre {
-  color: #f8aa19;
-  font-size: 1rem;
-}
-
-/* Sección de eliminar y controles */
-.eliminar-seccion {
-  border-top: 1px solid #dee2e6;
-  padding-top: 1.5rem;
-}
-
-.input-grupo {
-  display: flex;
-  gap: 0.5rem;
-}
-
+/* Inputs personalizados */
 .input-custom {
-  flex: 1;
-  padding: 0.65rem 1rem;
-  border: 1px solid #ced4da;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
   border-radius: 8px;
-  font-size: 1rem;
+  color: #ffffff;
+  font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
 }
 
 .input-custom:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 3px rgba(65, 191, 173, 0.15);
 }
 
-.btn-eliminar {
-  padding: 0.65rem 1.25rem;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.textarea-custom {
+  resize: vertical;
+  min-height: 90px;
 }
 
-.btn-eliminar:hover {
-  background-color: #bb2d3b;
-}
-
-/* Tarjeta contenedora principal */
-.card {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #121212; /* Fondo oscuro consistente */
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #ffffff;
-}
-
-/* Títulos y etiquetas */
-.titulo-seccion, .subtitulo-seccion {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 1rem;
-}
-
-.subtitulo-seccion {
-  margin-top: 1.5rem;
-  border-top: 1px solid #2a2a2a;
-  padding-top: 1rem;
-}
-
-.label-input {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #f8aa19; /* Tono anaranjado característico */
-  margin-bottom: 0.4rem;
+.input-custom::placeholder {
+  color: #9cbcc4;
 }
 
 /* Listado de películas */
@@ -315,16 +185,17 @@ textarea.input {
   list-style: none;
   padding: 0;
   margin: 0 0 1.5rem 0;
-  max-height: 160px;
+  max-height: 180px;
   overflow-y: auto;
-  border: 1px solid #2a2a2a;
+  border: 1px solid #427C8E;
   border-radius: 8px;
-  background: #1a1a1a;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .pelicula-item {
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid #2a2a2a;
+  padding: 10px 15px;
+  border-bottom: 1px solid #427C8E;
+  cursor: pointer;
   transition: background 0.2s ease;
 }
 
@@ -333,141 +204,95 @@ textarea.input {
 }
 
 .pelicula-item:hover {
-  background: #262626;
+  background: rgba(65, 191, 173, 0.15);
 }
 
 .pelicula-nombre {
-  color: #e0e0e0;
+  color: #ffffff;
   font-size: 0.95rem;
+  font-weight: 500;
 }
 
-/* Sección de búsqueda y grupos de inputs */
+/* Sección de eliminación */
 .eliminar-seccion {
-  border-top: 1px solid #2a2a2a;
+  border-top: 1px solid #427C8E;
   padding-top: 1.2rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .input-grupo {
   display: flex;
-  gap: 0.5rem;
+  gap: 12px;
+  align-items: flex-end;
 }
 
-.input-grupo-col {
-  margin-bottom: 1rem;
-}
-
-.full-width-input {
+.input-grupo app-campo-input {
   flex: 1;
 }
 
-/* Estilos personalizados para Inputs y Textareas */
-.input-custom {
-  width: 100%;
-  padding: 0.65rem 1rem;
-  background-color: #1a1a1a;
-  border: 1px solid #333333;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+/* Botones principales y de acción */
+.boton_i {
   box-sizing: border-box;
-}
-
-.input-custom:focus {
-  border-color: #f8aa19;
-  box-shadow: 0 0 0 3px rgba(248, 170, 25, 0.15);
-}
-
-.textarea-custom {
-  resize: vertical;
-  min-height: 80px;
-}
-
-/* Botones */
-.btn-eliminar, .btn-guardar {
-  padding: 0.65rem 1.25rem;
-  background-color: #f8aa19;
-  color: #121212;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #41BFAD;
   border: none;
   border-radius: 8px;
-  font-weight: 600;
+  color: #1a3036;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s;
+  margin-top: 10px;
+  transition: filter 0.2s;
 }
 
-.btn-eliminar:hover, .btn-guardar:hover {
-  background-color: #ffbc3b;
+.boton_i:hover {
+  filter: brightness(1.1);
 }
 
-.btn-guardar {
-  width: 100%;
-  margin-top: 1rem;
-  font-size: 1rem;
-}
-
-.btn-guardar:disabled {
-  opacity: 0.6;
+.boton_i:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+  filter: none;
 }
 
-/* Mensaje de error */
-.error-msg {
-  color: #ff6b6b;
+.btn-eliminar {
+  padding: 0 20px;
+  height: 44px;
+  background-color: #D08E78; /* Terracota para eliminar */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  font-family: 'Manrope', sans-serif;
+}
+
+.btn-eliminar:hover {
+  filter: brightness(1.1);
+}
+
+/* Mensajes de error */
+.error, .error-msg {
+  color: #ff8080;
   font-size: 0.9rem;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  background: rgba(255, 107, 107, 0.1);
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: rgba(255, 128, 128, 0.1);
   border-radius: 6px;
+  border: 1px solid rgba(255, 128, 128, 0.3);
 }
 
-/* Previsualización de Imagen */
-.imagen-preview-container {
-  margin: 1rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.poster-actual {
-  width: 100px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #333333;
-}
-
-/* Estilo para el input de archivos personalizado */
+/* Contenedor de archivos */
 .file-container {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-bottom: 1rem;
+  grid-column: span 2;
 }
 
-.file-custom-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #1a1a1a;
-  border: 2px dashed #f8aa19;
-  border-radius: 8px;
-  padding: 12px 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.file-custom-box:hover {
-  background-color: #262626;
-  border-color: #ffbc3b;
-}
-
-.file-text {
-  color: #ffffff;
-  font-size: 0.9rem;
-}
-
-.file-input-hidden {
-  display: none;
-}

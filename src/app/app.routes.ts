@@ -18,13 +18,9 @@ export const routes: Routes = [
     },
     {
         path: 'home',
-        
-        loadComponent: () => import('./pages/home/home').then(m => m.Home)
-    },
-    {
-        path: 'home/admin',
-        
-        loadComponent: () => import('./pages/home/home/admin/admin').then(m => m.Admin)
+        loadComponent: () => import('./pages/home/home').then(m => m.Home),
+        canActivate :[authGuard],
+    
     },
     {
         path: 'registro',
@@ -37,7 +33,9 @@ export const routes: Routes = [
     },
     {
         path: 'admin',
-        loadChildren:() => import('./pages/admin/admin.routes').then(m => m.instalarroute)
+        loadChildren:() => import('./pages/admin/admin.routes').then(m => m.instalarroute),
+        canActivate :[authGuard],
+        data:{roles:['admin']}
     }
     
 ];

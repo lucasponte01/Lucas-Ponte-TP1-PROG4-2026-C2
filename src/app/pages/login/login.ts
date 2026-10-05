@@ -33,7 +33,7 @@ export class Login {
     const { email, contrasena } = this.form_login.getRawValue();
 
     try {
-      await this.auth.logear({ email: email!, password: contrasena! });
+      await this.auth.login({ email: email!, password: contrasena! });
       this.router.navigate(['/home']);
     } catch (error) {
       console.error(error);

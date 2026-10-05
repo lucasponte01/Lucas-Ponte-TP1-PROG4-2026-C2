@@ -1,7 +1,5 @@
 <body class="body">
-<header class="navbar navbar-top">
-  <button class="btn_nav" (click)="cerrar_sesion()">Cerrar sesión</button>
-</header>
+<app-navbar [logo_menus]="logo_menus"></app-navbar>
 
 <nav class="navbar navbar-menu">
   <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
@@ -20,6 +18,7 @@
             <option value="" disabled selected>Seleccionar película</option>
             @for (p of peliculas(); track p.id) {
               <option [value]="p.id">{{ p.nombre }} ({{ p.duracion_min }} min)</option>
+              
             }
           </select>
           
@@ -30,16 +29,17 @@
             }
           </select>
           
-          <div class="input-container">
-            <label for="inicio" class="label-input">Inicio</label>
-            <input id="inicio" formControlName="inicio" type="datetime-local" class="input" />
-          </div>
+          <input pInputText formControlName="inicio" pInputMask="99/99/9999 99:99" placeholder="DD/MM/AAAA HH:mm" class="input" />
+            @if (form_crear.get('inicio')?.invalid && form_crear.get('inicio')?.touched) {
+              @if (form_crear.get('inicio')?.hasError('required')) {
+                <p class="field__error">Ingresá la fecha y hora.</p>
+              }
+              @if (form_crear.get('inicio')?.hasError('invalidDate')) {
+                <p class="field__error">Ingresá una fecha y hora válidas.</p>
+              }
+            }
 
-          <div class="input-container">
-          <label for="fin" class="label-input">Fin</label>
-          <input id="fin" formControlName="fin" type="datetime-local" class="input" />
-        </div>s
-          
+
           <select formControlName="formato" class="input">
             <option value="2D">2D</option>
             <option value="3D">3D</option>
@@ -52,12 +52,19 @@
             <option value="subtitulada">Subtitulada</option>
           </select>
          
-          <input formControlName="precio_base" type="number" placeholder="Precio base" class="input" />
-          <input formControlName="precio_vip" type="number" placeholder="Precio VIP" class="input" />
-       
+          <app-campo-input id="precio_base" label="Precio base" [control]="$any(form_crear.controls.precio_base)" type="number">
+            <app-error-requerido mensaje="El precio base es requerido" [errors]="form_crear.controls.precio_base.errors"></app-error-requerido>
+            <app-error-minlenght mensaje="El precio base debe ser al menos 1" [errors]="form_crear.controls.precio_base.errors"></app-error-minlenght>
+            <app-error-maxlenght mensaje="El precio base no puede ser mayor a 99999" [errors]="form_crear.controls.precio_base.errors"></app-error-maxlenght>
+          </app-campo-input>
+          <app-campo-input id="precio_vip" label="Precio VIP" [control]="$any(form_crear.controls.precio_vip)" type="number">
+            <app-error-requerido mensaje="El precio VIP es requerido" [errors]="form_crear.controls.precio_vip.errors"></app-error-requerido>
+            <app-error-minlenght mensaje="El precio VIP debe ser al menos 1" [errors]="form_crear.controls.precio_vip.errors"></app-error-minlenght>
+            <app-error-maxlenght mensaje="El precio VIP no puede ser mayor a 99999" [errors]="form_crear.controls.precio_vip.errors"></app-error-maxlenght>
+          </app-campo-input>
+
           <label class="checkbox-container full-width">
-            <input formControlName="es_preventa" type="checkbox" /> 
-            <span>Es preventa</span>
+            <app-campo-input id="es_preventa" label="Es preventa" [control]="$any(form_crear.controls.es_preventa)" type="checkbox"></app-campo-input>
           </label>
 
           @if (error()) {
@@ -83,8 +90,9 @@
         </div>
 
         <form [formGroup]="form_edicion" (ngSubmit)="buscar_funcion_por_numero()" class="input-grupo">
-          <input formControlName="numero" type="number" placeholder="N° de función" class="input" />
+          <app-campo-input id="numero" label="N° de función" [control]="$any(form_modificar.controls.numero)" type="number"></app-campo-input>
           <button type="submit" class="btn-eliminar">Buscar</button>
+
         </form>
 
         @if (error()) {
@@ -107,15 +115,17 @@
               }
             </select>
 
-            <div class="input-container">
-              <label for="inicio-edicion" class="label-input">Inicio</label>
-              <input id="inicio-edicion" formControlName="inicio" type="datetime-local" class="input" />
-            </div>
+            <input pInputText formControlName="inicio" pInputMask="99/99/9999 99:99" placeholder="DD/MM/AAAA HH:mm" class="input" />
+              @if (form_edicion.get('inicio')?.invalid && form_edicion.get('inicio')?.touched) {
+                @if (form_edicion.get('inicio')?.hasError('required')) {
+                  <p class="field__error">Ingresá la fecha y hora.</p>
+                }
+                @if (form_edicion.get('inicio')?.hasError('invalidDate')) {
+                  <p class="field__error">Ingresá una fecha y hora válidas.</p>
+                }
+              }
 
-            <div class="input-container">
-              <label for="fin" class="label-input">Fin</label>
-              <input id="fin" formControlName="fin" type="datetime-local" class="input" />
-            </div>
+            
 
             <select formControlName="formato" class="input">
               <option value="2D">2D</option>
@@ -129,15 +139,22 @@
               <option value="subtitulada">Subtitulada</option>
             </select>
 
-            <input formControlName="precio_base" type="number" placeholder="Precio base" class="input" />
-            <input formControlName="precio_vip" type="number" placeholder="Precio VIP" class="input" />
+            <app-campo-input id="precio_base" label="Precio base" [control]="$any(form_edicion.controls.precio_base)" type="number">
+              <app-error-requerido mensaje="El precio base es requerido" [errors]="form_edicion.controls.precio_base.errors"></app-error-requerido>
+              <app-error-minlenght mensaje="El precio base debe ser al menos 1" [errors]="form_edicion.controls.precio_base.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="El precio base no puede ser mayor a 99999" [errors]="form_edicion.controls.precio_base.errors"></app-error-maxlenght>
+            </app-campo-input>
+          <app-campo-input id="precio_vip" label="Precio VIP" [control]="$any(form_edicion.controls.precio_vip)" type="number">
+            <app-error-requerido mensaje="El precio VIP es requerido" [errors]="form_edicion.controls.precio_vip.errors"></app-error-requerido>
+            <app-error-minlenght mensaje="El precio VIP debe ser al menos 1" [errors]="form_edicion.controls.precio_vip.errors"></app-error-minlenght>
+            <app-error-maxlenght mensaje="El precio VIP no puede ser mayor a 99999" [errors]="form_edicion.controls.precio_vip.errors"></app-error-maxlenght>
+          </app-campo-input>
 
             <label class="checkbox-container full-width">
-              <input formControlName="es_preventa" type="checkbox" /> 
-              <span>Es preventa</span>
+              <app-campo-input id="es_preventa" label="Es preventa" [control]="$any(form_edicion.controls.es_preventa)" type="checkbox"></app-campo-input>
             </label>
 
-            <button type="submit" class="btn_nav full-width" [disabled]="form_edicion.invalid || Guardando()">
+            <button type="submit" class="boton_i full-width" [disabled]="form_edicion.invalid || Guardando()">
               {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
             </button>
           </form>
@@ -157,7 +174,7 @@
         </div>
 
         <form [formGroup]="form_eliminar" (ngSubmit)="eliminar_funcion()" class="input-grupo">
-          <input formControlName="numero" type="number" placeholder="N° de función" class="input" />
+          <app-campo-input id="numero_delete" label="N° de función" [control]="$any(form_eliminar.controls.id)" type="number"></app-campo-input>
           <button type="submit" class="btn-eliminar">Eliminar</button>
         </form>
 

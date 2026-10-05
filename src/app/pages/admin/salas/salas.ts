@@ -5,23 +5,32 @@ import { SalaService } from '../../../services/salas/salas';
 import { Auth } from '../../../services/auth';
 import Sala, { SalasPorCrear } from '../../../interfaces/salas';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CampoInput } from '../../../components/ui/campo-input/campo-input';
+import { ErrorMinlenght } from '../../../components/ui/error-minlenght/error-minlenght';
+import { ErrorRequerido } from '../../../components/ui/error-requerido/error-requerido';
+import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-maxlenght';
+import { ErrorPattern } from '../../../components/ui/error-pattern/error-pattern';
+import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CampoInput, ErrorMinlenght, ErrorRequerido, ErrorMaxlenght, ErrorPattern, NavbarComponent],
   selector: 'app-salas',
   styleUrl: './salas.css',
   templateUrl: './salas.html',
 })
 export class SalasAdmin {
-
+  logo_menus = "/assets/imagenes/Gemini2.png"
 //RF-25: distribución de butacas y productos.
 //RF-26: Reporte de facturación diaria y cantidad de entradas vendidas, exportable a PDF y Excel.
 //RF-27: Gráficos de películas más vistas por semana/mes y producto de candy bar más vendido.
 //RF-28: Log de actividad: quién creó una función, quién modificó un precio, quién validó un QR — todo con fecha y hora.
- bd = inject(FuncionService);
+  bd = inject(FuncionService);
   peliculasBd = inject(PeliculaService);
   salasBd = inject(SalaService);
   auth = inject(Auth);
+  router = inject(Router);
+
 
   error = signal('');
   Guardando = signal(false);
@@ -44,13 +53,17 @@ export class SalasAdmin {
     }
   }
 
+  async volver() {
+    this.router.navigate(['/home']);
+  }
+
 
     async traer_salas(){
       this.salas.set(await this.salasBd.mostrar_sala());
     } 
     //crear sala
     form_crear = new FormGroup({
-        nombre: new FormControl('', [Validators.required]),
+        nombre: new FormControl('', [Validators.required , Validators.minLength(3), Validators.maxLength(20) ,Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
     })
     async crear_sala(): Promise<void> {
     
@@ -74,7 +87,7 @@ export class SalasAdmin {
   sala_seleccionada = signal<boolean>(false);
   form_edicion = new FormGroup({
     id:new FormControl('', [Validators.required]),
-    nombre: new FormControl('', [Validators.required]),
+    nombre: new FormControl('', [Validators.required , Validators.minLength(3), Validators.maxLength(20) ,Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
   });
 
     seleccionar_sala_para_editar(sala: any) {

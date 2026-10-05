@@ -24,7 +24,7 @@ export class RegistroAnonimo {
   nombre_form = signal<string>('')
   email_form = signal<string>('')
 
-  logo_2='assets/imagenes/Gemini2.png'
+  logo_2='assets/imagenes/Gemini1r.png'
 
    form_registro_anonimo = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.minLength(2) , Validators.maxLength(15) , Validators.pattern(/^[a-zA-Z\- ]+$/)]),

@@ -15,17 +15,23 @@ label {
 
 input {
   box-sizing: border-box;
-  color: #ebe705;
+  color: #ffffff;
   width: 100%;
   height: 38px;
   padding: 0 12px;
-  background: rgba(249, 250, 249, 0.05);
-  border: 1px solid #ebe705;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #427C8E; 
   border-radius: 8px;
   font-size: 0.9rem;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: #41BFAD; 
+  box-shadow: 0 0 0 2px rgba(65, 191, 173, 0.2);
 }
 
 input::placeholder {
-  color: rgba(235, 231, 5, 0.5);
+  color: rgba(255, 255, 255, 0.4); 
 }
