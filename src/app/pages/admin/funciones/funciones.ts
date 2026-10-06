@@ -15,6 +15,7 @@ import { ErrorRequerido } from '../../../components/ui/error-requerido/error-req
 import { ErrorMinlenght } from '../../../components/ui/error-minlenght/error-minlenght';
 import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-maxlenght';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
+import { fechaFuturaValidator, fechaHoraFuturaValidator } from '../../../validators/fecha-futura.validator';
 
 
 @Component({
@@ -82,7 +83,7 @@ export class FuncionesAdmin {
   form_crear = new FormGroup({
     pelicula_id: new FormControl('', [Validators.required]),
     sala_id: new FormControl('', [Validators.required]),
-    inicio: new FormControl('', [Validators.required, dateTimeValidator]),
+    inicio: new FormControl('', [Validators.required, dateTimeValidator, fechaHoraFuturaValidator]),
     formato: new FormControl('2D', [Validators.required]),
     idioma: new FormControl('castellano', [Validators.required]),
     precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),
@@ -145,7 +146,7 @@ export class FuncionesAdmin {
       id: new FormControl('', [Validators.required]),
       pelicula_id: new FormControl('', [Validators.required]),
       sala_id: new FormControl('', [Validators.required]),
-      inicio: new FormControl('', [Validators.required, dateTimeValidator]),
+      inicio: new FormControl('', [Validators.required, dateTimeValidator, fechaHoraFuturaValidator]),
       formato: new FormControl('2D', [Validators.required]),
       idioma: new FormControl('castellano', [Validators.required]),
       precio_base: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(99999)]),

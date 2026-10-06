@@ -1,0 +1,111 @@
+<body class="body">
+<app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+<div class="container">
+  @if (pelicula()) {
+    
+    <!-- Tarjeta Principal con División Interna (Película a la izquierda, Reseñas a la derecha) -->
+    <div class="movie-detail-main-card">
+      
+      <!-- Columna Izquierda: Imagen y Detalle de la Película -->
+      <div class="detail-left-section">
+        <div class="detail-image-container">
+          <img [src]="pelicula().imagen_url" [alt]="pelicula().nombre" />
+        </div>
+        <div class="detail-content">
+          <span class="section-label">Detalle de la Película</span>
+          <h2 class="movie-title">{{ pelicula().nombre }}</h2>
+          
+          <div class="generos-tags">
+            @for (g of pelicula().generos; track g) {
+              <span class="tag-genre">{{ g }}</span>
+            }
+            @if (pelicula().duracion_min) {
+              <span class="tag-duration">{{ pelicula().duracion_min | minutosToHoras }} min</span>
+            }
+          </div>
+
+          <p class="sinopsis-completa">
+            <strong>Sinopsis:</strong> {{ pelicula().sinopsis }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Línea divisoria central -->
+      <div class="card-divider"></div>
+
+      <!-- Columna Derecha: Reseñas de Usuarios -->
+      <div class="detail-right-section">
+        <div class="subtitle-row">
+          <h2>Reseñas de Usuarios</h2>
+        </div>
+
+        @if (Resenas().length > 0) {
+          <div class="resenas-container-internal">
+            @for (resena of Resenas(); track resena.id) {
+              <div class="resena-card-internal">
+                <div class="resena-header">
+                  <div class="estrellas">
+                    @for (s of [1,2,3,4,5]; track s) {
+                      <span [style.color]="s <= resena.estrellas ? '#FFD700' : '#427C8E'">★</span>
+                    }
+                  </div>
+                  <span class="resena-fecha">{{ resena.creada_en | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <p class="resena-comentario">"{{ resena.comentario }}"</p>
+              </div>
+            }
+            <button class="btn-elegir-butacas">colocar resena</button>
+          </div>
+          <div class="rating-box" style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
+            <span style="color: #FFD700; font-size: 1.1rem;">★</span>
+            <span style="color: #ffffff; font-weight: bold; font-size: 0.95rem;">
+              {{ resenas_promedio() > 0 ? resenas_promedio() : 'Sin calificaciones' }}
+            </span>
+            @if (resenas_promedio() > 0) {
+              <span style="color: #9cbcc4; font-size: 0.85rem;">({{ Resenas().length }} reseñas)</span>
+            }
+          </div>
+        } @else {
+          <p class="mensaje-vacio">Aún no hay reseñas para esta película.</p>
+        }
+      </div>
+
+    </div>
+
+    <!-- Funciones Disponibles (Abajo) -->
+    <div class="subtitle-row" style="margin-top: 40px;">
+      <h2>Funciones Disponibles</h2>
+    </div>
+    
+    @if (funciones().length > 0) {
+      <div class="funciones-grid">
+        @for (funcion of funciones(); track funcion.id) {
+          <div class="funcion-card">
+            <div class="funcion-header">
+              <span class="tag-function">{{ funcion.formato }}</span>
+              <span class="tag-idioma">{{ funcion.idioma }}</span>
+            </div>
+
+            <div class="funcion-body">
+              <p><strong>Sala:</strong> {{ funcion.salas?.nombre }}</p>
+              <p><strong>Horario:</strong> {{ funcion.inicio | date:'dd/MM/yyyy HH:mm' }} - {{ funcion.fin | date:'dd/MM/yyyy HH:mm' }}</p>
+              <div class="precios-box">
+                <span>Normal: <strong>${{ funcion.precio_base | currency:'ARS' }}</strong></span>
+                <span>VIP: <strong>${{ funcion.precio_vip | currency:'ARS' }}</strong></span>
+              </div>
+            </div>
+
+            <button class="btn-elegir-butacas" [routerLink]="['/compra/butacas']" [queryParams]="{ funcionId: funcion.id }">
+              Elegir butacas
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="mensaje-vacio">No hay funciones disponibles para esta película actualmente.</p>
+    }
+
+  }
+</div>
+</body>

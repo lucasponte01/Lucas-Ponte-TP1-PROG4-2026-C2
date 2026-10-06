@@ -28,29 +28,38 @@
               <app-error-pattern mensaje="La sinopsis solo puede contener letras, números y espacios" [errors]="form_crear.controls.sinopsis.errors"></app-error-pattern>
             </textarea>
             
-            <app-campo-input id="duracion_min" label="Duración (min)" [control]="$any(form_crear.controls.duracion_min)" type="text">
+            <app-campo-input id="duracion_min" label="Duración (min)" [control]="$any(form_crear.controls.duracion_min)" type="number">
               <app-error-requerido mensaje="La duración es requerida" [errors]="form_crear.controls.duracion_min.errors"></app-error-requerido>
               <app-error-minlenght mensaje="La duración debe ser al menos 1 minuto" [errors]="form_crear.controls.duracion_min.errors"></app-error-minlenght>
               <app-error-maxlenght mensaje="La duración no puede ser mayor a 500 minutos" [errors]="form_crear.controls.duracion_min.errors"></app-error-maxlenght> 
               <app-error-pattern mensaje="La duración solo puede contener números" [errors]="form_crear.controls.duracion_min.errors"></app-error-pattern>
             </app-campo-input>
             
-            <label  for="restriccion_edad">Restricción de edad:</label>
-            <select id="restriccion_edad" formControlName="restriccion_edad" class="input">
-              <option value="13">13</option>
-              <option value="16">16</option>
-              <option value="18">18</option>
+           <div class="input-grupo-col">
+            <label for="restriccion_edad" class="label-input">Restricción de edad:</label>
+            <select id="restriccion_edad" formControlName="restriccion_edad" class="input-custom">
+              <option [value]="13">13</option>
+              <option [value]="16">16</option>
+              <option [value]="18">18</option>
             </select>
+          </div>
 
-            <input  pInputText formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input" />
-              @if (form_crear.get('fecha_estreno')?.invalid && form_crear.get('fecha_estreno')?.touched) {
-                @if (form_crear.get('fecha_estreno')?.hasError('required')) {
-                  <p class="field__error">Ingresá la fecha de estreno.</p>
-                }
-                @if (form_crear.get('fecha_estreno')?.hasError('invalidDate')) {
-                  <p class="field__error">Ingresá una fecha válida.</p>
-                }
+          
+          <div class="input-grupo-col">
+            <label for="fecha_estreno" class="label-input">Fecha de estreno:</label>
+            <input pInputText id="fecha_estreno" formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input-custom" />
+            @if (form_crear.get('fecha_estreno')?.invalid && form_crear.get('fecha_estreno')?.touched) {
+              @if (form_crear.get('fecha_estreno')?.hasError('required')) {
+                <p class="field__error text-xs text-red-400 mt-1" >Ingresá la fecha de estreno.</p>
               }
+              @if (form_crear.get('fecha_estreno')?.hasError('invalidDate')) {
+                <p class="field__error text-xs text-red-400 mt-1" >Ingresá una fecha válida.</p>
+              }
+              @if (form_crear.get('fecha_estreno')?.hasError('fechaPasada')) {
+                <p class="field__error text-xs text-red-400 mt-1">La función no puede ser en una fecha que ya pasó.</p>
+              }
+            }
+          </div>
             
 
             <app-campo-input id="preventa_pct_descuento" label="% preventa (opcional)" [control]="$any(form_crear.controls.preventa_pct_descuento)" type="text">
@@ -67,9 +76,10 @@
               <app-error-pattern mensaje="Los géneros solo pueden contener letras, números y espacios" [errors]="form_crear.controls.generos.errors"></app-error-pattern>
             </app-campo-input>
 
-            <div class="file-container">
-              <app-campo-input id="foto" label="Imagen de película" [control]="$any(form_crear.controls.foto)" type="file"></app-campo-input>
-            </div>
+           <div class="file-container">
+            <label for="foto_nativo">Imagen de película</label>
+            <input id="foto_nativo" type="file" accept="image/*" (change)="cargarImagenCrear($event)" class="input">
+          </div>
 
             @if (error()) {
               <p class="error full-width-input">{{ error() }}</p>
@@ -131,22 +141,31 @@
                 </textarea>
               </div>
 
-              <label  for="restriccion_edad">Restricción de edad:</label>
-                <select id="restriccion_edad" formControlName="restriccion_edad" class="input">
-                  <option value="13">13</option>
-                  <option value="16">16</option>
-                  <option value="18">18</option>
+              <div class="input-grupo-col">
+                <label for="restriccion_edad" class="label-input">Restricción de edad:</label>
+                <select id="restriccion_edad" formControlName="restriccion_edad" class="input-custom">
+                  <option [value]="13">13</option>
+                  <option [value]="16">16</option>
+                  <option [value]="18">18</option>
                 </select>
+              </div>
 
-              <input  pInputText formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input" />
-              @if (form_edicion.get('fecha_estreno')?.invalid && form_edicion.get('fecha_estreno')?.touched) {
-                @if (form_edicion.get('fecha_estreno')?.hasError('required')) {
-                  <p class="field__error">Ingresá la fecha de estreno.</p>
+              <!-- Fecha de estreno (Izquierda) -->
+              <div class="input-grupo-col">
+                <label for="fecha_estreno" class="label-input">Fecha de estreno:</label>
+                <input pInputText id="fecha_estreno" formControlName="fecha_estreno" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input-custom" />
+                @if (form_edicion.get('fecha_estreno')?.invalid && form_edicion.get('fecha_estreno')?.touched) {
+                  @if (form_edicion.get('fecha_estreno')?.hasError('required')) {
+                    <p class="field__error text-xs text-red-400 mt-1" >Ingresá la fecha de estreno.</p>
+                  }
+                  @if (form_edicion.get('fecha_estreno')?.hasError('invalidDate')) {
+                    <p class="field__error text-xs text-red-400 mt-1">Ingresá una fecha válida.</p>
+                  }
+                  @if (form_edicion.get('fecha_estreno')?.hasError('fechaPasada')) {
+                    <p class="field__error text-xs text-red-400 mt-1">La función no puede ser en una fecha que ya pasó.</p>
+                  }
                 }
-                @if (form_edicion.get('fecha_estreno')?.hasError('invalidDate')) {
-                  <p class="field__error">Ingresá una fecha válida.</p>
-                }
-              }
+              </div>
 
               <div class="input-grupo-col">
                 <app-campo-input id="preventa_pct_descuento_edit" label="% Preventa (opcional)" [control]="$any(form_edicion.controls.preventa_pct_descuento)" type="text">

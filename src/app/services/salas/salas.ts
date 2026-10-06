@@ -19,6 +19,8 @@ export class SalaService {
         return data as Salas[];
     }
 
+    
+
     async crear_sala(sala: SalasPorCrear): Promise<void> {
         const {data, error } = await this.salas.insert(sala);
 

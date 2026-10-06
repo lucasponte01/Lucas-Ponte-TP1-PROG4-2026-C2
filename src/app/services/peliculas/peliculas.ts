@@ -21,6 +21,42 @@ export class PeliculaService {
     
     }
 
+    async mostrar_pelicula_id(peliculaId: string): Promise<{ pelicula: any; funciones: any[]; resenas: any[] }> {
+            const {data:pelicula, error:errorpelicula} = await this.peliculas.select('*').eq('id' , peliculaId).single();
+
+            if(errorpelicula){
+                throw errorpelicula;
+            }
+
+            if (!pelicula) {
+                    throw new Error('No se encontró la película');
+                }
+
+            if (pelicula.imagen) {
+                const { data: urlData } = this.sup.client.storage
+                .from('Peliculas')
+                .getPublicUrl(pelicula.imagen);
+
+                if (urlData) {
+                pelicula.imagen = urlData.publicUrl;
+                }
+            }    
+            
+            const {data:funciones, error:errorfuncion} = await this.sup.client.from('funciones').select('* , salas (*)').eq('pelicula_id' , peliculaId);
+
+            if(errorfuncion){
+                throw errorfuncion;
+            }
+
+            const {data:resenas , error:errorresenas} = await this.sup.client.from('resenas').select('*').eq('pelicula_id' , peliculaId);
+
+            if(errorresenas){
+                throw errorresenas;
+            }
+
+            return { pelicula, funciones: funciones || [], resenas: resenas || [] };
+        }
+
     async subirArchivo(file: File): Promise<string | null> {
         const ruta = `${Date.now()}.${file.type.split('/')[1]}`;
         const { error } = await this.sup.Stg.from('Peliculas').upload(ruta, file);

@@ -13,6 +13,7 @@ import { ErrorMaxlenght } from '../../../components/ui/error-maxlenght/error-max
 import { ErrorMinlenght } from '../../../components/ui/error-minlenght/error-minlenght';
 import { ErrorPattern } from '../../../components/ui/error-pattern/error-pattern';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
+import { fechaFuturaValidator } from '../../../validators/fecha-futura.validator';
 
 @Component({
   imports: [ReactiveFormsModule, CampoInput, ErrorRequerido, ErrorMaxlenght, ErrorMinlenght, ErrorPattern, NavbarComponent],
@@ -62,7 +63,7 @@ export class PeliculasAdmin {
     sinopsis: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(1000) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
     duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(500) , Validators.pattern(/^[0-9]+$/)]),
     restriccion_edad: new FormControl<number | null>(null),
-    fecha_estreno: new FormControl('', [Validators.required, dateValidator]),
+    fecha_estreno: new FormControl('', [Validators.required, dateValidator , fechaFuturaValidator]),
     preventa_pct_descuento: new FormControl<number | null>(null , [Validators.min(0), Validators.max(100) , Validators.pattern(/^[0-9]+$/)]),
     generos: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s,]+$/)]),
     foto: new FormControl<File | null>(null, [Validators.required])
@@ -157,7 +158,7 @@ export class PeliculasAdmin {
         sinopsis: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(1000) , Validators.pattern(/^[a-zA-Z0-9\s]+$/)]),
         duracion_min: new FormControl<number | null>(null, [Validators.required, Validators.min(1) , Validators.max(500) , Validators.pattern(/^[0-9]+$/)]),
         restriccion_edad: new FormControl<number | null>(null),
-        fecha_estreno: new FormControl('', [Validators.required, dateValidator]),
+        fecha_estreno: new FormControl('', [Validators.required, dateValidator , fechaFuturaValidator]),
         preventa_pct_descuento: new FormControl<number | null>(null , [Validators.min(0), Validators.max(100) , Validators.pattern(/^[0-9]+$/)]),
         generos: new FormControl('', [Validators.required , Validators.minLength(1), Validators.maxLength(100) , Validators.pattern(/^[a-zA-Z0-9\s,]+$/)]),
         imagen_url: new FormControl<File | string | null>(null)

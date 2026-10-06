@@ -32,10 +32,13 @@
           <input pInputText formControlName="inicio" pInputMask="99/99/9999 99:99" placeholder="DD/MM/AAAA HH:mm" class="input" />
             @if (form_crear.get('inicio')?.invalid && form_crear.get('inicio')?.touched) {
               @if (form_crear.get('inicio')?.hasError('required')) {
-                <p class="field__error">Ingresá la fecha y hora.</p>
+                <p class="field__error text-xs text-red-400 mt-1">Ingresá la fecha y hora.</p>
               }
               @if (form_crear.get('inicio')?.hasError('invalidDate')) {
-                <p class="field__error">Ingresá una fecha y hora válidas.</p>
+                <p class="field__error text-xs text-red-400 mt-1">Ingresá una fecha y hora válidas.</p>
+              }
+              @if (form_crear.get('inicio')?.hasError('fechaPasada')) {
+                <p class="field__error text-xs text-red-400 mt-1">La función no puede ser en una fecha que ya pasó.</p>
               }
             }
 
@@ -122,6 +125,9 @@
                 }
                 @if (form_edicion.get('inicio')?.hasError('invalidDate')) {
                   <p class="field__error">Ingresá una fecha y hora válidas.</p>
+                }
+                @if (form_edicion.get('inicio')?.hasError('fechaPasada')) {
+                  <p class="field__error">La función no puede ser en una fecha que ya pasó.</p>
                 }
               }
 

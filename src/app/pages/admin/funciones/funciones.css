@@ -156,6 +156,17 @@ body {
   margin-top: 1rem;
 }
 
+.form-grid .field__error {
+  grid-column: span 2;
+  width: 100%;
+  color: #ff8080;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-left: 2px;
+}
+
+
 /* Inputs y Selects */
 .input, .input-custom {
   color: #ffffff;
@@ -300,3 +311,24 @@ body {
     grid-column: span 1;
   }
 }
+
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2341BFAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Opciones desplegables adaptadas a la paleta petróleo y oscura */
+select.input option {
+  background-color: #203e45; /* Fondo petróleo profundo */
+  color: #ffffff; /* Texto blanco legible */
+  padding: 10px;
+}
+

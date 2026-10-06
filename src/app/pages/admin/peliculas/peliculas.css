@@ -139,12 +139,14 @@ body {
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px 20px;
+  gap: 16px 20px;
   text-align: left;
   width: 100%;
 }
 
 .input-grupo-col {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 5px;
 }
 
@@ -178,6 +180,27 @@ body {
 
 .input-custom::placeholder {
   color: #9cbcc4;
+}
+
+/* Estilo para el select desplegable */
+select.input-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2341BFAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Opciones del select para que combinen con la temática oscura */
+select.input-custom option {
+  background-color: #203e45; /* Fondo petróleo profundo */
+  color: #ffffff; /* Texto blanco */
+  padding: 10px;
 }
 
 /* Listado de películas */
@@ -288,6 +311,14 @@ body {
   border: 1px solid rgba(255, 128, 128, 0.3);
 }
 
+.field__error {
+  color: #ff8080;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-left: 2px;
+}
+
 /* Contenedor de archivos */
 .file-container {
   display: flex;
@@ -295,4 +326,3 @@ body {
   gap: 5px;
   grid-column: span 2;
 }
-

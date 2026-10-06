@@ -1,0 +1,283 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Tarjeta principal contenedora en dos columnas */
+.movie-detail-main-card {
+  display: flex;
+  background-color: #366E79;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border: 1px solid #427C8E;
+}
+
+/* Columna Izquierda (Película) */
+.detail-left-section {
+  display: flex;
+  flex: 1.2;
+  gap: 20px;
+  padding: 20px;
+}
+
+.detail-image-container {
+  width: 200px;
+  min-width: 200px;
+  max-height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.detail-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.section-label {
+  color: #41BFAD;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.movie-title {
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.generos-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag-genre, .tag-duration, .tag-function {
+  background-color: rgba(65, 191, 173, 0.2);
+  color: #41BFAD;
+  border: 1px solid #41BFAD;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sinopsis-completa {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* Línea divisoria vertical entre la peli y las reseñas */
+.card-divider {
+  width: 1px;
+  background-color: #427C8E;
+  margin: 20px 0;
+}
+
+/* Columna Derecha (Reseñas) */
+.detail-right-section {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-right-section .subtitle-row h2 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.resenas-container-internal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 300px; /* Para que si hay varias reseñas scrollee prolijo */
+  padding-right: 4px;
+}
+
+.resena-card-internal {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resena-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.estrellas {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.resena-fecha {
+  color: #9cbcc4;
+  font-size: 0.8rem;
+}
+
+.resena-comentario {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Títulos generales */
+.subtitle-row h2 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Funciones Disponibles */
+.funciones-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.funcion-card {
+  background-color: #1a3036;
+  border: 1px solid #427C8E;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.funcion-card:hover {
+  transform: translateY(-2px);
+}
+
+.funcion-header {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-idioma {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.funcion-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.precios-box {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: #9cbcc4;
+}
+
+.precios-box strong {
+  color: #41BFAD;
+}
+
+.btn-elegir-butacas {
+  width: 100%;
+  padding: 10px;
+  background-color: #41BFAD;
+  color: #1a3036;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  margin-top: auto;
+}
+
+.btn-elegir-butacas:hover {
+  filter: brightness(1.1);
+}
+
+.mensaje-vacio {
+  color: #9cbcc4;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* Responsividad para pantallas chicas */
+@media (max-width: 1024px) {
+  .movie-detail-main-card {
+    flex-direction: column;
+  }
+  .card-divider {
+    width: 100%;
+    height: 1px;
+    margin: 0 20px;
+  }
+  .funciones-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-left-section {
+    flex-direction: column;
+  }
+  .detail-image-container {
+    width: 100%;
+    max-height: 250px;
+  }
+  .funciones-grid {
+    grid-template-columns: 1fr;
+  }
+}
