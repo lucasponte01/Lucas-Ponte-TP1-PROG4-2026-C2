@@ -1,9 +1,9 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ButacaService } from '../../../../services/butacas/butacas';
-import { NavbarComponent } from '../../../../components/ui/navbar/navbar';
-import { FuncionService } from '../../../../services/funciones/funciones';
+import { ButacaService } from '../../../services/butacas/butacas';
+import { NavbarComponent } from '../../../components/ui/navbar/navbar';
+import { FuncionService } from '../../../services/funciones/funciones';
 import { RealtimeChannel } from '@supabase/supabase-js';
 @Component({
   selector: 'app-seleccion-butacas',
@@ -44,27 +44,25 @@ export class SeleccionButacas implements OnInit, OnDestroy {
       }
 
       if (this.funcionIdActual) {
-        this.suscripcion = this.butacaService.sup.client
-          .channel('cambios-butacas-sala')
-          .on(
-            'postgres_changes',
-            {
-              event: 'UPDATE',
-              schema: 'public',
-              table: 'butacas',
-            },
-            async (data: any) => {
-              console.log('Cambio detectado en butaca:', data);
+       this.suscripcion = this.butacaService.sup.client.channel('cambios-reservas-' + this.funcionIdActual).on(
+          'postgres_changes',
+          { event: '*',
+            schema: 'public', 
+            table: 'reservas_temporales', 
+            filter: 'funcion_id=eq.' + this.funcionIdActual },
+          async () => {
+            const funcion = this.Funcion();
+            if (!funcion) return;
 
-              const funcion = this.Funcion();
-              if (funcion) {
-                const todasLasButacas = await this.butacaService.mostrar_por_sala(funcion.sala_id);
-                this.construirMapaFilas(todasLasButacas);
-              }
-            }
-          )
-          .subscribe();
-      }
+            const [todasLasButacas, ocupadasIds] = await Promise.all([
+              this.butacaService.mostrar_por_sala(funcion.sala_id),
+              this.butacaService.mostrar_ocupadas(this.funcionIdActual!),
+            ]);
+            this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
+          }
+        )
+        .subscribe();
+    }
     });
   }
 
@@ -73,19 +71,19 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     this.realtimeChannel?.unsubscribe();
   }
 
-  async cargarButacasPorFuncion(funcionId: string) {
+ async cargarButacasPorFuncion(funcionId: string) {
   this.cargando.set(true);
   try {
     const funcion = await this.funciones.mostrar_funcion_por_id(funcionId);
     if (!funcion) throw new Error('No se encontró la función o la sala asociada.');
-    
     this.Funcion.set(funcion);
-    const salaId = funcion.sala_id;
 
-    // Solo necesitamos traer las butacas de la sala (que ya traen su columna 'estado')
-    const todasLasButacas = await this.butacaService.mostrar_por_sala(salaId);
+    const [todasLasButacas, ocupadasIds] = await Promise.all([
+      this.butacaService.mostrar_por_sala(funcion.sala_id),
+      this.butacaService.mostrar_ocupadas(funcionId),
+    ]);
 
-    this.construirMapaFilas(todasLasButacas);
+    this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
   } catch (error) {
     console.error('Error al cargar las butacas de la función:', error);
   } finally {
@@ -94,39 +92,34 @@ export class SeleccionButacas implements OnInit, OnDestroy {
 }
 
  
-  private construirMapaFilas(todasLasButacas: any[]) {
-  const seleccionadasActuales = new Set(this.butacasSeleccionadas());
-  const mapaFilas = new Map<string, any[]>();
+  private construirMapaFilas(todasLasButacas: any[], ocupadas: Set<string>) {
+    const seleccionadasActuales = new Set(this.butacasSeleccionadas());
+    const mapaFilas = new Map<string, any[]>();
 
-  for (const b of todasLasButacas) {
-    // Verificamos el estado directamente desde la base de datos ('disponible' u 'ocupada')
-    const esOcupada = b.estado === 'ocupada'; 
-    
-    if (esOcupada && seleccionadasActuales.has(b.id)) {
-      seleccionadasActuales.delete(b.id);
+    for (const b of todasLasButacas) {
+      const esOcupada = ocupadas.has(b.id);
+      if (esOcupada && seleccionadasActuales.has(b.id)) {
+        seleccionadasActuales.delete(b.id);
+      }
+
+      const asientoConEstado = {
+        ...b,
+        estado: esOcupada ? 'ocupada' : 'disponible',
+        seleccionado: seleccionadasActuales.has(b.id)
+      };
+
+      if (!mapaFilas.has(b.fila)) mapaFilas.set(b.fila, []);
+      mapaFilas.get(b.fila)?.push(asientoConEstado);
     }
 
-    const asientoConEstado = {
-      ...b,
-      estado: b.estado, // Mantenemos el estado exacto de la base de datos ('disponible' u 'ocupada')
-      seleccionado: seleccionadasActuales.has(b.id)
-    };
+    const resultado = Array.from(mapaFilas.entries())
+      .map(([fila, asientos]) => ({ fila, asientos: asientos.sort((x, y) => x.numero - y.numero) }))
+      .sort((a, b) => a.fila.localeCompare(b.fila));
 
-    if (!mapaFilas.has(b.fila)) {
-      mapaFilas.set(b.fila, []);
-    }
-    mapaFilas.get(b.fila)?.push(asientoConEstado);
+    this.filasAgrupadas.set(resultado);
+    this.butacasSeleccionadas.set(Array.from(seleccionadasActuales));
+    this.recalcularResumen();
   }
-
-  const resultado = Array.from(mapaFilas.entries()).map(([fila, asientos]) => ({
-    fila,
-    asientos: asientos.sort((x, y) => x.numero - y.numero)
-  })).sort((a, b) => a.fila.localeCompare(b.fila));
-
-  this.filasAgrupadas.set(resultado);
-  this.butacasSeleccionadas.set(Array.from(seleccionadasActuales));
-  this.recalcularResumen();
-}
 
 
   alternarSeleccion(asiento: any) {
@@ -169,17 +162,16 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     );
   }
 
-async continuarCompra() {
+  async continuarCompra() {
     const idsSeleccionados = this.butacasSeleccionadas();
-    
-    console.log("IDs que se van a bloquear:", idsSeleccionados); // <--- Mira esto en la consola
+    if (idsSeleccionados.length === 0) return;
 
-    if (idsSeleccionados.length === 0) {
-        console.warn("No hay butacas seleccionadas");
-        return;
+    try {
+      await this.butacaService.reservar_butacas(this.funcionIdActual!, idsSeleccionados);
+      // acá iría el router.navigate(['/compra/candy'], { queryParams: {...} })
+    } catch (e) {
+      console.error(e);
+      // mostrar error: alguien reservó una de esas butacas justo antes que vos
     }
-    
-    const respuesta = await this.butacaService.bloquearButacas(idsSeleccionados);
-    console.log("Respuesta directa de Supabase al actualizar:", respuesta);
-}
+  }
 }

@@ -66,7 +66,7 @@
 
                 <p class="sinopsis">{{ pelicula.sinopsis }}</p>   
 
-                <button class="btn-ver-funciones" type="button" [routerLink]="['/compra/peliculas_detalle']" [queryParams]="{ peliculaId: pelicula.id }">
+                <button class="btn-ver-funciones" type="button" (click)="verDetallePelicula(pelicula)" >
                   Ver funciones
                 </button>
               </div>

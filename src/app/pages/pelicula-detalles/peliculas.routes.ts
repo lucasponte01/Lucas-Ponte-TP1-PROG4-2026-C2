@@ -11,6 +11,6 @@ export const homeroute: Route[] = [
   },//poner can para la ruta
   {
     path: 'butacas',
-    loadComponent: () => import('./selector/butacas/butacas').then(m => m.SeleccionButacas)
+    loadComponent: () => import('./selector-butacas/butacas').then(m => m.SeleccionButacas)
   }
 ];

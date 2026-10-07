@@ -106,6 +106,24 @@ export class Home {
     this.funciones.set(await this.funcion.mostrar_funcion());
   }
 
+   verDetallePelicula(pelicula: any) {
+   
+  const tienePermiso = this.auth.verificarAccesoPelicula(pelicula.restriccion_edad);
+    console.log("¿Tiene acceso?", tienePermiso);
+  if (tienePermiso) {
+    this.route.navigate(['compra/peliculas_detalle'], { 
+      queryParams: { peliculaId: pelicula.id } 
+    });
+  } else {
+    if (pelicula.restriccion_edad == 16){
+      alert(`Contenido restringido: Esta película es clasificación +${pelicula.restriccion_edad}. No cumples con la edad requerida.`);
+    }else if (pelicula.restriccion_edad == 18){
+      alert(`Contenido restringido: Esta película es clasificación +${pelicula.restriccion_edad}. Solo pueder asistir un adulto.`);
+    }
+  }
+}
+
+
   async abrirSelectorpelis(): Promise<void> {
     this.mostrarpeliculas.set(true);
     this.cargando_peliculas.set(true);

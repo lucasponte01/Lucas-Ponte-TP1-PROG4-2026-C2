@@ -17,23 +17,28 @@ export class ButacaService {
     return data as Butaca[];
   }
 
-  async mostrar_ocupadas(sala_id: string): Promise<string[]> {
+  async mostrar_ocupadas(funcion_id: string): Promise<string[]> {
     const { data, error } = await this.sup.client
-      .from('butacas')
-      .select('id')
-      .eq('sala_id', sala_id)
-      .eq('estado', 'ocupada');
+      .from('butacas_ocupadas')
+      .select('butaca_id')
+      .eq('funcion_id', funcion_id);
 
     if (error) throw error;
 
-    return (data ?? []).map(b=>  b.id);
+    const ids: string[] = [];
+    for (const fila of data ?? []) {
+      ids.push(fila.butaca_id);
+    }
+    return ids;
   }
 
-  async bloquearButacas(idsButacas: string[]) {
-  const {data, error } = await this.sup.client.from('butacas').update({ estado: 'ocupada' }).in('id', idsButacas).select();
+  async reservar_butacas(funcion_id: string, butaca_ids: string[]): Promise<void> {
+    const filas = [];
+    for (const butaca_id of butaca_ids) {
+      filas.push({ funcion_id, butaca_id });
+    }
 
-  if (error) throw error;
-
-  return { data, error };
-}
+    const { error } = await this.sup.client.from('reservas_temporales').insert(filas);
+    if (error) throw error;
+  }
 }

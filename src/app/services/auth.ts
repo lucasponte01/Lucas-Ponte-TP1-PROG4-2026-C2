@@ -24,6 +24,32 @@ export class Auth {
         });
     }
 
+  verificarAccesoPelicula(restriccionEdad: number | null): boolean {
+    // Si es null o 0, significa que no tiene restricción
+    if (!restriccionEdad || restriccionEdad === 0) {
+      return true; 
+    }
+
+    const user = this.usuarioActual();
+    const fechaNacimiento = user?.user_metadata?.['fecha_nacimiento'];
+
+    if (!fechaNacimiento) {
+      return false; // Si no hay fecha registrada, por seguridad bloqueamos
+    }
+
+    // Calculamos la edad actual del usuario
+    const fecha = new Date(fechaNacimiento);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fecha.getFullYear();
+    const noCumplio = hoy.getMonth() < fecha.getMonth() || (hoy.getMonth() === fecha.getMonth() && hoy.getDate() < fecha.getDate());
+    if (noCumplio) edad--;
+
+    console.log("Edad del usuario:", edad, "Edad mínima requerida:", restriccionEdad);
+
+    // Retorna true solo si la edad es mayor o igual a la restricción de Supabase
+    return edad >= restriccionEdad;
+  }
+
     public async registrar(usuario : Usuario){
       const fecha = parseDate(usuario.fecha_nacimiento);
       if (!fecha) throw new Error('Fecha de nacimiento inválida');
