@@ -23,6 +23,11 @@ export const routes: Routes = [
     
     },
     {
+        path:'resenas',
+        loadComponent:() => import('./pages/resenas/resenas').then(m => m.Resenas),
+        canActivate :[authGuard]
+    },
+    {
         path: 'compra',
         loadChildren: () => import('./pages/pelicula-detalles/peliculas.routes').then(m => m.homeroute),
         
@@ -41,6 +46,7 @@ export const routes: Routes = [
         loadChildren:() => import('./pages/admin/admin.routes').then(m => m.instalarroute),
         canActivate :[authGuard],
         data:{roles:['admin']}
-    }
+    },
+    
     
 ];

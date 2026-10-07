@@ -19,6 +19,12 @@ export class FuncionService {
         return data as Funcion[];
 
     }
+
+    async mostrar_funcion_por_id(id: string): Promise<Funcion> {
+        const { data, error } = await this.funciones.select('*, salas(nombre)').eq('id', id).single();
+         if (error) throw error;
+        return data as Funcion;
+    }
     
     async crear_funcion(funcion: FuncionPorCrear):Promise<void>{
         const {data, error } = await this.funciones.insert(funcion)

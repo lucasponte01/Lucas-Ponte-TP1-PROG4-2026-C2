@@ -47,18 +47,18 @@ export class SlectorPelicula implements OnInit {
   }
 
   async cargar_Datos_Detalle(id: string) {
-    this.cargando.set(true);
-    try {
-      const respuesta = await this.peliculaService.mostrar_pelicula_id(id);
-
-      this.pelicula.set(respuesta.pelicula);
-      this.funciones.set(respuesta.funciones);
-      this.Resenas.set(respuesta.resenas);
-      this.calcularPromedioEstrellas();
-    } catch (error) {
-      console.error('Error al cargar detalles de la película:', error);
-    } finally {
-      this.cargando.set(false);
-    }
+  this.cargando.set(true);
+  try {
+    const respuesta = await this.peliculaService.mostrar_pelicula_id(id);
+    this.pelicula.set(respuesta.pelicula ); 
+    this.funciones.set(respuesta.funciones);
+    this.Resenas.set(respuesta.resenas);
+  
+    this.calcularPromedioEstrellas();
+  } catch (error) {
+    console.error('Error al cargar detalles de la película:', error);
+  } finally {
+    this.cargando.set(false);
   }
+}
 }

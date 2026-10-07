@@ -1,0 +1,99 @@
+<body class="body">
+  <app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+  <div class="container">
+    
+    @if (cargando()) {
+      <p style="color: white; text-align: center; margin-top: 50px;">Cargando distribución de sala...</p>
+    } @else {
+      
+      <!-- Tarjeta de Información de la Función y Sala -->
+      @if (Funcion()) {
+        <div class="funcion-info-card">
+          <div class="info-detalles">
+            <span class="section-label">Función Seleccionada</span>
+            <div class="info-badges">
+              <span class="tag-badge">Sala: {{ Funcion().salas.nombre  }}</span>
+              <span class="tag-badge">Idioma: {{ Funcion().idioma }}</span>
+              <span class="tag-badge">Formato: {{ Funcion().formato }}</span>
+              <span class="tag-badge">Fecha: {{ Funcion().inicio | date:'dd/MM/yyyy HH:mm' }} </span>
+              <span class="tag-badge">fin: {{ Funcion().fin | date:'dd/MM/yyyy HH:mm' }} </span>
+              <span class="tag-badge">precio base: {{ Funcion().precio_base | currency: 'ARS' }} </span>
+              <span class="tag-badge">precio vip: {{ Funcion().precio_vip | currency: 'ARS' }} </span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Contenedor Principal de Selección -->
+      <div class="sala-main-card">
+        <h3 class="subtitle-text" >Selecciona tus butacas</h3>
+
+        <!-- Pantalla del Cine -->
+        <div class="pantalla-cine-ref" >PANTALLA</div>
+
+        <!-- Leyenda de Tipos y Estados -->
+        <div class="leyenda-container">
+          <div class="leyenda-item"><span class="dot normal"></span> Normal</div>
+          <div class="leyenda-item"><span class="dot vip"></span> VIP</div>
+          <div class="leyenda-item"><span class="dot accesible"></span> Accesible</div>
+          <div class="leyenda-item"><span class="dot ocupada"></span> Ocupada</div>
+          <div class="leyenda-item"><span class="dot seleccionada"></span> Seleccionada</div>
+        </div>
+
+        <!-- Distribución de Filas y Asientos -->
+        <div class="filas-wrapper">
+          @for (f of filasAgrupadas(); track f.fila) {
+            <div class="fila-row">
+              <span class="fila-label">{{ f.fila }}</span>
+              
+              <div class="asientos-row">
+                @for (asiento of f.asientos; track asiento.id) {
+                  <button 
+                    type="button"
+                    class="btn-asiento"
+                    [class.normal]="asiento.tipo === 'normal'"
+                    [class.vip]="asiento.tipo === 'vip'"
+                    [class.accesible]="asiento.tipo === 'accesible'"
+                    [class.ocupado]="asiento.estado === 'ocupada'"
+                    [class.seleccionado]="asiento.seleccionado"
+                    [disabled]="asiento.estado === 'ocupada'"
+                    (click)="alternarSeleccion(asiento)">
+                    {{ asiento.numero }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Barra de Resumen e Acceso -->
+        <div class="footer-resumen">
+          <div class="resumen-info">
+            <p class="resumen-texto">Butacas seleccionadas: <strong>{{ butacasSeleccionadas().length }}</strong></p>
+            <p class="resumen-total">Total a Pagar: <strong>{{ total() | currency: 'ARS' }}</strong></p>
+          </div>
+
+          <!-- Sección condicional si se seleccionan butacas VIP -->
+          @if (hayVipSeleccionada()) {
+            <div class="vip-confirmacion-container" style="margin: 15px 0;">
+              <label style="color: white; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input class="input" type="checkbox" [checked]="confirmaVip()" (change)="ConfirmaVip()" />
+                <span>Confirmo la selección de asientos VIP (tarifa diferencial aplicada)</span>
+              </label>
+            </div>
+          }
+
+          <!-- Botón de Continuar habilitado según las reglas de negocio -->
+          <button 
+            type="button" 
+            class="btn-continuar" 
+            [disabled]="!puedeContinuar()"
+            (click)="continuarCompra()">
+            Continuar con la Compra
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</body>

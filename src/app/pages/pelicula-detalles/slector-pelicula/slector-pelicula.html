@@ -55,8 +55,9 @@
                 <p class="resena-comentario">"{{ resena.comentario }}"</p>
               </div>
             }
-            <button class="btn-elegir-butacas">colocar resena</button>
+            
           </div>
+          
           <div class="rating-box" style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
             <span style="color: #FFD700; font-size: 1.1rem;">★</span>
             <span style="color: #ffffff; font-weight: bold; font-size: 0.95rem;">
@@ -69,8 +70,9 @@
         } @else {
           <p class="mensaje-vacio">Aún no hay reseñas para esta película.</p>
         }
+        <button class="btn-elegir-butacas" routerLink="/resenas" [queryParams]="{ peliculaId: pelicula().id }">colocar resena</button>
       </div>
-
+      
     </div>
 
     <!-- Funciones Disponibles (Abajo) -->

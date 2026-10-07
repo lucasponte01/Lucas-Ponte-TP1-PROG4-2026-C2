@@ -1,0 +1,235 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body.body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Tarjeta de Información de la Función */
+.funcion-info-card {
+  background-color: #366E79;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #427C8E;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.section-label {
+  color: #41BFAD;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.movie-title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 6px 0 12px 0;
+}
+
+.info-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tag-badge {
+  background-color: rgba(65, 191, 173, 0.2);
+  color: #41BFAD;
+  border: 1px solid #41BFAD;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+/* Tarjeta Principal de la Sala */
+.sala-main-card {
+  background-color: #366E79;
+  border-radius: 12px;
+  padding: 30px;
+  border: 1px solid #427C8E;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subtitle-text {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+/* Pantalla de Cine */
+.pantalla-cine-ref {
+  width: 80%;
+  max-width: 600px;
+  background: linear-gradient(to bottom, rgba(65, 191, 173, 0.4), transparent);
+  text-align: center;
+  color: #41BFAD;
+  font-weight: bold;
+  letter-spacing: 4px;
+  padding: 8px;
+  border-radius: 6px;
+  border-top: 4px solid #41BFAD;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(65, 191, 173, 0.2);
+}
+
+/* Leyenda */
+.leyenda-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+.dot.normal { background: #4a5568; border: 1px solid #718096; }
+.dot.vip { background: #d69e2e; border: 1px solid #f6e05e; }
+.dot.accesible { background: #4299e1; border: 1px solid #63b3ed; }
+.dot.ocupada { background: #1a202c; border: 1px solid #2d3748; }
+.dot.seleccionada { background: #41BFAD; border: 1px solid #fff; }
+
+/* Contenedor de Filas */
+.filas-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.fila-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fila-label {
+  color: #41BFAD;
+  font-weight: bold;
+  width: 25px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.asientos-row {
+  display: flex;
+  gap: 6px;
+}
+
+/* Botones de Butacas y sus Colores */
+.btn-asiento {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #ffffff;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-asiento:hover:not(:disabled) {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Tipos y Estados de Butacas */
+.btn-asiento.normal { background-color: #4a5568; }
+.btn-asiento.accesible { background-color: #4299e1; }
+.btn-asiento.vip { background-color: #d69e2e; color: #1a202c; }
+
+.btn-asiento.ocupado {
+  background-color: #1a202c !important;
+  color: #4a5568 !important;
+  border-color: #2d3748;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-asiento.seleccionado {
+  background-color: #41BFAD !important;
+  color: #1a3036 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 10px #41BFAD;
+  transform: scale(1.08);
+}
+
+/* Footer de Resumen */
+.footer-resumen {
+  margin-top: 35px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #427C8E;
+}
+
+.resumen-texto {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.resumen-texto strong {
+  color: #41BFAD;
+}
+
+.btn-continuar {
+  background-color: #41BFAD;
+  color: #1a3036;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.btn-continuar:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn-continuar:disabled {
+  background-color: #2b4c53;
+  color: #718096;
+  cursor: not-allowed;
+}

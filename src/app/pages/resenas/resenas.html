@@ -1,0 +1,76 @@
+<body class="body">
+  <app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+  <div class="container">
+    @if (pelicula()) {
+      <div class="movie-detail-main-card">
+        
+        <!-- Columna Izquierda: Imagen y Detalle de la Película -->
+        <div class="detail-left-section">
+          <div class="detail-image-container">
+            <img [src]="pelicula().imagen_url" [alt]="pelicula().nombre" />
+          </div>
+          <div class="detail-content">
+            <span class="section-label">Detalle de la Película</span>
+            <h2 class="movie-title">{{ pelicula().nombre }}</h2>
+
+            <div class="generos-tags">
+              @for (g of pelicula().generos; track g) {
+                <span class="tag-genre">{{ g }}</span>
+              }
+              @if (pelicula().duracion_min) {
+                <span class="tag-duration">{{ pelicula().duracion_min | minutosToHoras }} min</span>
+              }
+            </div>
+
+            <p class="sinopsis-completa">
+              <strong>Sinopsis:</strong> {{ pelicula().sinopsis }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Línea divisoria central -->
+        <div class="card-divider"></div>
+
+        <!-- Columna Derecha: Formulario de Reseñas -->
+        <div class="detail-right-section">
+          <div class="subtitle-row">
+            <h2>Escribir una Reseña</h2>
+          </div>
+          
+          <form [formGroup]="form_crear_resena" (ngSubmit)="crear_resena_pelicula()" style="display: flex; flex-direction: column; gap: 15px;">
+            
+            <!-- Input de Estrellas con componente reutilizable -->
+            <div class="input-grupo-col">
+              <app-campo-input id="estrellas" label="Calificación (Estrellas 1-5)" [control]="$any(form_crear_resena.controls.estrellas)" type="number">
+                <app-error-requerido mensaje="La calificación es requerida" [errors]="form_crear_resena.controls.estrellas.errors"></app-error-requerido>
+                <app-error-minlenght mensaje="La calificación mínima es 1 estrella" [errors]="form_crear_resena.controls.estrellas.errors"></app-error-minlenght>
+                <app-error-maxlenght mensaje="La calificación máxima es 5 estrellas" [errors]="form_crear_resena.controls.estrellas.errors"></app-error-maxlenght>
+              </app-campo-input>
+            </div>
+
+            <!-- Textarea de Comentario -->
+            <div class="input-grupo-col" style="display: flex; flex-direction: column; gap: 5px;">
+              <label for="comentario" style="color: #ffffff; font-size: 0.9rem; font-weight: 500;">Comentario</label>
+              <textarea id="comentario" formControlName="comentario" rows="4" class="input" placeholder="¿Qué te pareció la película?" style="width: 100%; padding: 10px; border-radius: 8px; background-color: rgba(0,0,0,0.2); border: 1px solid #427C8E; color: white; resize: vertical;">
+                <app-error-requerido mensaje="La calificación es requerida" [errors]="form_crear_resena.comentario.come.errors"></app-error-requerido>
+                <app-error-minlenght mensaje="El comentario debe tener al menos 10 caracteres" [errors]="form_crear_resena.controls.comentario.errors"></app-error-minlenght>
+              <app-error-maxlenght mensaje="El comentario no puede superar los 150 caracteres" [errors]="form_crear_resena.controls.comentario.errors"></app-error-maxlenght>
+              <app-error-pattern mensaje="El comentario solo puede tener letras , espacios y numeros" [errors]="form_crear_resena.controls.comentario.errors"></app-error-pattern>
+            </textarea>
+              
+            </div>
+
+            <button type="submit" class="btn-elegir-butacas" [disabled]="form_crear_resena.invalid || cargando()" style="margin-top: 10px;">
+              {{ cargando() ? 'Guardando...' : 'Publicar Reseña' }}
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    } @else {
+      <p style="color: white; text-align: center; margin-top: 50px;">Cargando información de la película...</p>
+    }
+  </div>
+</body>

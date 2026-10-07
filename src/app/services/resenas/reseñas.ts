@@ -4,7 +4,7 @@ import { SupabaseService } from '../supabase.service';
 import Salas, { type SalasPorCrear } from '../../interfaces/salas';
 import Resenas, { ResenasPorCrear } from '../../interfaces/resenas';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class Reseñas {
 stg = inject(StorageService);
 sup = inject(SupabaseService);
