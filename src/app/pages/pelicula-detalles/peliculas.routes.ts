@@ -12,5 +12,9 @@ export const homeroute: Route[] = [
   {
     path: 'butacas',
     loadComponent: () => import('./selector-butacas/butacas').then(m => m.SeleccionButacas)
+  },
+  {
+    path: 'candy',
+    loadComponent: () => import('./selector-candy/candy/candy').then(m => m.Candy)
   }
 ];

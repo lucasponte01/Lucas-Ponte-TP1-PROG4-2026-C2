@@ -3,9 +3,12 @@ import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 import { CampoInput } from '../../../components/ui/campo-input/campo-input';
 import { CandyServise } from '../../../services/candy/candy';
 import CandyProducto, { CandyPorCrear } from '../../../interfaces/cady_productos';
+import ComboProducto from '../../../interfaces/combos';
+import { ComboServise } from '../../../services/combo/combos';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
-  imports: [NavbarComponent, CampoInput],
+  imports: [NavbarComponent, CampoInput , CurrencyPipe],
   selector: 'app-candy',
   styleUrl: './candy.css',
   templateUrl: './candy.html',
@@ -13,9 +16,10 @@ import CandyProducto, { CandyPorCrear } from '../../../interfaces/cady_productos
 export class Candy {
   logo_menus = "/assets/imagenes/Gemini2.png"
   candy = inject(CandyServise);
+  combo = inject(ComboServise)
   cargando = signal<boolean | null>(null)
   candy_muestra = signal<CandyProducto[]>([]);
-
+  combo_muestra = signal<ComboProducto[]>([]);
 
    async ngOnInit() {
     this.cargando.set(true);
@@ -63,5 +67,6 @@ onBuscar(texto: string): void {
 
   async traerTodos_productos() {
     this.candy_muestra.set(await this.candy.mostrar_productos());
+    this.combo_muestra.set(await this.combo.obtenerCombos())
   }
 }

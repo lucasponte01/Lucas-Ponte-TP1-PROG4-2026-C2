@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButacaService } from '../../../services/butacas/butacas';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 import { FuncionService } from '../../../services/funciones/funciones';
@@ -17,7 +17,7 @@ export class SeleccionButacas implements OnInit, OnDestroy {
   private butacaService = inject(ButacaService);
   private route = inject(ActivatedRoute);
   private funciones = inject(FuncionService);
-
+  ruta = inject(Router)
   filasAgrupadas = signal<any[]>([]);
   cargando = signal<boolean>(true);
   Funcion = signal<any>(null);
@@ -168,10 +168,10 @@ export class SeleccionButacas implements OnInit, OnDestroy {
 
     try {
       await this.butacaService.reservar_butacas(this.funcionIdActual!, idsSeleccionados);
-      // acá iría el router.navigate(['/compra/candy'], { queryParams: {...} })
+      this.ruta.navigate(['/compra/candy'], { queryParams: {} })
     } catch (e) {
       console.error(e);
-      // mostrar error: alguien reservó una de esas butacas justo antes que vos
+      
     }
   }
 }

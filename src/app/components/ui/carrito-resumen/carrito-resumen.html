@@ -1,0 +1,32 @@
+<div class="carrito-card">
+  <h3 class="textos">Resumen de tu Orden</h3>
+
+  <div class="carrito-lista">
+    @for (item of items(); track item.id) {
+      <div class="carrito-item">
+        <div class="info-item">
+          <span class="textos nombre">{{ item.nombre }}</span>
+          <span class="textos precio">$ {{ item.precio }}</span>
+        </div>
+        <button type="button" class="btn-quitar" (click)="quitar(item.id)">✕</button>
+      </div>
+    } @empty {
+      <p class="textos vacio">Tu carrito está vacío.</p>
+    }
+  </div>
+
+  <div class="carrito-footer">
+    <div class="total-row">
+      <span class="textos total-label">Total a Pagar:</span>
+      <span class="textos total-monto">$ {{ total }}</span>
+    </div>
+
+    <button 
+      type="button" 
+      class="boton_i full-width" 
+      [disabled]="items().length === 0"
+      (click)="finalizar()">
+      Confirmar y Pagar
+    </button>
+  </div>
+</div>

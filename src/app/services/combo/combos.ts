@@ -11,7 +11,7 @@ export class ComboServise {
 
     combos = this.sup.client.from('combos')
     async obtenerCombos() {
-        const { data, error } = await this.combos.select('*').eq('activo', true).order('created_at', { ascending: false });
+        const { data, error } = await this.combos.select('*').order('created_at', { ascending: false });
         
         if (error) throw error;
         

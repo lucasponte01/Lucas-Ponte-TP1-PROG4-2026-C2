@@ -2,11 +2,43 @@
 
 <app-navbar [logo_menus]="logo_menus"></app-navbar>
 
-
 <main class="container">
-    <app-campo-input label="Buscar Productos por Categorías" (input)="onBuscar($any($event.target).value)" type="search"></app-campo-input>
- 
-    <div class="subtitle-row">
+    <app-campo-input label="Buscar Productos o Combos" (input)="onBuscar($any($event.target).value)" type="search"></app-campo-input>
+   
+   
+    <div class="subtitle-row" style="margin-top: 20px;">
+      <h2>Combos Especiales</h2>
+    </div>
+
+    @if (combo_muestra().length > 0) {
+      <div class="movies-grid">
+        @for (combo of combo_muestra(); track combo.id) {
+          <div class="movie-card">
+            <div class="movie-image-container">
+              <img [src]="combo.foto" [alt]="combo.nombre" />
+              @if (combo.destacado) {
+                <span class="tag-badge" style="position: absolute; top: 10px; right: 10px; background-color: #d97706; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">★ Destacado</span>
+              }
+            </div>
+
+            <div class="movie-info">
+              <div class="movie-main-info">
+                <h3 class="movie-title">{{ combo.nombre }}</h3>
+                <p class="textos" style="font-size: 0.85rem; color: #ccc; margin: 5px 0;">{{ combo.descripcion }}</p>
+                
+                <p class="textos" style="font-size: 0.85rem; color: #ccc; margin: 5px 0;">Precio: {{ combo.precio | currency: 'ARS' }}</p>
+                
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p style="color: #888; margin-bottom: 20px;">No hay combos disponibles en este momento.</p>
+    }
+
+
+    <div class="subtitle-row" style="margin-top: 30px;">
       <h2>Catálogo de Candy</h2>
     </div>
 
@@ -35,12 +67,10 @@
                       <span class="tag-genre">{{ cat }}</span>
                     }
                   </div>
-                  <!-- Precio adaptado -->
-                  <div class="precio-container" style="margin-top: 10px;">
-                    <span class="tag-badge" style="background-color: #2e7d32; color: white; font-weight: bold;">$ {{ producto.precio }}</span>
-                  </div>
+                  <p class="textos" style="font-size: 0.85rem; color: #ccc; margin: 5px 0;">Precio: {{ producto.precio | currency: 'ARS' }}</p>
+                
+                  
                 </div>
-
               </div>
               
             </div>

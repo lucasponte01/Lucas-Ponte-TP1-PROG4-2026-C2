@@ -6,7 +6,7 @@
     <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
     <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
     <button class="btn_nav" (click)="cambiarVista('combo/crear')">crear combo</button>
-    <button class="btn_nav" (click)="cambiarVista('combo/desactivar o activar')">crear combo</button>
+    <button class="btn_nav" (click)="cambiarVista('combo/desactivar o activar')">actualizar combo</button>
     </nav>
 
     <div class="main-content">
@@ -215,14 +215,7 @@
                                     </div>
 
                                     <!-- Botón de acción directa para dar de baja o activar -->
-                                    <button 
-                                        type="button" 
-                                        class="boton_i" 
-                                        [style.background-color]="combo.activo ? '#dc2626' : '#16a34a'"
-                                        [disabled]="Guardando()"
-                                        (click)="cambiarEstado(combo.id, combo.activo)">
-                                        {{ combo.activo ? 'Dar de Baja' : 'Activar' }}
-                                    </button>
+                                    <button type="button" class="boton_i" [style.background-color]="combo.activo ? '#dc2626' : '#16a34a'" [disabled]="Guardando()" (click)="cambiarEstado(combo.id, combo.activo)"> {{ combo.activo ? 'Dar de Baja' : 'Activar' }} </button>
                                 </div>
                             } @empty {
                                 <p class="textos" style="text-align: center; color: #888; padding: 20px;">No hay combos registrados.</p>
