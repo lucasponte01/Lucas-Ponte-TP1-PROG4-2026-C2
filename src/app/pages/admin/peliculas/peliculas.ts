@@ -40,20 +40,6 @@ export class PeliculasAdmin {
   
   }
 
-  async cerrar_sesion() {
-    try {
-      await this.auth.cerrarSesion();
-      
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async volver() {
-    this.router.navigate(['/home']);
-  }
-
-
   async  traer_peliculas(){
     this.peliculas.set(await this.bd.mostrarpeliculas()) ;
     }

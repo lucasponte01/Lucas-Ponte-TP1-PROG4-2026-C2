@@ -1,0 +1,241 @@
+<body>
+    <app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+    <nav class="navbar navbar-menu">
+    <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
+    <button class="btn_nav" (click)="cambiarVista('modificar')">Modificar</button>
+    <button class="btn_nav" (click)="cambiarVista('eliminar')">Eliminar</button>
+    <button class="btn_nav" (click)="cambiarVista('combo/crear')">crear combo</button>
+    <button class="btn_nav" (click)="cambiarVista('combo/desactivar o activar')">crear combo</button>
+    </nav>
+
+    <div class="main-content">
+         @switch (vistaActiva()) {
+
+            @case ('crear') {
+                <div class="card">
+                <h2 class="textos">Crear Producto</h2>
+                <form [formGroup]="form_crear" (ngSubmit)="crear_producto()" class="form-grid">
+                    <app-campo-input id="nombre_Producto" label="Nombre del Producto" [control]="$any(form_crear.controls.nombre)" type="text">
+                    <app-error-requerido mensaje="El nombre del Producto es requerido" [errors]="form_crear.controls.nombre.errors"></app-error-requerido>
+                    <app-error-minlenght mensaje="El nombre del Producto debe tener al menos 1 caracter" [errors]="form_crear.controls.nombre.errors"></app-error-minlenght>  
+                    <app-error-maxlenght mensaje="El nombre del Producto no puede tener más de 100 caracteres" [errors]="form_crear.controls.nombre.errors"></app-error-maxlenght>
+                    <app-error-pattern mensaje="El nombre del Producto solo puede contener letras, números y espacios" [errors]="form_crear.controls.nombre.errors"></app-error-pattern>
+                    </app-campo-input>
+
+                    <app-campo-input id="precio_Producto" label="precio del Producto" [control]="$any(form_crear.controls.precio)" type="number" >
+                        <app-error-requerido mensaje="El precio del Producto es requerido" [errors]="form_crear.controls.precio.errors"></app-error-requerido>
+                        <app-error-minlenght mensaje="El precio del Producto debe tener al menos 1 caracter" [errors]="form_crear.controls.precio.errors"></app-error-minlenght>
+                        <app-error-maxlenght mensaje="El precio del Producto no puede tener más de 100000 caracteres" [errors]="form_crear.controls.precio.errors"></app-error-maxlenght>
+                    </app-campo-input>
+                    
+                    <app-campo-input id="Categorias_Producto" label="Categorias" [control]="$any(form_crear.controls.categorias)" type="text">
+                    <app-error-requerido mensaje="Las Categorias son requeridos" [errors]="form_crear.controls.categorias.errors"></app-error-requerido>
+                    <app-error-minlenght mensaje="Las Categorias deben tener al menos 1 caracter" [errors]="form_crear.controls.categorias.errors"></app-error-minlenght>
+                    <app-error-maxlenght mensaje="Las Categorias no pueden tener más de 100 caracteres" [errors]="form_crear.controls.categorias.errors"></app-error-maxlenght>
+                    <app-error-pattern mensaje="Las Categorias solo pueden contener letras, números y espacios" [errors]="form_crear.controls.categorias.errors"></app-error-pattern>
+                    </app-campo-input>
+
+                <div class="file-container">
+                    <label for="foto_nativo">Imagen de película</label>
+                    <input id="foto_nativo" type="file" accept="image/*" (change)="cargarImagenCrear($event)" class="input">
+                </div>
+
+                    @if (error()) {
+                    <p class="error full-width-input">{{ error() }}</p>
+                    }
+
+                    <button type="submit" class="boton_i full-width-input" [disabled]="form_crear.invalid || Guardando()">
+                    {{ Guardando() ? 'Guardando...' : 'Crear Producto' }}
+                    </button>
+                </form>
+                </div>
+            }
+        
+           @case ('modificar') {
+                <div class="card">
+                <div class="lista-seccion">
+                    <h3 class="titulo-seccion">Listado de Productos de Candy</h3>
+                    <div class="peliculas-lista">
+                    @for (item of productos(); track item.id) {
+                        <div class="pelicula-item" (click)="seleccionar_producto_para_editar(item)">
+                        <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }} - ${{ item.precio }}</span>
+                        </div>
+                    }
+                    </div>
+                </div>
+
+                @if (error()) {
+                    <p class="error-msg">{{ error() }}</p>
+                }
+
+                @if (producto_seleccionado()) {
+                    <form [formGroup]="form_edicion" (ngSubmit)="modificar_producto()" class="form-grid">
+                    <h4 class="subtitulo-seccion full-width">Editar Datos del Producto</h4>
+                    
+                    <div class="input-grupo-col">
+                        <app-campo-input id="nombre_edit" label="Nombre" [control]="$any(form_edicion.controls.nombre)" type="text">
+                        <app-error-requerido mensaje="El nombre del producto es requerido" [errors]="form_edicion.controls.nombre.errors"></app-error-requerido>
+                        <app-error-minlenght mensaje="El nombre debe tener al menos 1 caracter" [errors]="form_edicion.controls.nombre.errors"></app-error-minlenght>
+                        <app-error-maxlenght mensaje="El nombre no puede tener más de 100 caracteres" [errors]="form_edicion.controls.nombre.errors"></app-error-maxlenght>    
+                        <app-error-pattern mensaje="El nombre solo puede contener letras, números y espacios" [errors]="form_edicion.controls.nombre.errors"></app-error-pattern>  
+                        </app-campo-input>
+                    </div>
+
+                    <div class="input-grupo-col">
+                        <app-campo-input id="precio_edit" label="Precio" [control]="$any(form_edicion.controls.precio)" type="number">
+                        <app-error-requerido mensaje="El precio es requerido" [errors]="form_edicion.controls.precio.errors"></app-error-requerido>
+                        </app-campo-input>
+                    </div>
+
+                    <div class="input-grupo-col">
+                        <app-campo-input id="categorias_edit" label="Categorías (separadas por comas)" [control]="$any(form_edicion.controls.categorias)" type="text">
+                        <app-error-requerido mensaje="Las categorías son requeridas" [errors]="form_edicion.controls.categorias.errors"></app-error-requerido>
+                        <app-error-minlenght mensaje="Las categorías deben tener al menos 1 caracter" [errors]="form_edicion.controls.categorias.errors"></app-error-minlenght>
+                        <app-error-maxlenght mensaje="Las categorías no pueden tener más de 100 caracteres" [errors]="form_edicion.controls.categorias.errors"></app-error-maxlenght>
+                        <app-error-pattern mensaje="Las categorías solo pueden contener letras, números, espacios y comas" [errors]="form_edicion.controls.categorias.errors"></app-error-pattern>
+                        </app-campo-input>
+                    </div>
+                    
+                    <div class="input-grupo-col full-width">
+                        <div class="file-container">
+                            <label for="imagen_edit_nativo">Cambiar imagen (opcional)</label>
+                            <input id="imagen_edit_nativo" type="file" accept="image/*" (change)="cargarImagenEditar($event)" class="input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="boton_i full-width" [disabled]="form_edicion.invalid || Guardando()">
+                        {{ Guardando() ? 'Guardando...' : 'Guardar cambios' }}
+                    </button>
+                    </form>
+                }
+                </div>
+            }
+         
+            @case ('eliminar') {
+                <div class="card">
+                <div class="lista-seccion">
+                    <h3 class="titulo-seccion">Listado de Películas</h3>
+                    <div class="peliculas-lista">
+                    @for (item of productos(); track item.id) {
+                        <div class="pelicula-item" (click)="form_eliminar.controls.nombre.setValue(item.nombre)">
+                        <span class="pelicula-nombre">{{ $index + 1 }}. {{ item.nombre }}</span>
+                        </div>
+                    }
+                    </div>
+                </div>
+                
+                <div class="eliminar-seccion">
+                    <form [formGroup]="form_eliminar" (ngSubmit)="eliminar_pelicula()" class="input-grupo">
+                    <app-campo-input id="nombre_delete" label="Nombre de la película" [control]="$any(form_eliminar.controls.nombre)" type="text"></app-campo-input>
+                    <button type="submit" class="btn-eliminar">Eliminar</button>
+                    </form>
+                </div>
+
+                @if (error()) {
+                    <p class="error-msg">{{ error() }}</p>
+                }
+                </div>
+            }
+            @case ('combo/crear') {
+                <div class="card">
+                <h2 class="textos">Crear Nuevo Combo</h2>
+                <form [formGroup]="formCombo" (ngSubmit)="crearCombo()" class="form-grid">
+                    
+                    <!-- Nombre del Combo -->
+                    <app-campo-input id="nombre_Combo" label="Nombre del Combo" [control]="$any(formCombo.controls.nombre)" type="text">
+                    <app-error-requerido mensaje="El nombre del combo es requerido" [errors]="formCombo.controls.nombre.errors"></app-error-requerido>
+                    <app-error-minlenght mensaje="El nombre del combo debe tener al menos 3 caracteres" [errors]="formCombo.controls.nombre.errors"></app-error-minlenght>  
+                    <app-error-maxlenght mensaje="El nombre del combo no puede tener más de 100 caracteres" [errors]="formCombo.controls.nombre.errors"></app-error-maxlenght>
+                    </app-campo-input>
+
+                    <!-- Descripción del Combo -->
+                    <app-campo-input id="descripcion_Combo" label="Descripción" [control]="$any(formCombo.controls.descripcion)" type="text">
+                    <app-error-maxlenght mensaje="La descripción no puede tener más de 250 caracteres" [errors]="formCombo.controls.descripcion.errors"></app-error-maxlenght>
+                    </app-campo-input>
+
+                    <!-- Precio del Combo -->
+                    <app-campo-input id="precio_Combo" label="Precio del Combo" [control]="$any(formCombo.controls.precio)" type="number">
+                        <app-error-requerido mensaje="El precio del combo es requerido" [errors]="formCombo.controls.precio.errors"></app-error-requerido>
+                    </app-campo-input>
+                    
+                    <!-- Selección de Productos que incluye -->
+                    <div class="full-width-input">
+                        <label class="textos">Productos incluidos (Snacks, Bebidas, Golosinas):</label>
+                        <div class="productos-checkbox-list" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
+                            @for (prod of productos(); track prod.id) {
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input 
+                                        type="checkbox" 
+                                        [checked]="formCombo.value.productos_ids?.includes(prod.id)"
+                                        (change)="ProductoSeleccionado(prod.id)">
+                                    <span>{{ prod.nombre }} - ${{ prod.precio }}</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Checkbox Destacado -->
+                    <div class="full-width-input" style="display: flex; align-items: center; gap: 8px; margin: 10px 0;">
+                        <input type="checkbox" id="destacado_combo" formControlName="destacado">
+                        <label for="destacado_combo" class="textos" style="cursor: pointer;">Destacar en la página principal</label>
+                    </div>
+
+                    <!-- Imagen del Combo -->
+                    <div class="file-container full-width-input">
+                        <label for="foto_combo">Imagen del Combo</label>
+                        <input id="foto_combo" type="file" accept="image/*" (change)="cargarImagenCombo($event)" class="input">
+                    </div>
+
+                    @if (error()) {
+                    <p class="error full-width-input">{{ error() }}</p>
+                    }
+
+                    <button type="submit" class="boton_i full-width-input" [disabled]="formCombo.invalid || Guardando()">
+                    {{ Guardando() ? 'Guardando...' : 'Crear Combo' }}
+                    </button>
+                </form>
+                </div>
+            }
+        @case ('combo/desactivar o activar'){
+                <div class="card">
+                    <div class="lista-seccion">
+                        <h3 class="titulo-seccion">Gestionar Combos (Activar / Dar de Baja)</h3>
+                        <div class="peliculas-lista" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                            @for (combo of combosListados(); track combo.id) {
+                                <div class="pelicula-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                                    <div>
+                                        <span class="pelicula-nombre">{{ $index + 1 }}. {{ combo.nombre }} - ${{ combo.precio }}</span>
+                                        @if (combo.destacado) {
+                                            <span style="color: gold; font-size: 0.8rem; margin-left: 6px;">★ Destacado</span>
+                                        }
+                                        <div style="font-size: 0.85rem; margin-top: 4px;">
+                                            Estado: <span [style.color]="combo.activo ? '#4ade80' : '#f87171'">{{ combo.activo ? 'Activo' : 'Inactivo' }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón de acción directa para dar de baja o activar -->
+                                    <button 
+                                        type="button" 
+                                        class="boton_i" 
+                                        [style.background-color]="combo.activo ? '#dc2626' : '#16a34a'"
+                                        [disabled]="Guardando()"
+                                        (click)="cambiarEstado(combo.id, combo.activo)">
+                                        {{ combo.activo ? 'Dar de Baja' : 'Activar' }}
+                                    </button>
+                                </div>
+                            } @empty {
+                                <p class="textos" style="text-align: center; color: #888; padding: 20px;">No hay combos registrados.</p>
+                            }
+                        </div>
+                    </div>
+
+                    @if (error()) {
+                        <p class="error-msg">{{ error() }}</p>
+                    }
+                </div>
+            }
+    }
+    </div>
+
+</body>

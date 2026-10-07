@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './pages/guard/auth-guard';
+import { Candy } from './pages/home/candy/candy';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home').then(m => m.Home),
         
     
+    },
+    {
+        path: 'candy',
+        loadComponent: () => import('./pages/home/candy/candy').then(m => m.Candy),
     },
     {
         path:'resenas',

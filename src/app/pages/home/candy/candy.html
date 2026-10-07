@@ -1,0 +1,52 @@
+<body>
+
+<app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+
+<main class="container">
+    <app-campo-input label="Buscar Productos por Categorías" (input)="onBuscar($any($event.target).value)" type="search"></app-campo-input>
+ 
+    <div class="subtitle-row">
+      <h2>Catálogo de Candy</h2>
+    </div>
+
+    @if (CandyFiltrados().length === 0) {
+      <span>Producto no encontrado</span>
+    } @else {
+      @if (cargando()) {
+        <p>Cargando productos...</p>
+      } @else if (candy_muestra().length === 0) {
+        <p>No hay productos de candy cargados.</p>
+      } @else {
+        <div class="movies-grid">
+          @for (producto of CandyFiltrados(); track producto.id) {
+            <div class="movie-card">
+              
+              <div class="movie-image-container">
+                <img [src]="producto.foto" [alt]="producto.nombre" />
+              </div>
+
+              <div class="movie-info">
+                <div class="movie-main-info">
+                  <h3 class="movie-title">{{ producto.nombre }}</h3>
+                  <span class="section-label">Categorías:</span>
+                  <div class="generos-tags">
+                    @for (cat of producto.categorias; track cat) {
+                      <span class="tag-genre">{{ cat }}</span>
+                    }
+                  </div>
+                  <!-- Precio adaptado -->
+                  <div class="precio-container" style="margin-top: 10px;">
+                    <span class="tag-badge" style="background-color: #2e7d32; color: white; font-weight: bold;">$ {{ producto.precio }}</span>
+                  </div>
+                </div>
+
+              </div>
+              
+            </div>
+          }
+        </div>
+      }
+    }
+</main>
+</body>
