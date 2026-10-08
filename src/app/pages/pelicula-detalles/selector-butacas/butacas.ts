@@ -5,6 +5,8 @@ import { ButacaService } from '../../../services/butacas/butacas';
 import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 import { FuncionService } from '../../../services/funciones/funciones';
 import { RealtimeChannel } from '@supabase/supabase-js';
+import { CarritoService } from '../../../services/carrito/carrito';
+
 @Component({
   selector: 'app-seleccion-butacas',
   standalone: true,
@@ -17,7 +19,9 @@ export class SeleccionButacas implements OnInit, OnDestroy {
   private butacaService = inject(ButacaService);
   private route = inject(ActivatedRoute);
   private funciones = inject(FuncionService);
-  ruta = inject(Router)
+  private carritoService = inject(CarritoService);
+  ruta = inject(Router);
+
   filasAgrupadas = signal<any[]>([]);
   cargando = signal<boolean>(true);
   Funcion = signal<any>(null);
@@ -62,7 +66,7 @@ export class SeleccionButacas implements OnInit, OnDestroy {
           }
         )
         .subscribe();
-    }
+      }
     });
   }
 
@@ -71,27 +75,26 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     this.realtimeChannel?.unsubscribe();
   }
 
- async cargarButacasPorFuncion(funcionId: string) {
-  this.cargando.set(true);
-  try {
-    const funcion = await this.funciones.mostrar_funcion_por_id(funcionId);
-    if (!funcion) throw new Error('No se encontró la función o la sala asociada.');
-    this.Funcion.set(funcion);
+  async cargarButacasPorFuncion(funcionId: string) {
+    this.cargando.set(true);
+    try {
+      const funcion = await this.funciones.mostrar_funcion_por_id(funcionId);
+      if (!funcion) throw new Error('No se encontró la función o la sala asociada.');
+      this.Funcion.set(funcion);
 
-    const [todasLasButacas, ocupadasIds] = await Promise.all([
-      this.butacaService.mostrar_por_sala(funcion.sala_id),
-      this.butacaService.mostrar_ocupadas(funcionId),
-    ]);
+      const [todasLasButacas, ocupadasIds] = await Promise.all([
+        this.butacaService.mostrar_por_sala(funcion.sala_id),
+        this.butacaService.mostrar_ocupadas(funcionId),
+      ]);
 
-    this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
-  } catch (error) {
-    console.error('Error al cargar las butacas de la función:', error);
-  } finally {
-    this.cargando.set(false);
+      this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
+    } catch (error) {
+      console.error('Error al cargar las butacas de la función:', error);
+    } finally {
+      this.cargando.set(false);
+    }
   }
-}
 
- 
   private construirMapaFilas(todasLasButacas: any[], ocupadas: Set<string>) {
     const seleccionadasActuales = new Set(this.butacasSeleccionadas());
     const mapaFilas = new Map<string, any[]>();
@@ -102,11 +105,11 @@ export class SeleccionButacas implements OnInit, OnDestroy {
         seleccionadasActuales.delete(b.id);
       }
 
-      const asientoConEstado = {
-        ...b,
+      // Reemplazamos el spread (...) por Object.assign para cumplir la regla
+      const asientoConEstado = Object.assign({}, b, {
         estado: esOcupada ? 'ocupada' : 'disponible',
         seleccionado: seleccionadasActuales.has(b.id)
-      };
+      });
 
       if (!mapaFilas.has(b.fila)) mapaFilas.set(b.fila, []);
       mapaFilas.get(b.fila)?.push(asientoConEstado);
@@ -121,14 +124,15 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     this.recalcularResumen();
   }
 
-
   alternarSeleccion(asiento: any) {
     if (asiento.estado === 'ocupada') return;
 
     asiento.seleccionado = !asiento.seleccionado;
     const actual = this.butacasSeleccionadas();
+    
     if (asiento.seleccionado) {
-      this.butacasSeleccionadas.set([...actual, asiento.id]);
+      // Usamos .concat() en lugar de [...actual, asiento.id]
+      this.butacasSeleccionadas.set(actual.concat([asiento.id]));
     } else {
       this.butacasSeleccionadas.set(actual.filter(id => id !== asiento.id));
     }
@@ -162,16 +166,24 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     );
   }
 
-  async continuarCompra() {
-    const idsSeleccionados = this.butacasSeleccionadas();
-    if (idsSeleccionados.length === 0) return;
+  continuarAlCandy() {
+    const idsSeleccionadas = this.butacasSeleccionadas().join(', ');
 
-    try {
-      await this.butacaService.reservar_butacas(this.funcionIdActual!, idsSeleccionados);
-      this.ruta.navigate(['/compra/candy'], { queryParams: {} })
-    } catch (e) {
-      console.error(e);
-      
-    }
+    // Creamos el item de entradas para el carrito global
+    const itemEntradas = {
+      id: 'butacas-reserva',
+      nombre: `Butacas seleccionadas: ${idsSeleccionadas}`,
+      precio: this.total(),
+      tipo: 'entrada' as const,
+      cantidad: 1
+    };
+
+    // Actualizamos el carrito global usando .concat() y filter() sin operador ...
+    const actual = this.carritoService.items();
+    const filtrado = actual.filter(i => i.id !== 'butacas-reserva');
+    this.carritoService.items.set(filtrado.concat([itemEntradas]));
+
+    // Navegamos al candy
+    this.ruta.navigate(['/compra/candy']);
   }
 }

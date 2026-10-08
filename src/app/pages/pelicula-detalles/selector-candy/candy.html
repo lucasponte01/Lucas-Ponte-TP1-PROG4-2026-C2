@@ -1,0 +1,98 @@
+<body>
+
+<app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+<main class="container">
+    <!-- Buscador global para Candy y Combos -->
+    <app-campo-input label="Buscar Productos Categoría" (input)="onBuscar($any($event.target).value)" type="search"></app-campo-input>
+   
+    <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+      
+      <!-- Columna Principal: Grillas de Combos y Candy -->
+      <div style="flex: 1; min-width: 300px;">
+        
+        <!-- SECCIÓN DE COMBOS ESPECIALES -->
+        <div class="subtitle-row" style="margin-top: 10px;">
+          <h2>Combos Especiales</h2>
+        </div>
+
+        @if (combo_muestra().length > 0) {
+          <div class="movies-grid">
+            @for (combo of combo_muestra(); track combo.id) {
+              <!-- Uso de tu Directiva Custom [appResaltarCombo] -->
+              <div class="movie-card" [appResaltarCombo]="combo.destacado">
+                <div class="movie-image-container">
+                  <img [src]="combo.foto" [alt]="combo.nombre" />
+                  @if (combo.destacado) {
+                    <span class="tag-badge" style="position: absolute; top: 10px; right: 10px; background-color: #d97706; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">★ Destacado</span>
+                  }
+                </div>
+
+                <div class="movie-info">
+                  <div class="movie-main-info">
+                    <h3 class="movie-title">{{ combo.nombre }}</h3>
+                    <p class="sinopsis" style="margin: 4px 0;">{{ combo.descripcion }}</p>
+                    
+                    <div class="precio-container" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 6px;">
+                      <span class="tag-badge" style="background-color: #2e7d32; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;">$ {{ combo.precio }}</span>
+                      <button (click)="agregar(combo.id, combo.nombre, combo.precio, 'combo')">Agregar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="mensaje-vacio" style="margin-bottom: 25px;">No hay combos disponibles con ese criterio.</p>
+        }
+
+        <!-- SECCIÓN DE CANDY INDIVIDUAL -->
+        <div class="subtitle-row" style="margin-top: 30px;">
+          <h2>Catálogo de Candy Individual</h2>
+        </div>
+
+        @if (cargando()) {
+          <p class="mensaje-vacio">Cargando productos...</p>
+        } @else if (CandyFiltrados().length === 0) {
+          <p class="mensaje-vacio">Producto no encontrado.</p>
+        } @else {
+          <div class="movies-grid">
+            @for (producto of CandyFiltrados(); track producto.id) {
+              <div class="movie-card">
+                
+                <div class="movie-image-container">
+                  <img [src]="producto.foto" [alt]="producto.nombre" />
+                </div>
+
+                <div class="movie-info">
+                  <div class="movie-main-info">
+                    <h3 class="movie-title">{{ producto.nombre }}</h3>
+                    <span class="section-label">Categorías:</span>
+                    <div class="generos-tags">
+                      @for (cat of producto.categorias; track cat) {
+                        <span class="tag-genre">{{ cat }}</span>
+                      }
+                    </div>
+                    
+                    <div class="precio-container" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 6px;">
+                      <span class="tag-badge" style="background-color: #2e7d32; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;">$ {{ producto.precio }}</span>
+                      <button (click)="agregar(producto.id, producto.nombre, producto.precio, 'candy')">Agregar</button>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+     <app-carrito-resumen 
+        [items]="carritoService.items()" 
+        (eliminarItem)="carritoService.removerItem($event)" 
+        (confirmarCompra)="procesarPagoYGenerarQR()">
+    </app-carrito-resumen>
+
+    </div>
+</main>
+</body>
