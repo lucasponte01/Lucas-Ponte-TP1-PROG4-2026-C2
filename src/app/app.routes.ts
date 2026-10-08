@@ -52,6 +52,11 @@ export const routes: Routes = [
         canActivate :[authGuard],
         data:{roles:['admin']}
     },
+    {
+        path:'perfil',
+        loadComponent:() => import('./pages/perfil/perfil').then(m => m.Perfil),
+        canActivate :[authGuard]
+    }
     
     
 ];

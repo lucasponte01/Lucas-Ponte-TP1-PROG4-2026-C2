@@ -1,4 +1,4 @@
-// validators/fecha-nacimiento.validator.ts
+
 import { ValidatorFn } from '@angular/forms';
 import { parseDate } from '../utils/parse_date';
 

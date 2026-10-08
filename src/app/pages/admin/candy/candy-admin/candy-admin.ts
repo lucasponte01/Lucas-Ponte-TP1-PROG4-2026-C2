@@ -1,11 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { NavbarComponent } from '../../../../components/ui/navbar/navbar';
-import { PeliculaService } from '../../../../services/peliculas/peliculas';
-import { SupabaseService } from '../../../../services/supabase.service';
 import { Auth } from '../../../../services/auth';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import Pelicula from '../../../../interfaces/peliculas';
+import {  FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CampoInput } from '../../../../components/ui/campo-input/campo-input';
 import { ErrorRequerido } from '../../../../components/ui/error-requerido/error-requerido';
 import { ErrorMinlenght } from '../../../../components/ui/error-minlenght/error-minlenght';
@@ -13,7 +10,6 @@ import { ErrorMaxlenght } from '../../../../components/ui/error-maxlenght/error-
 import { ErrorPattern } from '../../../../components/ui/error-pattern/error-pattern';
 import CandyProducto, { CandyPorCrear, CandyPorModificar } from '../../../../interfaces/cady_productos';
 import { CandyServise } from '../../../../services/candy/candy';
-import { Candy } from '../../../home/candy/candy';
 import { ComboServise } from '../../../../services/combo/combos';
 import ComboProducto, { ComboPorCrear } from '../../../../interfaces/combos';
 
@@ -73,13 +69,12 @@ export class CandyAdmin {
           return;
         }
 
-        const nombre = this.form_crear.value.nombre?.trim() ?? '';
-        const precio = this.form_crear.value.precio ?? 0;
+        
         const categorias = (this.form_crear.value.categorias ?? '').split(',').map(cat => cat.trim()).filter(cat => cat.length > 0);
 
         const producto: CandyPorCrear = {
-          nombre,
-          precio,
+          nombre:this.form_crear.value.nombre?.trim() ?? '',
+          precio:this.form_crear.value.precio ?? 0,
           categorias,
           foto: urlFoto,
         };

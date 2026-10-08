@@ -1,0 +1,141 @@
+<body>
+    <app-navbar [logo_menus]="logo_menus"></app-navbar>
+
+    <nav class="navbar navbar-menu">
+    <button class="btn_nav" (click)="cambiarVista('crear')">Crear</button>
+    <button class="btn_nav" (click)="cambiarVista('cupones/desactivar o activar')">Eliminar</button>
+    
+    </nav>
+
+    <div class="main-content">
+         @switch (vistaActiva()) {
+
+            @case ('crear') {
+                <div class="main-content">
+                    <div class="card">
+                        <h2 class="textos">Crear Cupón</h2>
+
+                        <form [formGroup]="cuponForm" (ngSubmit)="crear_Cupon()" class="form-grid">
+                            
+                            
+                            <app-campo-input id="codigo_cupon" label="Código del Cupón" [control]="$any(cuponForm.controls['codigo'])" type="text">
+                                <app-error-requerido mensaje="El código del cupón es requerido" [errors]="cuponForm.controls['codigo'].errors"></app-error-requerido>
+                                <app-error-minlenght mensaje="El código debe tener al menos 3 caracteres" [errors]="cuponForm.controls['codigo'].errors"></app-error-minlenght>
+                            </app-campo-input>
+
+                            
+                            <div class="file-container">
+                                <label for="tipo_cupon">Tipo de Descuento</label>
+                                <select id="tipo_cupon" formControlName="tipo" class="input">
+                                    <option value="porcentaje">Porcentaje (%)</option>
+                                    <option value="fijo">Monto Fijo ($)</option>
+                                </select>
+                            </div>
+
+                            
+                            <app-campo-input id="valor_cupon" label="Valor del Descuento" [control]="$any(cuponForm.controls['valor'])" type="number">
+                                <app-error-requerido mensaje="El valor es requerido" [errors]="cuponForm.controls['valor'].errors"></app-error-requerido>
+                            </app-campo-input>
+
+                            
+                            <app-campo-input id="edad_minima_cupon" label="Edad Mínima (Opcional)" [control]="$any(cuponForm.controls['edad_minima'])" type="number">
+                            </app-campo-input>
+
+                            
+                            <div class="input-grupo-col">
+                                <label for="fecha_inicio" class="label-input">Fecha de Inicio:</label>
+                                <input pInputText id="fecha_inicio" formControlName="fecha_inicio" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input-custom" />
+                                @if (cuponForm.get('fecha_inicio')?.invalid && cuponForm.get('fecha_inicio')?.touched) {
+                                    @if (cuponForm.get('fecha_inicio')?.hasError('required')) {
+                                        <p class="field__error text-xs text-red-400 mt-1">Ingresá la fecha de inicio.</p>
+                                    }
+                                    @if (cuponForm.get('fecha_inicio')?.hasError('invalidDate')) {
+                                        <p class="field__error text-xs text-red-400 mt-1">Ingresá una fecha válida (DD/MM/AAAA).</p>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Fecha de Finalización -->
+                            <div class="input-grupo-col">
+                                <label for="fecha_final" class="label-input">Fecha de Finalización:</label>
+                                <input pInputText id="fecha_final" formControlName="fecha_fin" pInputMask="99/99/9999" placeholder="DD/MM/AAAA" class="input-custom" />
+                                @if (cuponForm.get('fecha_final')?.invalid && cuponForm.get('fecha_final')?.touched) {
+                                    @if (cuponForm.get('fecha_final')?.hasError('required')) {
+                                        <p class="field__error text-xs text-red-400 mt-1">Ingresá la fecha de finalización.</p>
+                                    }
+                                    @if (cuponForm.get('fecha_final')?.hasError('invalidDate')) {
+                                        <p class="field__error text-xs text-red-400 mt-1">Ingresá una fecha válida (DD/MM/AAAA).</p>
+                                    }
+                                }
+                            </div>
+
+                            
+                            <div class="file-container" style="display: flex; gap: 20px; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" formControlName="solo_primera_compra">
+                                    <span>Solo Primera Compra </span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" formControlName="activo">
+                                    <span>Activo</span>
+                                </label>
+                            </div>
+
+                            
+                            <button type="submit" class="boton_i full-width-input" [disabled]=" cargando()">
+                                {{ cargando() ? 'Guardando...' : 'Crear Cupón' }}
+                            </button>
+
+                            @if (error()) {
+                                    <p class="error-msg" style="color: red; margin-top: 10px; text-align: center;">{{ error() }}</p>
+                                }
+                        </form>
+                    </div>
+                </div>
+
+            }
+            @case ('cupones/desactivar o activar'){
+                <div class="card">
+                    <div class="lista-seccion">
+                        <h3 class="titulo-seccion">Gestionar Cupones (Activar / Dar de Baja)</h3>
+                        <div class="peliculas-lista" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                            @for (cupon of cuponesListados(); track cupon.id) {
+                                <div class="pelicula-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                                    <div>
+                                        <span class="pelicula-nombre">{{ $index + 1 }}. {{ cupon.codigo }} - 
+                                            @if (cupon.tipo === 'porcentaje') {
+                                                {{ cupon.valor }}%
+                                            } @else {
+                                                ${{ cupon.valor }}
+                                            }
+                                        </span>
+                                        
+                                        @if (cupon.solo_primera_compra) {
+                                            <span style="color: #60a5fa; font-size: 0.8rem; margin-left: 6px;">[1ra Compra]</span>
+                                        }
+
+                                        <div style="font-size: 0.85rem; margin-top: 4px;">
+                                            Estado: <span [style.color]="cupon.activo ? '#4ade80' : '#f87171'">{{ cupon.activo ? 'Activo' : 'Inactivo' }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón de acción directa para dar de baja o activar -->
+                                    <button type="button" class="boton_i" [style.background-color]="cupon.activo ? '#dc2626' : '#16a34a'" [disabled]="cargando()" (click)="cambiarEstado(cupon.id, cupon.activo)"> 
+                                        {{ cupon.activo ? 'Dar de Baja' : 'Activar' }} 
+                                    </button>
+                                </div>
+                            } @empty {
+                                <p class="textos" style="text-align: center; color: #888; padding: 20px;">No hay cupones registrados.</p>
+                            }
+                        </div>
+                    </div>
+
+                    @if (error()) {
+                        <p class="error-msg">{{ error() }}</p>
+                    }
+                </div>
+            }
+         }
+
+

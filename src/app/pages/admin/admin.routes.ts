@@ -27,5 +27,11 @@ export const instalarroute: Route[] = [
     loadComponent: () => import('./candy/candy-admin/candy-admin').then(m => m.CandyAdmin),
     canActivate :[authGuard],
     data:{roles:['admin']}
+  },
+  {
+    path: 'cupon',
+    loadComponent: () => import('./cupones/cupon').then(m => m.Cupon),
+    canActivate :[authGuard],
+    data:{roles:['admin']}
   }
 ];

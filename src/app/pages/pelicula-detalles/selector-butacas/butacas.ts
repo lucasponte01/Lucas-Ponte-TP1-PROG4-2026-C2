@@ -32,7 +32,6 @@ export class SeleccionButacas implements OnInit, OnDestroy {
   puedeContinuar = signal(false);
 
   suscripcion?: RealtimeChannel;
-  realtimeChannel?: RealtimeChannel;
   private funcionIdActual: string | null = null;
 
   async ngOnInit() {
@@ -42,37 +41,52 @@ export class SeleccionButacas implements OnInit, OnDestroy {
 
       if (FuncionId) {
         await this.cargarButacasPorFuncion(FuncionId);
+        this.suscriberseARealtime(FuncionId);
       } else {
         console.warn('Falta el ID de la función en la URL');
         this.cargando.set(false);
-      }
-
-      if (this.funcionIdActual) {
-       this.suscripcion = this.butacaService.sup.client.channel('cambios-reservas-' + this.funcionIdActual).on(
-          'postgres_changes',
-          { event: '*',
-            schema: 'public', 
-            table: 'reservas_temporales', 
-            filter: 'funcion_id=eq.' + this.funcionIdActual },
-          async () => {
-            const funcion = this.Funcion();
-            if (!funcion) return;
-
-            const [todasLasButacas, ocupadasIds] = await Promise.all([
-              this.butacaService.mostrar_por_sala(funcion.sala_id),
-              this.butacaService.mostrar_ocupadas(this.funcionIdActual!),
-            ]);
-            this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
-          }
-        )
-        .subscribe();
       }
     });
   }
 
   ngOnDestroy() {
-    this.suscripcion?.unsubscribe();
-    this.realtimeChannel?.unsubscribe();
+    if (this.suscripcion) {
+      this.butacaService.sup.client.removeChannel(this.suscripcion);
+    }
+  }
+
+  private suscriberseARealtime(funcionId: string) {
+    // Si ya había una suscripción previa, la removemos limpiamente
+    if (this.suscripcion) {
+      this.butacaService.sup.client.removeChannel(this.suscripcion);
+    }
+
+    // Creamos un canal único y aseguramos escuchar el evento en la tabla correcta
+    this.suscripcion = this.butacaService.sup.client
+      .channel(`room-reservas-${funcionId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reservas_temporales',
+          filter: `funcion_id=eq.${funcionId}`
+        },
+        async (payload) => {
+          console.log('Cambio detectado en tiempo real:', payload);
+          const funcion = this.Funcion();
+          if (!funcion) return;
+
+          const [todasLasButacas, ocupadasIds] = await Promise.all([
+            this.butacaService.mostrar_por_sala(funcion.sala_id),
+            this.butacaService.mostrar_ocupadas(funcionId),
+          ]);
+          this.construirMapaFilas(todasLasButacas, new Set(ocupadasIds));
+        }
+      )
+      .subscribe((status) => {
+        console.log('Estado de la suscripción Realtime:', status);
+      });
   }
 
   async cargarButacasPorFuncion(funcionId: string) {
@@ -96,48 +110,53 @@ export class SeleccionButacas implements OnInit, OnDestroy {
   }
 
   private construirMapaFilas(todasLasButacas: any[], ocupadas: Set<string>) {
-    const seleccionadasActuales = new Set(this.butacasSeleccionadas());
-    const mapaFilas = new Map<string, any[]>();
+  const seleccionadasAntes = this.butacasSeleccionadas();
+  const seleccionadasAhora: string[] = [];
+  const filas: any[] = [];
+  let filaActual: any = null;
 
-    for (const b of todasLasButacas) {
-      const esOcupada = ocupadas.has(b.id);
-      if (esOcupada && seleccionadasActuales.has(b.id)) {
-        seleccionadasActuales.delete(b.id);
-      }
+  for (const b of todasLasButacas) {
+    const esOcupada = ocupadas.has(b.id);
+    let estaSeleccionada = seleccionadasAntes.includes(b.id);
 
-      // Reemplazamos el spread (...) por Object.assign para cumplir la regla
-      const asientoConEstado = Object.assign({}, b, {
-        estado: esOcupada ? 'ocupada' : 'disponible',
-        seleccionado: seleccionadasActuales.has(b.id)
-      });
+    if (esOcupada) estaSeleccionada = false;
+    if (estaSeleccionada) seleccionadasAhora.push(b.id);
 
-      if (!mapaFilas.has(b.fila)) mapaFilas.set(b.fila, []);
-      mapaFilas.get(b.fila)?.push(asientoConEstado);
+    const asiento = {
+      id: b.id,
+      fila: b.fila,
+      numero: b.numero,
+      tipo: b.tipo,
+      estado: esOcupada ? 'ocupada' : 'disponible',
+      seleccionado: estaSeleccionada
+    };
+
+    if (filaActual === null || filaActual.fila !== b.fila) {
+      filaActual = { fila: b.fila, asientos: [] };
+      filas.push(filaActual);
     }
-
-    const resultado = Array.from(mapaFilas.entries())
-      .map(([fila, asientos]) => ({ fila, asientos: asientos.sort((x, y) => x.numero - y.numero) }))
-      .sort((a, b) => a.fila.localeCompare(b.fila));
-
-    this.filasAgrupadas.set(resultado);
-    this.butacasSeleccionadas.set(Array.from(seleccionadasActuales));
-    this.recalcularResumen();
+    filaActual.asientos.push(asiento);
   }
+
+  this.filasAgrupadas.set(filas);
+  this.butacasSeleccionadas.set(seleccionadasAhora);
+  this.recalcularResumen();
+}
 
   alternarSeleccion(asiento: any) {
-    if (asiento.estado === 'ocupada') return;
+  if (asiento.estado === 'ocupada') return;
 
-    asiento.seleccionado = !asiento.seleccionado;
-    const actual = this.butacasSeleccionadas();
-    
-    if (asiento.seleccionado) {
-      // Usamos .concat() en lugar de [...actual, asiento.id]
-      this.butacasSeleccionadas.set(actual.concat([asiento.id]));
-    } else {
-      this.butacasSeleccionadas.set(actual.filter(id => id !== asiento.id));
-    }
-    this.recalcularResumen();
+  asiento.seleccionado = !asiento.seleccionado;
+
+  const nuevaLista: string[] = [];
+  for (const id of this.butacasSeleccionadas()) {
+    if (id !== asiento.id) nuevaLista.push(id);
   }
+  if (asiento.seleccionado) nuevaLista.push(asiento.id);
+
+  this.butacasSeleccionadas.set(nuevaLista);
+  this.recalcularResumen();
+}
 
   ConfirmaVip(): void {
     this.confirmaVip.set(!this.confirmaVip());
@@ -166,24 +185,59 @@ export class SeleccionButacas implements OnInit, OnDestroy {
     );
   }
 
-  continuarAlCandy() {
-    const idsSeleccionadas = this.butacasSeleccionadas().join(', ');
+  async continuarAlCandy() {
+    const idsSeleccionadas = this.butacasSeleccionadas();
 
-    // Creamos el item de entradas para el carrito global
-    const itemEntradas = {
-      id: 'butacas-reserva',
-      nombre: `Butacas seleccionadas: ${idsSeleccionadas}`,
-      precio: this.total(),
-      tipo: 'entrada' as const,
-      cantidad: 1
-    };
+    if (idsSeleccionadas.length === 0) return;
 
-    // Actualizamos el carrito global usando .concat() y filter() sin operador ...
-    const actual = this.carritoService.items();
-    const filtrado = actual.filter(i => i.id !== 'butacas-reserva');
-    this.carritoService.items.set(filtrado.concat([itemEntradas]));
+    try {
+      // 1. Guardamos las reservas temporales usando el método que ya tienes en el servicio
+      if (this.funcionIdActual) {
+        await this.butacaService.reservar_butacas(this.funcionIdActual, idsSeleccionadas);
+      }
 
-    // Navegamos al candy
-    this.ruta.navigate(['/compra/candy']);
+      const butacasSeleccionadas = [];
+
+      for (const grupo of this.filasAgrupadas()) {
+        for (const asiento of grupo.asientos) {
+          if (asiento.seleccionado) {
+            butacasSeleccionadas.push({
+              id: asiento.id,
+              tipo: asiento.tipo,
+              fila: asiento.fila,     
+              numero: asiento.numero,
+              precio: asiento.tipo === 'vip'
+                ? this.Funcion().precio_vip
+                : this.Funcion().precio_base
+            });
+          }
+        }
+      }
+
+      this.carritoService.funcionCompra.set(this.Funcion());
+      this.carritoService.butacasCompra.set(butacasSeleccionadas);
+   
+     
+      const itemEntradas = {
+        id: 'butacas-reserva',
+        nombre: `Butacas seleccionadas: ${idsSeleccionadas}`,
+        precio: this.total(),
+        tipo: 'entrada' as const,
+        cantidad: 1
+      };
+
+      const actual = this.carritoService.items();
+        const filtrado = actual.filter(i => i.id !== 'butacas-reserva');
+
+        this.carritoService.items.set(
+          filtrado.concat([itemEntradas])
+        );
+
+      // 4. Navegamos a la pantalla de candy
+      this.ruta.navigate(['/compra/candy']);
+
+    } catch (error) {
+      console.error('Error al registrar las butacas temporalmente:', error);
+    }
   }
 }

@@ -50,19 +50,92 @@ export class Auth {
     return edad >= restriccionEdad;
   }
 
-    async obtenerHistorialPuntos(usuarioId: string) {
-    const { data, error } = await this._supabaseService.client
-      .from('movimientos_puntos')
-      .select('*')
-      .eq('usuario_id', usuarioId)
-      .order('creado_en', { ascending: false });
+    async consultarhistorial_de_peliculas() {
+    try {
+      const { data: { user } } = await this._supabaseService.Auth.getUser();
+      if (!user) return [];
 
-    if (error) {
-      console.error('Error al obtener puntos:', error);
+      // 1. Obtenemos las compras del usuario
+      const { data: compras, error: errorCompras } = await this._supabaseService.client
+        .from('compras')
+        .select('*')
+        .eq('usuario_id', user.id)
+        .order('fecha_compra', { ascending: false });
+
+      if (errorCompras || !compras) {
+        console.error('Error al cargar compras:', errorCompras);
+        return [];
+      }
+
+      // 2. Recorremos cada compra para buscar su función y sus entradas de forma independiente
+      const historialCompleto = await Promise.all(
+        compras.map(async (compra) => {
+          let funcionData = null;
+          let peliculaData = null;
+          let entradasData = [];
+
+          // Intentamos buscar la función asociada (probando el campo funcion_id o id_funcion)
+          const idFuncion = compra.funcion_id || compra.id_funcion;
+          if (idFuncion) {
+            const { data: funcion } = await this._supabaseService.client
+              .from('funciones')
+              .select('*')
+              .eq('id', idFuncion)
+              .maybeSingle();
+
+            if (funcion) {
+              funcionData = funcion;
+              const idPelicula = funcion.pelicula_id || funcion.id_pelicula;
+              
+              if (idPelicula) {
+                const { data: pelicula } = await this._supabaseService.client
+                  .from('peliculas')
+                  .select('*')
+                  .eq('id', idPelicula)
+                  .maybeSingle();
+
+                if (pelicula) {
+                  peliculaData = pelicula;
+                }
+              }
+            }
+          }
+
+          // Buscamos las entradas asociadas a esta compra
+          const { data: entradas } = await this.client_entradas_o_similar(compra.id);
+          if (entradas) {
+            entradasData = entradas;
+          }
+
+          return {
+            ...compra,
+            funciones: funcionData ? {
+              ...funcionData,
+              peliculas: peliculaData
+            } : null,
+            compra_entradas: entradasData
+          };
+        })
+      );
+
+      return historialCompleto;
+    } catch (error) {
+      console.error('Error al cargar historial:', error);
       return [];
     }
-    return data;
   }
+
+  private async client_entradas_o_similar(compraId: string) {
+    try {
+      return await this._supabaseService.client
+        .from('compra_entradas')
+        .select('*')
+        .eq('compra_id', compraId);
+    } catch {
+      return { data: [] };
+    }
+  }
+
 
     public async registrar(usuario : Usuario){
       const fecha = parseDate(usuario.fecha_nacimiento);

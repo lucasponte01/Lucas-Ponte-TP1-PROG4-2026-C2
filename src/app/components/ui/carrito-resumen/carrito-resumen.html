@@ -1,22 +1,112 @@
 <div class="carrito-card">
-  <h3 class="textos">Resumen de tu orden</h3>
-
+  <h3 class="textos">
+    Resumen de tu orden
+  </h3>
   @for (item of items; track item.id) {
     <div class="carrito-item">
-      <span class="textos">{{ item.nombre }} x{{ item.cantidad }}</span>
-      <span class="textos">$ {{ item.precio * item.cantidad }}</span>
-      <button type="button" class="btn-quitar" (click)="eliminarItem.emit(item.id)">✕</button>
+      <span class="textos">
+        {{ item.nombre }} x{{ item.cantidad }}
+      </span>
+      <span class="textos">
+        $ {{ item.precio * item.cantidad }}
+      </span>
+      <button type="button" class="btn-quitar" (click)="eliminarItem.emit(item.id)">
+        ✕
+      </button>
     </div>
   } @empty {
-    <p class="textos">Tu carrito está vacío.</p>
+    <p class="textos">
+      Tu carrito está vacío.
+    </p>
+  }
+
+  <!-- Si el cupón aplicado es de primera compra, mostramos un aviso lindo -->
+  @if (carritoService.cuponAplicado()?.solo_primera_compra) {
+    <div class="cupon-aplicado" style="background-color: rgba(74, 222, 128, 0.1); border: 1px dashed #4ade80;">
+      <span class="textos" style="color: #4ade80;">
+        ✨ ¡Descuento de 1ra compra aplicado automáticamente!
+      </span>
+      <button type="button" (click)="quitarCupon()">
+        Quitar
+      </button>
+    </div>
+  } @else {
+    <!-- Input normal de cupones para usuarios que no son nuevos o quieren usar otro -->
+    <div class="cupon-container">
+      <input
+        type="text"
+        placeholder="Código de cupón"
+        [(ngModel)]="codigoCupon"
+      />
+      <button type="button" (click)="aplicarCupon()" [disabled]="items.length === 0">
+        Aplicar
+      </button>
+    </div>
+  }
+
+  @if (mensajeCupon) {
+    <p class="cupon-ok">
+      {{ mensajeCupon }}
+    </p>
+  }
+
+  @if (errorCupon) {
+    <p class="cupon-error">
+      {{ errorCupon }}
+    </p>
+  }
+
+  @if (carritoService.cuponAplicado() && !carritoService.cuponAplicado()?.solo_primera_compra) {
+    <div class="cupon-aplicado">
+      <span>
+        Cupón:
+        {{ carritoService.cuponAplicado()?.codigo }}
+      </span>
+      <button type="button" (click)="quitarCupon()">
+        Quitar
+      </button>
+    </div>
   }
 
   <div class="total-row">
-    <span class="textos">Total:</span>
-    <span class="textos">$ {{ calcularTotal() }}</span>
+    <span class="textos">
+      Subtotal:
+    </span>
+    <span class="textos">
+      $ {{ calcularSubtotal() }}
+    </span>
   </div>
 
-  <button type="button" class="boton_i" [disabled]="items.length === 0" (click)="confirmarCompra.emit()">
+  @if (calcularDescuento() > 0) {
+    <div class="total-row">
+      <span class="textos">
+        Descuento:
+      </span>
+      <span class="textos">
+        -$ {{ calcularDescuento() }}
+      </span>
+    </div>
+  }
+
+  <div class="total-row">
+    <span class="textos">
+      Total:
+    </span>
+    <span class="textos">
+      $ {{ calcularTotal() }}
+    </span>
+  </div>
+
+  <div class="total-row" style="color: #60a5fa; font-size: 0.9rem;">
+    <span>Puntos a sumar con esta compra:</span>
+    <span>+ {{ calcularTotal() }} pts</span>
+  </div>
+
+  <button
+    type="button"
+    class="boton_i"
+    [disabled]="items.length === 0"
+    (click)="confirmarCompra.emit()">
     Confirmar y pagar
   </button>
 </div>
