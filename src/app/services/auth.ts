@@ -25,7 +25,7 @@ export class Auth {
     }
 
   verificarAccesoPelicula(restriccionEdad: number | null): boolean {
-    // Si es null o 0, significa que no tiene restricción
+    
     if (!restriccionEdad || restriccionEdad === 0) {
       return true; 
     }
@@ -46,8 +46,22 @@ export class Auth {
 
     console.log("Edad del usuario:", edad, "Edad mínima requerida:", restriccionEdad);
 
-    // Retorna true solo si la edad es mayor o igual a la restricción de Supabase
+   
     return edad >= restriccionEdad;
+  }
+
+    async obtenerHistorialPuntos(usuarioId: string) {
+    const { data, error } = await this._supabaseService.client
+      .from('movimientos_puntos')
+      .select('*')
+      .eq('usuario_id', usuarioId)
+      .order('creado_en', { ascending: false });
+
+    if (error) {
+      console.error('Error al obtener puntos:', error);
+      return [];
+    }
+    return data;
   }
 
     public async registrar(usuario : Usuario){
