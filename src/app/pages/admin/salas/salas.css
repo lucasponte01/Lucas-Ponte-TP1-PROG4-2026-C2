@@ -1,0 +1,319 @@
+/* ==========================================
+   ESTILOS GENERALES Y LAYOUT
+   ================================---------- */
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45; /* Fondo petróleo profundo */
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Navbar superior fijo */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 25px;
+  background-color: #162d33;
+  border-bottom: 1px solid #427C8E;
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-top {
+  justify-content: space-between; /* Distribuye Volver y Cerrar sesión a los extremos */
+}
+
+/* Botones de navegación del segundo navbar (Turquesa) */
+.btn_nav {
+  background-color: #41BFAD; 
+  color: #1a3036;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.btn_nav:hover {
+  filter: brightness(1.1);
+}
+
+/* Botones específicos del navbar superior (Terracota) */
+.btn_secundario {
+  background-color: #D08E78; 
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+/* Contenedor principal centrado */
+.main-content {
+  width: 100%;
+  min-height: calc(100vh - 65px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   TARJETAS Y CONTENEDORES
+   ================================---------- */
+.card {
+  background-color: #366E79; /* Azul petróleo de la tarjeta */
+  width: 100%;
+  max-width: 650px;
+  margin: 2rem auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  border: 1px solid #427C8E;
+  color: #ffffff;
+}
+
+/* Títulos y etiquetas */
+.titulo-seccion, 
+.subtitulo-seccion {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.subtitulo-seccion {
+  margin-top: 1.5rem;
+  border-top: 1px solid #427C8E;
+  padding-top: 1rem;
+}
+
+.label-input {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #41BFAD;
+  margin-bottom: 0.4rem;
+}
+
+/* ==========================================
+   LISTADOS Y ELEMENTOS DE LISTA
+   ================================---------- */
+.peliculas-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.pelicula-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #427C8E;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pelicula-item:last-child {
+  border-bottom: none;
+}
+
+.pelicula-item:hover {
+  background: rgba(65, 191, 173, 0.15);
+}
+
+.pelicula-nombre {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ==========================================
+   FORMULARIOS Y CAMPOS
+   ================================---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.full-width-input {
+  grid-column: span 2;
+}
+
+.input-grupo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-grupo-col {
+  margin-bottom: 1rem;
+}
+
+/* Estilos para inputs personalizados */
+.input,
+.input-custom {
+  color: #ffffff;
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea.input,
+.textarea-custom {
+  height: 90px;
+  padding-top: 10px;
+  resize: vertical;
+}
+
+.input::placeholder,
+.input-custom::placeholder {
+  color: #9cbcc4;
+}
+
+.input:focus,
+.input-custom:focus {
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 3px rgba(65, 191, 173, 0.15);
+}
+
+/* ==========================================
+   BOTONES
+   ================================---------- */
+.boton_i,
+.btn-guardar {
+  box-sizing: border-box;
+  width: 100%;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #41BFAD; /* Turquesa vibrante */
+  border: none;
+  border-radius: 8px;
+  color: #1a3036;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  grid-column: span 2;
+  transition: filter 0.2s;
+}
+
+.boton_i:hover,
+.btn-guardar:hover {
+  filter: brightness(1.1);
+}
+
+.boton_i:disabled,
+.btn-guardar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.btn-eliminar {
+  padding: 8px 14px;
+  background-color: #D08E78; /* Terracota para eliminar */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.btn-eliminar:hover {
+  filter: brightness(1.1);
+}
+
+/* ==========================================
+   MENSAJES Y UTILIDADES
+   ================================---------- */
+.error {
+  color: #ff8080;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.error-msg {
+  color: #ff8080;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  padding: 8px 12px;
+  background: rgba(255, 128, 128, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 128, 128, 0.3);
+}
+
+.textos {
+  color: #ffffff;
+}
+
+/* Inputs de archivos personalizados */
+.file-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Manrope', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.file-label {
+  color: #41BFAD;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.file-custom-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px dashed #427C8E;
+  border-radius: 8px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-custom-box:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: #41BFAD;
+}
+
+.file-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.file-input-hidden {
+  display: none;
+}

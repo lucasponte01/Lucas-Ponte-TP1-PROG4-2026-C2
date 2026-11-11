@@ -1,0 +1,210 @@
+.login {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.logo_container {
+  width: 100%;
+  max-width: 180px;
+  margin-bottom: 10px;
+}
+
+.logo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.volver-container {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 10px;
+}
+
+.card {
+  background-color: #366E79; 
+  width: 100%;
+  max-width: 600px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid #427C8E;
+}
+
+.textos {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+}
+.textos-label {
+  display: block;
+  color: #ffffff;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 15px;
+  text-align: left;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.texto-edad {
+  color: #41BFAD;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+
+.boton_i {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #41BFAD; 
+  border: none;
+  border-radius: 8px;
+  color: #1a3036; 
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: filter 0.2s;
+}
+
+.boton_i:hover {
+  filter: brightness(1.1);
+}
+
+.boton_i:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+
+.boton_secundario {
+  background: #D08E78;
+  color: #ffffff;
+  margin-top: 0;
+  height: 38px;
+  max-width: 100px;
+}
+
+.modal-avatares {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;  
+  padding: 16px; 
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-top: 15px;
+  border: 1px solid #427C8E;
+}
+
+.grid-avatares {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.avatars {
+  width: 55px;  
+  height: 55px;  
+  object-fit: cover; 
+  border-radius: 50%;
+  border: 2px solid #41BFAD;
+  cursor: pointer;
+  background: #ffffff;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.avatars:hover {
+  transform: scale(1.05);
+}
+
+.avatars.seleccionado {
+  border: 3px solid #ffffff; 
+  transform: scale(1.15);    
+  box-shadow: 0 0 12px #41BFAD;
+}
+
+.avatar-seleccionado-preview {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-img {
+  width: 65px;
+  height: 65px;
+  border: 3px solid #41BFAD;
+}
+
+.texto-cargando {
+  color: #ffffff;
+  font-family: 'Manrope', sans-serif;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Aseguramos que la clase .input (que ya usabas) luzca pareja en selects y fecha */
+.input, .select-custom {
+  width: 100%;
+  height: 42px;
+  background-color: #203e45;
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+}
+
+.select-custom {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2341BFAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.input:focus, .select-custom:focus {
+  outline: none;
+  border-color: #41BFAD;
+}
+
+.field__error {
+  color: #ff8b8b;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-family: 'Manrope', sans-serif;
+}

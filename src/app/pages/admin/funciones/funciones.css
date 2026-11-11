@@ -1,0 +1,334 @@
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45; /* Fondo petróleo profundo */
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Navbar superior fijo */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 25px;
+  background-color: #162d33;
+  border-bottom: 1px solid #427C8E;
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-top {
+  justify-content: flex-end;
+  border-bottom: none;
+}
+
+.navbar-menu {
+  justify-content: flex-start;
+  border-top: 1px solid #427C8E;
+}
+
+/* Botones del Navbar Superior (Volver / Cerrar sesión) en Terracota */
+.navbar-top .btn_nav {
+  background-color: #D08E78; /* Terracota */
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.navbar-top .btn_nav:hover {
+  filter: brightness(1.1);
+}
+
+/* Botones del Menú de Pestañas (Crear, Modificar, Eliminar) en Turquesa */
+.navbar-menu .btn_nav {
+  background-color: #41BFAD; /* Turquesa vibrante */
+  color: #1a3036;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.navbar-menu .btn_nav:hover {
+  filter: brightness(1.1);
+}
+
+/* Contenedor principal */
+.main-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+/* Tarjeta contenedora unificada */
+.card {
+  background-color: #366E79; /* Azul petróleo de la tarjeta */
+  width: 100%;
+  max-width: 750px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  border: 1px solid #427C8E;
+  color: #ffffff;
+}
+
+/* Títulos y Secciones */
+.titulo-seccion, .subtitulo-seccion {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.subtitulo-seccion {
+  margin-top: 1.5rem;
+  border-top: 1px solid #427C8E;
+  padding-top: 1rem;
+}
+
+.label-input {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #41BFAD;
+  margin-bottom: 0.4rem;
+}
+
+/* Listado de películas interactivo */
+.peliculas-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid #427C8E;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.pelicula-item {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #427C8E;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pelicula-item:last-child {
+  border-bottom: none;
+}
+
+.pelicula-item:hover {
+  background: rgba(65, 191, 173, 0.15);
+}
+
+.pelicula-nombre {
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+/* Grilla del formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 20px;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.form-grid .field__error {
+  grid-column: span 2;
+  width: 100%;
+  color: #ff8080;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-left: 2px;
+}
+
+
+/* Inputs y Selects */
+.input, .input-custom {
+  color: #ffffff;
+  width: 100%;
+  height: 45px;
+  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+}
+
+.input-custom {
+  border-color: #427C8E;
+}
+
+.input-custom:focus, .input:focus {
+  border-color: #41BFAD;
+  box-shadow: 0 0 0 2px rgba(65, 191, 173, 0.2);
+}
+
+.textarea-custom {
+  height: 90px;
+  padding-top: 10px;
+  resize: vertical;
+}
+
+.input::placeholder, .input-custom::placeholder {
+  color: #9cbcc4;
+  opacity: 0.8;
+}
+
+.input option {
+  background-color: #203e45;
+  color: #ffffff;
+}
+
+/* Grupos de búsqueda (Modificar / Eliminar) */
+.eliminar-seccion {
+  border-top: 1px solid #427C8E;
+  padding-top: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.input-grupo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-grupo-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Botones */
+.btn-eliminar, .btn-guardar, .boton_i {
+  padding: 0 20px;
+  height: 45px;
+  background-color: #41BFAD; /* Turquesa vibrante por defecto */
+  color: #1a3036;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Manrope', sans-serif;
+}
+
+.btn-eliminar {
+  background-color: #D08E78; /* Terracota para eliminar */
+  color: white;
+}
+
+.btn-eliminar:hover {
+  filter: brightness(1.1);
+}
+
+.btn-guardar, .boton_i {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn-guardar:hover, .boton_i:hover {
+  filter: brightness(1.1);
+}
+
+.btn-guardar:disabled, .boton_i:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+/* Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"] {
+  accent-color: #41BFAD;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Mensajes de error */
+.error, .error-msg {
+  color: #ff8080;
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 10px;
+  background: rgba(255, 128, 128, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 128, 128, 0.3);
+  text-align: center;
+}
+
+/* Utilidades */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+}
+
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2341BFAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Opciones desplegables adaptadas a la paleta petróleo y oscura */
+select.input option {
+  background-color: #203e45; /* Fondo petróleo profundo */
+  color: #ffffff; /* Texto blanco legible */
+  padding: 10px;
+}
+

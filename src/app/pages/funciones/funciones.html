@@ -1,0 +1,60 @@
+<div class="contenedor-funciones">
+  <!-- Botón de navegación -->
+  <div class="navegacion-funciones">
+    <button type="button" class="btn-volver" routerLink="/catalogo">
+      ← Volver al Catálogo
+    </button>
+  </div>
+
+  <!-- Estado de carga -->
+  @if (cargando()) {
+    <div class="estado-carga">
+      <div class="spinner"></div>
+      <p>Cargando funciones disponibles...</p>
+    </div>
+  }
+
+  <!-- Listado de funciones -->
+  @if (!cargando() && funciones() && funciones().length > 0) {
+    <div class="contenido-funciones">
+      <header class="cabecera-funciones">
+        <h2>Funciones Disponibles</h2>
+        <p class="subtitulo">Seleccioná el horario que prefieras para continuar con tu compra.</p>
+      </header>
+
+      <div class="grilla-funciones">
+        @for (funcion of funciones(); track funcion.id) {
+          <article class="tarjeta-funcion">
+            <div class="info-funcion">
+              <div class="contenedor-horario">
+                <!-- Nota: podés usar el pipe 'date' nativo de Angular sin importar CommonModule -->
+                <span class="hora-funcion">{{ funcion.inicio | date:'HH:mm' }} hs</span>
+                <span class="fecha-funcion">{{ funcion.inicio | date:'dd/MM/yyyy' }}</span>
+              </div>
+
+              <div class="grupo-etiquetas">
+                <span class="etiqueta formato">{{ funcion.formato }}</span>
+                <span class="etiqueta idioma">{{ funcion.idioma }}</span>
+                @if (funcion.es_preventa) {
+                  <span class="etiqueta preventa">Preventa</span>
+                }
+              </div>
+
+              <div class="info-sala">
+                <span class="etiqueta-sala">Sala:</span>
+                <span class="nombre-sala">{{ funcion.salas?.nombre || 'Sala Principal' }}</span>
+              </div>
+            </div>
+
+            <div class="accion-funcion">
+              
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  }
+
+
+ 
+</div>
