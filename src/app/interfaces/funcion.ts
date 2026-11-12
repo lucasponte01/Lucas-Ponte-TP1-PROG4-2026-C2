@@ -13,7 +13,9 @@ export interface Funcion {
   precio_vip : number;
   es_preventa: boolean;
   created_at: Timestamp<any>;
-  
+  salas?: {              // <-- Esto silencia el error de TypeScript para siempre
+    nombre: string;
+  }
 }
 
 export interface FuncionPorCrear{

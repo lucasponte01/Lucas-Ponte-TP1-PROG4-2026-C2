@@ -21,22 +21,17 @@ import { NavbarComponent } from '../../../components/ui/navbar/navbar';
 })
 export class SalasAdmin {
   logo_menus = "/assets/imagenes/Gemini2.png"
-//RF-25: distribución de butacas y productos.
-//RF-26: Reporte de facturación diaria y cantidad de entradas vendidas, exportable a PDF y Excel.
-//RF-27: Gráficos de películas más vistas por semana/mes y producto de candy bar más vendido.
-//RF-28: Log de actividad: quién creó una función, quién modificó un precio, quién validó un QR — todo con fecha y hora.
+
   bd = inject(FuncionService);
   peliculasBd = inject(PeliculaService);
   salasBd = inject(SalaService);
   auth = inject(Auth);
   router = inject(Router);
 
-
   error = signal('');
   Guardando = signal(false);
   vistaActiva = signal<string>('crear');
 
-  
   salas = signal<Sala[]>([]);
 
   cambiarVista(vista: string) {

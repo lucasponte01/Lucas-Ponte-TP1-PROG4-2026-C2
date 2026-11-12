@@ -46,6 +46,11 @@ export const routes: Routes = [
         path:'compra/funciones',
         loadComponent:() => import('./pages/funciones/funciones').then(m => m.Funciones),
         canActivate :[authGuard],
-    }
+    },
+    {
+        path:'resenas',
+        loadComponent:() => import('./pages/resenas/resenas').then(m => m.Resenas),
+        canActivate :[authGuard]
+    },
     
 ];

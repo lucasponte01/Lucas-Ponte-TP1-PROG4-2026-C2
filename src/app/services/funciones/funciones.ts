@@ -21,7 +21,7 @@ export class FuncionService {
     }
 
     async mostrar_funcion_por_id(peliculaId: string): Promise<Funcion[]> {
-        const { data, error } = await this.funciones.select('*, salas(nombre)').eq('pelicula_id', peliculaId);
+        const { data, error } = await this.funciones.select('*, salas:sala_id ( nombre )').eq('pelicula_id', peliculaId);
          if (error) throw error;
         return data as Funcion[];
     }

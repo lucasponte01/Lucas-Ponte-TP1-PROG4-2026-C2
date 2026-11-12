@@ -1,60 +1,159 @@
-<div class="contenedor-funciones">
-  <!-- Botón de navegación -->
-  <div class="navegacion-funciones">
-    <button type="button" class="btn-volver" routerLink="/catalogo">
-      ← Volver al Catálogo
-    </button>
-  </div>
+<body>
+  <app-navbar [logo_menus]="logo_menus"></app-navbar>
+  
+  <div class="contenedor-funciones">
+    <!-- Estado de carga -->
+    @if (cargando()) {
+      <div class="estado-carga">
+        <div class="spinner"></div>
+        <p>Cargando funciones disponibles...</p>
+      </div>
+    }
 
-  <!-- Estado de carga -->
-  @if (cargando()) {
-    <div class="estado-carga">
-      <div class="spinner"></div>
-      <p>Cargando funciones disponibles...</p>
-    </div>
-  }
+    <!-- Detalle de la Película -->
+    @if (!cargando() && pelicula()) {
+      <div class="tarjeta-detalle-pelicula">
+        <div class="poster-container">
+          <img [src]="pelicula()?.imagen_url" [alt]="pelicula()?.nombre" class="pelicula-poster">
+        </div>
+        
+        <div class="pelicula-info-detallada">
+          <div class="titulo-con-restriccion">
+            <h1>{{ pelicula()?.nombre }}</h1>
+            @if (pelicula()?.restriccion_edad) {
+              <span class="badge-restriccion">+{{ pelicula()?.restriccion_edad }}</span>
+            }
+          </div>
 
-  <!-- Listado de funciones -->
-  @if (!cargando() && funciones() && funciones().length > 0) {
-    <div class="contenido-funciones">
-      <header class="cabecera-funciones">
-        <h2>Funciones Disponibles</h2>
-        <p class="subtitulo">Seleccioná el horario que prefieras para continuar con tu compra.</p>
-      </header>
+          <p class="sinopsis">{{ pelicula()?.sinopsis }}</p>
 
-      <div class="grilla-funciones">
-        @for (funcion of funciones(); track funcion.id) {
-          <article class="tarjeta-funcion">
-            <div class="info-funcion">
-              <div class="contenedor-horario">
-                <!-- Nota: podés usar el pipe 'date' nativo de Angular sin importar CommonModule -->
-                <span class="hora-funcion">{{ funcion.inicio | date:'HH:mm' }} hs</span>
-                <span class="fecha-funcion">{{ funcion.inicio | date:'dd/MM/yyyy' }}</span>
-              </div>
+          <div class="puntuacion-promedio-container">
+            <span class="estrella-icono">⭐</span>
+            <span class="promedio-valor">{{ promedioEstrellas() }}</span>
+            <span class="promedio-total">({{ resenas().length }} {{ resenas().length === 1 ? 'reseña' : 'reseñas' }})</span>
+          </div>
 
-              <div class="grupo-etiquetas">
-                <span class="etiqueta formato">{{ funcion.formato }}</span>
-                <span class="etiqueta idioma">{{ funcion.idioma }}</span>
-                @if (funcion.es_preventa) {
-                  <span class="etiqueta preventa">Preventa</span>
+          <div class="meta-datos">
+            <div class="meta-item">
+              <span class="meta-label">Duración:</span>
+              <span class="meta-valor">{{ pelicula()?.duracion_min }} min</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Estreno:</span>
+              <span class="meta-valor">{{ pelicula()?.fecha_estreno | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Géneros:</span>
+              <span class="meta-valor">
+                @for (genero of pelicula()?.generos; track genero; let last = $last) {
+                  {{ genero }}{{ !last ? ', ' : '' }}
                 }
-              </div>
-
-              <div class="info-sala">
-                <span class="etiqueta-sala">Sala:</span>
-                <span class="nombre-sala">{{ funcion.salas?.nombre || 'Sala Principal' }}</span>
-              </div>
+              </span>
             </div>
 
-            <div class="accion-funcion">
-              
-            </div>
-          </article>
+            @if (pelicula()?.preventa_pct_descuento) {
+              <div class="meta-item">
+                <span class="badge-preventa-header">¡Preventa {{ pelicula()?.preventa_pct_descuento }}% OFF!</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (!cargando() && pelicula()) {
+      <div class="seccion-resenas">
+        <div class="cabecera-resenas">
+          <h3>Reseñas de Usuarios</h3>
+          <button type="button" class="btn-crear-resena" routerLink="/resenas" [queryParams]="{ peliculaId: pelicula()?.id }">
+            + Escribir Reseña
+          </button>
+        </div>
+
+        @if (resenas() && resenas().length > 0) {
+          <div class="grilla-resenas">
+            @for (resena of resenas(); track resena.id) {
+              <div class="tarjeta-resena">
+                <div class="resena-header">
+                  <span class="estrellas">⭐ {{ resena.estrellas }} / 5</span>
+                  <span class="fecha-resena">{{ resena.creada_en | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <p class="comentario">"{{ resena.comentario }}"</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="sin-resenas">
+            <p>Aún no hay reseñas para esta película. ¡Sé el primero en calificarla!</p>
+          </div>
         }
       </div>
+    }
+
+    @if (!cargando() && funciones() && funciones().length > 0) {
+  <div class="contenido-funciones">
+    <header class="cabecera-funciones">
+      <h2>Funciones Disponibles</h2>
+      <p class="subtitulo">Seleccioná el horario que prefieras para continuar con tu compra.</p>
+    </header>
+
+    <div class="grilla-funciones">
+      @for (funcion of funciones(); track funcion.id) {
+        <article class="tarjeta-funcion">
+          <div class="info-funcion">
+            <!-- Horarios: Inicio y Fin -->
+            <div class="contenedor-horario">
+              <span class="hora-funcion">{{ funcion.inicio | date:'HH:mm' }} hs</span>
+              <span class="texto-hasta">al</span>
+              <span class="hora-fin">{{ funcion.fin | date:'HH:mm' }} hs</span>
+              <span class="fecha-funcion">({{ funcion.inicio | date:'dd/MM/yyyy' }})</span>
+            </div>
+
+            <!-- Etiquetas de Formato, Idioma y Preventa -->
+            <div class="grupo-etiquetas">
+              <span class="etiqueta formato">{{ funcion.formato }}</span>
+              <span class="etiqueta idioma">{{ funcion.idioma }}</span>
+              @if (funcion.es_preventa) {
+                <span class="etiqueta preventa">Preventa</span>
+              }
+            </div>
+
+            <!-- Sala -->
+            <div class="info-sala">
+              <span class="etiqueta-sala">Sala:</span>
+              <span class="nombre-sala">{{ funcion.salas?.nombre || 'Sala Principal' }}</span>
+            </div>
+
+            <!-- Precios (Base y VIP) -->
+            <div class="contenedor-precios">
+              <div class="precio-item">
+                <span class="precio-label">General:</span>
+                <span class="precio-valor">${{ funcion.precio_base }}</span>
+              </div>
+              <div class="precio-item">
+                <span class="precio-label">VIP:</span>
+                <span class="precio-valor vip">${{ funcion.precio_vip }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="accion-funcion">
+            
+          </div>
+        </article>
+      }
     </div>
-  }
+  </div>
+}
 
-
- 
-</div>
+    <!-- Estado vacío (sin funciones) -->
+    @if (!cargando() && (!funciones() || funciones().length === 0)) {
+      <div class="estado-vacio">
+        <div class="icono-vacio">🎬</div>
+        <h3>No hay funciones disponibles</h3>
+        <p>Por el momento no encontramos horarios programados para esta película.</p>
+      </div>
+    }
+  </div>
+</body>

@@ -33,9 +33,7 @@ export class PeliculaService {
                 }
 
             if (pelicula.imagen) {
-                const { data: urlData } = this.sup.client.storage
-                .from('Peliculas')
-                .getPublicUrl(pelicula.imagen);
+                const { data: urlData } = this.sup.client.storage.from('Peliculas').getPublicUrl(pelicula.imagen);
 
                 if (urlData) {
                 pelicula.imagen = urlData.publicUrl;

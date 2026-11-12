@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #203e45;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Tarjeta principal contenedora en dos columnas */
+.movie-detail-main-card {
+  display: flex;
+  background-color: #366E79;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #427C8E;
+}
+
+/* Columna Izquierda (Película) */
+.detail-left-section {
+  display: flex;
+  flex: 1.2;
+  gap: 20px;
+  padding: 20px;
+}
+
+.detail-image-container {
+  width: 200px;
+  min-width: 200px;
+  max-height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.detail-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.section-label {
+  color: #41BFAD;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.movie-title {
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.generos-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag-genre, .tag-duration {
+  background-color: rgba(65, 191, 173, 0.2);
+  color: #41BFAD;
+  border: 1px solid #41BFAD;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sinopsis-completa {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* Línea divisoria vertical entre la peli y el formulario */
+.card-divider {
+  width: 1px;
+  background-color: #427C8E;
+  margin: 20px 0;
+}
+
+/* Columna Derecha (Formulario) */
+.detail-right-section {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle-row h2 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.form-resena {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.textarea-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label-comentario {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.input-comentario {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid #427C8E;
+  color: white;
+  resize: vertical;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #41BFAD; 
+  box-shadow: 0 0 0 2px rgba(65, 191, 173, 0.2);
+}
+
+.btn-elegir-butacas {
+  width: 100%;
+  padding: 10px;
+  background-color: #41BFAD;
+  color: #1a3036;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.btn-elegir-butacas:hover {
+  filter: brightness(1.1);
+}
+
+.btn-submit-resena {
+  margin-top: 10px;
+}
+
+.mensaje-cargando {
+  color: white;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.error-texto {
+  color: #ff5555;
+  font-size: 0.75rem;
+  margin-top: 2px;
+  display: block;
+}
+
